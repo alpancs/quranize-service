@@ -19,10 +19,11 @@ type Node struct {
 }
 
 var (
-	root              *Node
-	alphabetToArabics = make(map[string][]string)
-	maxAlphabet       int
-	Quran             struct {
+	root     *Node
+	hijaiyas = make(map[string][]string)
+	maxAlpha int
+
+	Quran struct {
 		Suras []struct {
 			Index int    `xml:"index,attr"`
 			Name  string `xml:"name,attr"`
@@ -36,12 +37,12 @@ var (
 )
 
 func init() {
-	loadAlphabetToArabics()
+	loadHijaiyas()
 	loadQuran()
 	preCompute()
 }
 
-func loadAlphabetToArabics() {
+func loadHijaiyas() {
 	filePath := "corpus/arabic-to-alphabet"
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -52,9 +53,9 @@ func loadAlphabetToArabics() {
 		components := strings.Split(line, " ")
 		arabic := components[0]
 		for _, alphabet := range components[1:] {
-			alphabetToArabics[alphabet] = append(alphabetToArabics[alphabet], arabic)
-			if maxAlphabet < len(alphabet) {
-				maxAlphabet = len(alphabet)
+			hijaiyas[alphabet] = append(hijaiyas[alphabet], arabic)
+			if maxAlpha < len(alphabet) {
+				maxAlpha = len(alphabet)
 			}
 		}
 	}
@@ -143,8 +144,8 @@ func quranize(text string) []string {
 		return []string{""}
 	}
 	kalimas := []string{}
-	for i := 0; i < maxAlphabet && i < len(text); i++ {
-		if heads, ok := alphabetToArabics[text[:i+1]]; ok {
+	for i := 0; i < maxAlpha && i < len(text); i++ {
+		if heads, ok := hijaiyas[text[:i+1]]; ok {
 			tails := quranize(text[i+1:])
 			for _, combination := range combine(heads, tails) {
 				if inQuran(combination) {
