@@ -21,7 +21,7 @@ type Node struct {
 var (
 	root     *Node
 	hijaiyas = make(map[string][]string)
-	maxAlpha int
+	maxWidth int
 
 	Quran struct {
 		Suras []struct {
@@ -54,8 +54,8 @@ func loadHijaiyas() {
 		arabic := components[0]
 		for _, alphabet := range components[1:] {
 			hijaiyas[alphabet] = append(hijaiyas[alphabet], arabic)
-			if maxAlpha < len(alphabet) {
-				maxAlpha = len(alphabet)
+			if maxWidth < len(alphabet) {
+				maxWidth = len(alphabet)
 			}
 		}
 	}
@@ -82,9 +82,14 @@ func preCompute() {
 }
 
 func buildIndex(text string, location Location) {
-	for i, wi := 0, 0; i < len(text); i += wi {
-		_, wi = utf8.DecodeRuneInString(text[i:])
-		root = buildTree(text[i:]+END, location, root)
+	start := 0
+	for {
+		text = text[start:]
+		root = buildTree(text+END, location, root)
+		start = strings.Index(text, " ") + 1
+		if start == 0 {
+			break
+		}
 	}
 }
 
@@ -144,9 +149,10 @@ func quranize(text string) []string {
 		return []string{""}
 	}
 	kalimas := []string{}
-	for i := 0; i < maxAlpha && i < len(text); i++ {
-		if heads, ok := hijaiyas[text[:i+1]]; ok {
-			tails := quranize(text[i+1:])
+	l := len(text)
+	for width := 1; width <= maxWidth && width <= l; width++ {
+		if tails, ok := hijaiyas[text[l-width:]]; ok {
+			heads := quranize(text[:l-width])
 			for _, combination := range combine(heads, tails) {
 				if inQuran(combination) {
 					kalimas = append(kalimas, combination)

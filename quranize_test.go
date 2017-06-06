@@ -4,7 +4,7 @@ import "testing"
 
 func TestEncodeTajri(t *testing.T) {
 	input := "tajri"
-	output := []string{"تجرع", "تجري", "تجر"}
+	output := []string{"تجري", "تجر"}
 
 	kalimas := Encode(input)
 
