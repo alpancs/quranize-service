@@ -1,20 +1,23 @@
 package quranize
 
 import (
+	"bytes"
 	"strings"
 	"unicode/utf8"
 )
 
 const END = "$"
 
-type Location struct{ Sura, Aya int }
-type LocationSet map[Location]struct{}
-type Children map[rune]*Node
+type (
+	Location    struct{ Sura, Aya int }
+	LocationSet map[Location]struct{}
+	Children    map[rune]*Node
 
-type Node struct {
-	LocationSet
-	Children
-}
+	Node struct {
+		LocationSet
+		Children
+	}
+)
 
 var (
 	root     *Node
@@ -55,11 +58,18 @@ func combine(heads, tails []string) []string {
 	combinations := []string{}
 	for _, head := range heads {
 		for _, tail := range tails {
-			if tail == "" {
+			if head == "" {
+				combinations = append(combinations, tail)
+			} else if tail == "" {
 				combinations = append(combinations, head)
 			} else {
 				combinations = append(combinations, head+tail)
 				combinations = append(combinations, head+" "+tail)
+				combinations = append(combinations, head+" ال"+tail)
+				lastHarf, _ := utf8.DecodeLastRuneInString(head)
+				if lastHarf == 'و' {
+					combinations = append(combinations, head+"ا "+tail)
+				}
 			}
 		}
 	}
@@ -89,7 +99,27 @@ func quranize(text string) []string {
 	return kalimas
 }
 
+func removeDup(text string) string {
+	buffer := bytes.NewBuffer(nil)
+	for i := range text {
+		if i == 0 || text[i-1] != text[i] {
+			buffer.WriteByte(text[i])
+		}
+	}
+	return buffer.String()
+}
+
 func Encode(text string) []string {
 	text = strings.Replace(text, " ", "", -1)
-	return quranize(text)
+	mixResults := append(quranize(text), quranize(removeDup(text))...)
+
+	results := []string{}
+	used := make(map[string]bool)
+	for _, result := range mixResults {
+		if !used[result] {
+			used[result] = true
+			results = append(results, result)
+		}
+	}
+	return results
 }
