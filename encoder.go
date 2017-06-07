@@ -60,8 +60,6 @@ func combine(heads, tails []string) []string {
 		for _, tail := range tails {
 			if head == "" {
 				combinations = append(combinations, tail)
-			} else if tail == "" {
-				combinations = append(combinations, head)
 			} else {
 				combinations = append(combinations, head+tail)
 				combinations = append(combinations, head+" "+tail)
