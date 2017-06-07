@@ -39,6 +39,9 @@ var (
 )
 
 func queryTree(harfs []rune, node *Node) []Location {
+	if node == nil {
+		return []Location{}
+	}
 	if len(harfs) == 0 {
 		locations := make([]Location, 0, len(node.LocationSet))
 		for location := range node.LocationSet {
@@ -46,22 +49,17 @@ func queryTree(harfs []rune, node *Node) []Location {
 		}
 		return locations
 	}
-
-	if child, ok := node.Children[harfs[0]]; ok {
-		return queryTree(harfs[1:], child)
-	}
-	return []Location{}
+	return queryTree(harfs[1:], node.Children[harfs[0]])
 }
 
 func inTree(harfs []rune, node *Node) bool {
+	if node == nil {
+		return false
+	}
 	if len(harfs) == 0 {
 		return true
 	}
-
-	if child, ok := node.Children[harfs[0]]; ok {
-		return inTree(harfs[1:], child)
-	}
-	return false
+	return inTree(harfs[1:], node.Children[harfs[0]])
 }
 
 func combine(heads, tails []string) []string {
