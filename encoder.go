@@ -36,6 +36,7 @@ var (
 	}
 
 	hijaiyas = make(map[string][]string)
+	memo     = make(map[string][]string)
 )
 
 func queryTree(text string, node *Node) []Location {
@@ -52,6 +53,18 @@ func queryTree(text string, node *Node) []Location {
 		return queryTree(text[width:], child)
 	}
 	return []Location{}
+}
+
+func inTree(text string, node *Node) bool {
+	if text == "" {
+		return true
+	}
+
+	harf, width := utf8.DecodeRuneInString(text)
+	if child, ok := node.Children[harf]; ok {
+		return inTree(text[width:], child)
+	}
+	return false
 }
 
 func combine(heads, tails []string) []string {
@@ -74,26 +87,29 @@ func combine(heads, tails []string) []string {
 	return combinations
 }
 
-func inQuran(text string) bool {
-	return len(queryTree(text, root)) > 0
-}
-
 func quranize(text string) []string {
 	if text == "" {
 		return []string{""}
 	}
+
+	if cache, ok := memo[text]; ok {
+		return cache
+	}
+
 	kalimas := []string{}
 	l := len(text)
 	for width := 1; width <= maxWidth && width <= l; width++ {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width])
 			for _, combination := range combine(heads, tails) {
-				if inQuran(combination) {
+				if inTree(combination, root) {
 					kalimas = append(kalimas, combination)
 				}
 			}
 		}
 	}
+
+	memo[text] = kalimas
 	return kalimas
 }
 
