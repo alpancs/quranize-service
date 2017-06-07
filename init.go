@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"io/ioutil"
 	"strings"
-	"unicode/utf8"
 )
 
 var none struct{}
@@ -58,7 +57,7 @@ func indexAya(text string, location Location) {
 	start := 0
 	for {
 		text = text[start:]
-		root = buildTree(text+END, location, root)
+		root = buildTree([]rune(text+END), location, root)
 		start = strings.Index(text, " ") + 1
 		if start == 0 {
 			break
@@ -66,16 +65,15 @@ func indexAya(text string, location Location) {
 	}
 }
 
-func buildTree(text string, location Location, node *Node) *Node {
-	if text == "" {
+func buildTree(harfs []rune, location Location, node *Node) *Node {
+	if len(harfs) == 0 {
 		return node
 	}
 
-	harf, width := utf8.DecodeRuneInString(text)
 	if node == nil {
 		node = &Node{make(LocationSet), make(Children)}
 	}
 	node.LocationSet[location] = none
-	node.Children[harf] = buildTree(text[width:], location, node.Children[harf])
+	node.Children[harfs[0]] = buildTree(harfs[1:], location, node.Children[harfs[0]])
 	return node
 }

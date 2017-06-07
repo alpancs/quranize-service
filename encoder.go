@@ -3,7 +3,6 @@ package quranize
 import (
 	"bytes"
 	"strings"
-	"unicode/utf8"
 )
 
 const END = "$"
@@ -39,8 +38,8 @@ var (
 	memo     = make(map[string][]string)
 )
 
-func queryTree(text string, node *Node) []Location {
-	if text == "" {
+func queryTree(harfs []rune, node *Node) []Location {
+	if len(harfs) == 0 {
 		locations := make([]Location, 0, len(node.LocationSet))
 		for location := range node.LocationSet {
 			locations = append(locations, location)
@@ -48,21 +47,19 @@ func queryTree(text string, node *Node) []Location {
 		return locations
 	}
 
-	harf, width := utf8.DecodeRuneInString(text)
-	if child, ok := node.Children[harf]; ok {
-		return queryTree(text[width:], child)
+	if child, ok := node.Children[harfs[0]]; ok {
+		return queryTree(harfs[1:], child)
 	}
 	return []Location{}
 }
 
-func inTree(text string, node *Node) bool {
-	if text == "" {
+func inTree(harfs []rune, node *Node) bool {
+	if len(harfs) == 0 {
 		return true
 	}
 
-	harf, width := utf8.DecodeRuneInString(text)
-	if child, ok := node.Children[harf]; ok {
-		return inTree(text[width:], child)
+	if child, ok := node.Children[harfs[0]]; ok {
+		return inTree(harfs[1:], child)
 	}
 	return false
 }
@@ -77,8 +74,7 @@ func combine(heads, tails []string) []string {
 				combinations = append(combinations, head+tail)
 				combinations = append(combinations, head+" "+tail)
 				combinations = append(combinations, head+" ال"+tail)
-				lastHarf, _ := utf8.DecodeLastRuneInString(head)
-				if lastHarf == 'و' {
+				if head[len(head)-len("و"):] == "و" {
 					combinations = append(combinations, head+"ا "+tail)
 				}
 			}
@@ -102,7 +98,7 @@ func quranize(text string) []string {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width])
 			for _, combination := range combine(heads, tails) {
-				if inTree(combination, root) {
+				if inTree([]rune(combination), root) {
 					kalimas = append(kalimas, combination)
 				}
 			}
