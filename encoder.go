@@ -5,8 +5,6 @@ import (
 	"strings"
 )
 
-const END = "$"
-
 type (
 	Location struct{ Sura, Aya int }
 	Children map[rune]*Node
