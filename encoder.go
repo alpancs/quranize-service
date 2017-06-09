@@ -39,27 +39,27 @@ var (
 )
 
 func queryTree(harfs []rune, node *Node) []Location {
-	if node == nil {
-		return []Location{}
-	}
-	if len(harfs) == 0 {
-		locations := make([]Location, 0, len(node.LocationSet))
-		for location := range node.LocationSet {
-			locations = append(locations, location)
+	for _, harf := range harfs {
+		if node.Children[harf] == nil {
+			return []Location{}
 		}
-		return locations
+		node = node.Children[harf]
 	}
-	return queryTree(harfs[1:], node.Children[harfs[0]])
+	locations := make([]Location, 0, len(node.LocationSet))
+	for location := range node.LocationSet {
+		locations = append(locations, location)
+	}
+	return locations
 }
 
 func inTree(harfs []rune, node *Node) bool {
-	if node == nil {
-		return false
+	for _, harf := range harfs {
+		if node.Children[harf] == nil {
+			return false
+		}
+		node = node.Children[harf]
 	}
-	if len(harfs) == 0 {
-		return true
-	}
-	return inTree(harfs[1:], node.Children[harfs[0]])
+	return true
 }
 
 func combine(heads, tails []string) []string {
