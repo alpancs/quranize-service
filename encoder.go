@@ -8,12 +8,11 @@ import (
 const END = "$"
 
 type (
-	Location    struct{ Sura, Aya int }
-	LocationSet map[Location]struct{}
-	Children    map[rune]*Node
+	Location struct{ Sura, Aya int }
+	Children map[rune]*Node
 
 	Node struct {
-		LocationSet
+		Locations []Location
 		Children
 	}
 )
@@ -33,23 +32,20 @@ var (
 		} `xml:"sura"`
 	}
 
-	root     = &Node{make(LocationSet), make(Children)}
-	hijaiyas = make(map[string][]string)
-	memo     = make(map[string][]string)
+	root          = &Node{Children: make(Children)}
+	hijaiyas      = make(map[string][]string)
+	memo          = make(map[string][]string)
+	emptyLocation = []Location{}
 )
 
 func queryTree(harfs []rune, node *Node) []Location {
 	for _, harf := range harfs {
 		if node.Children[harf] == nil {
-			return []Location{}
+			return emptyLocation
 		}
 		node = node.Children[harf]
 	}
-	locations := make([]Location, 0, len(node.LocationSet))
-	for location := range node.LocationSet {
-		locations = append(locations, location)
-	}
-	return locations
+	return node.Locations
 }
 
 func inTree(harfs []rune, node *Node) bool {

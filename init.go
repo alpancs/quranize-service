@@ -68,9 +68,18 @@ func indexAya(text string, location Location) {
 func buildTree(harfs []rune, location Location, node *Node) {
 	for _, harf := range harfs {
 		if node.Children[harf] == nil {
-			node.Children[harf] = &Node{make(LocationSet), make(Children)}
+			node.Children[harf] = &Node{Children: make(Children)}
 		}
 		node = node.Children[harf]
-		node.LocationSet[location] = none
+		node.Locations = insert(node.Locations, location)
 	}
+}
+
+func insert(locations []Location, newLocation Location) []Location {
+	for _, location := range locations {
+		if newLocation == location {
+			return locations
+		}
+	}
+	return append(locations, newLocation)
 }
