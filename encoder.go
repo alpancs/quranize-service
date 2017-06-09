@@ -19,7 +19,6 @@ type (
 )
 
 var (
-	root     *Node
 	maxWidth int
 
 	Quran struct {
@@ -34,6 +33,7 @@ var (
 		} `xml:"sura"`
 	}
 
+	root     = &Node{make(LocationSet), make(Children)}
 	hijaiyas = make(map[string][]string)
 	memo     = make(map[string][]string)
 )

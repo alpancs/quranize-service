@@ -57,7 +57,7 @@ func indexAya(text string, location Location) {
 	start := 0
 	for {
 		text = text[start:]
-		root = buildTree([]rune(text+END), location, root)
+		buildTree([]rune(text), location, root)
 		start = strings.Index(text, " ") + 1
 		if start == 0 {
 			break
@@ -65,15 +65,12 @@ func indexAya(text string, location Location) {
 	}
 }
 
-func buildTree(harfs []rune, location Location, node *Node) *Node {
-	if len(harfs) == 0 {
-		return node
+func buildTree(harfs []rune, location Location, node *Node) {
+	for _, harf := range harfs {
+		if node.Children[harf] == nil {
+			node.Children[harf] = &Node{make(LocationSet), make(Children)}
+		}
+		node = node.Children[harf]
+		node.LocationSet[location] = none
 	}
-
-	if node == nil {
-		node = &Node{make(LocationSet), make(Children)}
-	}
-	node.LocationSet[location] = none
-	node.Children[harfs[0]] = buildTree(harfs[1:], location, node.Children[harfs[0]])
-	return node
 }
