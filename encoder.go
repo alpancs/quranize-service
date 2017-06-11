@@ -101,7 +101,7 @@ func quranize(text string) []string {
 	return kalimas
 }
 
-func removeDup(text string) string {
+func removeDoubleChar(text string) string {
 	buffer := bytes.NewBuffer(nil)
 	for i := range text {
 		if i == 0 || text[i-1] != text[i] {
@@ -111,17 +111,20 @@ func removeDup(text string) string {
 	return buffer.String()
 }
 
+func insertString(results []string, newResult string) []string {
+	for _, result := range results {
+		if result == newResult {
+			return results
+		}
+	}
+	return append(results, newResult)
+}
+
 func Encode(text string) []string {
 	text = strings.Replace(text, " ", "", -1)
-	mixResults := append(quranize(text), quranize(removeDup(text))...)
-
 	results := []string{}
-	used := make(map[string]bool)
-	for _, result := range mixResults {
-		if !used[result] {
-			used[result] = true
-			results = append(results, result)
-		}
+	for _, result := range append(quranize(text), quranize(removeDoubleChar(text))...) {
+		results = insertString(results, result)
 	}
 	return results
 }

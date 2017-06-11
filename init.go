@@ -69,11 +69,11 @@ func buildTree(harfs []rune, location Location, node *Node) {
 			node.Children[harf] = &Node{Children: make(Children)}
 		}
 		node = node.Children[harf]
-		node.Locations = insert(node.Locations, location)
+		node.Locations = insertLocation(node.Locations, location)
 	}
 }
 
-func insert(locations []Location, newLocation Location) []Location {
+func insertLocation(locations []Location, newLocation Location) []Location {
 	for _, location := range locations {
 		if newLocation == location {
 			return locations
