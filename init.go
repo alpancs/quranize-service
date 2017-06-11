@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-var none struct{}
-
 func init() {
 	loadHijaiyas()
 	loadQuran()
