@@ -65,10 +65,10 @@ func combine(heads, tails []string) []string {
 			} else {
 				combinations = append(combinations, head+tail)
 				combinations = append(combinations, head+" "+tail)
+				combinations = append(combinations, head+"ال"+tail)
 				combinations = append(combinations, head+" ال"+tail)
-				if head[len(head)-len("و"):] == "و" {
-					combinations = append(combinations, head+"ا "+tail)
-				}
+				combinations = append(combinations, head+"ا"+tail)
+				combinations = append(combinations, head+"ا "+tail)
 			}
 		}
 	}

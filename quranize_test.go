@@ -17,7 +17,7 @@ func properlyEncoded(input string, output []string) bool {
 
 func TestEncodeTajri(t *testing.T) {
 	input := "tajri"
-	output := []string{"تجري", "تجر"}
+	output := []string{"تجري", "تأجر", "تجر", "تجار"}
 	if !properlyEncoded(input, output) {
 		t.Error(Encode(input))
 	}
