@@ -111,20 +111,21 @@ func removeDoubleChar(text string) string {
 	return buffer.String()
 }
 
-func insertString(results []string, newResult string) []string {
+func unique(results []string) []string {
+	uniqueResult := []string{}
+	inSlice := make(map[string]bool)
 	for _, result := range results {
-		if result == newResult {
-			return results
+		if !inSlice[result] {
+			inSlice[result] = true
+			uniqueResult = append(uniqueResult, result)
 		}
 	}
-	return append(results, newResult)
+	return uniqueResult
 }
 
 func Encode(text string) []string {
 	text = strings.Replace(text, " ", "", -1)
-	results := []string{}
-	for _, result := range append(quranize(text), quranize(removeDoubleChar(text))...) {
-		results = insertString(results, result)
-	}
-	return results
+	results1 := quranize(text)
+	results2 := quranize(removeDoubleChar(text))
+	return unique(append(results1, results2...))
 }
