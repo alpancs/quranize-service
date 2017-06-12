@@ -5,46 +5,7 @@ import (
 	"strings"
 )
 
-type (
-	Location struct{ Sura, Aya, Begin, End int }
-	Children map[rune]*Node
-
-	Node struct {
-		Locations []Location
-		Children
-	}
-)
-
-var (
-	maxWidth int
-
-	Quran struct {
-		Suras []struct {
-			Index int    `xml:"index,attr"`
-			Name  string `xml:"name,attr"`
-			Ayas  []struct {
-				Index     int    `xml:"index,attr"`
-				Text      string `xml:"text,attr"`
-				Bismillah string `xml:"bismillah,attr"`
-			} `xml:"aya"`
-		} `xml:"sura"`
-	}
-
-	root          = &Node{Children: make(Children)}
-	hijaiyas      = make(map[string][]string)
-	memo          = make(map[string][]string)
-	emptyLocation = []Location{}
-)
-
-func queryTree(harfs []rune, node *Node) []Location {
-	for _, harf := range harfs {
-		if node.Children[harf] == nil {
-			return emptyLocation
-		}
-		node = node.Children[harf]
-	}
-	return node.Locations
-}
+var memo = make(map[string][]string)
 
 func inTree(harfs []rune, node *Node) bool {
 	for _, harf := range harfs {
@@ -128,8 +89,4 @@ func Encode(text string) []string {
 	results1 := quranize(text)
 	results2 := quranize(removeDoubleChar(text))
 	return unique(append(results1, results2...))
-}
-
-func Locate(kalima string) []Location {
-	return queryTree([]rune(kalima), root)
 }

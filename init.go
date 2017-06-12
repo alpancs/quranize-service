@@ -6,6 +6,35 @@ import (
 	"strings"
 )
 
+type (
+	Location struct{ Sura, Aya, Begin, End int }
+	Children map[rune]*Node
+
+	Node struct {
+		Locations []Location
+		Children
+	}
+)
+
+var (
+	maxWidth int
+
+	root     = &Node{Children: make(Children)}
+	hijaiyas = make(map[string][]string)
+
+	Quran struct {
+		Suras []struct {
+			Index int    `xml:"index,attr"`
+			Name  string `xml:"name,attr"`
+			Ayas  []struct {
+				Index     int    `xml:"index,attr"`
+				Text      string `xml:"text,attr"`
+				Bismillah string `xml:"bismillah,attr"`
+			} `xml:"aya"`
+		} `xml:"sura"`
+	}
+)
+
 func init() {
 	loadHijaiyas()
 	loadQuran()
