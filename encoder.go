@@ -6,7 +6,7 @@ import (
 )
 
 type (
-	Location struct{ Sura, Aya int }
+	Location struct{ Sura, Aya, Begin, End int }
 	Children map[rune]*Node
 
 	Node struct {
@@ -128,4 +128,8 @@ func Encode(text string) []string {
 	results1 := quranize(text)
 	results2 := quranize(removeDoubleChar(text))
 	return unique(append(results1, results2...))
+}
+
+func Locate(kalima string) []Location {
+	return queryTree([]rune(kalima), root)
 }

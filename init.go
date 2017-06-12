@@ -45,8 +45,7 @@ func loadQuran() {
 func buildIndex() {
 	for s, sura := range Quran.Suras {
 		for a, aya := range sura.Ayas {
-			location := Location{s, a}
-			indexAya(aya.Text, location)
+			indexAya(aya.Text, Location{Sura: s, Aya: a})
 		}
 	}
 }
@@ -54,6 +53,7 @@ func buildIndex() {
 func indexAya(text string, location Location) {
 	start := 0
 	for {
+		location.Begin = start
 		text = text[start:]
 		buildTree([]rune(text), location, root)
 		start = strings.Index(text, " ") + 1
@@ -64,7 +64,8 @@ func indexAya(text string, location Location) {
 }
 
 func buildTree(harfs []rune, location Location, node *Node) {
-	for _, harf := range harfs {
+	for i, harf := range harfs {
+		location.End = location.Begin + i + 1
 		if node.Children[harf] == nil {
 			node.Children[harf] = &Node{Children: make(Children)}
 		}

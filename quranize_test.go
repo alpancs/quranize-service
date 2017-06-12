@@ -15,6 +15,19 @@ func properlyEncoded(input string, output []string) bool {
 	return true
 }
 
+func properlyLocated(input string, output []Location) bool {
+	locations := Locate(input)
+	if len(locations) != len(output) {
+		return false
+	}
+	for i, location := range locations {
+		if output[i] != location {
+			return false
+		}
+	}
+	return true
+}
+
 func TestEncodeTajri(t *testing.T) {
 	input := "tajri"
 	output := []string{"تجري", "تأجر", "تجر", "تجار"}
@@ -68,5 +81,13 @@ func TestEncodeWatasimuFull(t *testing.T) {
 	output := []string{"واعتصموا بحبل الله"}
 	if !properlyEncoded(input, output) {
 		t.Error(Encode(input))
+	}
+}
+
+func TestLocate(t *testing.T) {
+	input := "بسم الله الرحمن الرحيم"
+	output := []Location{Location{0, 0, 0, 22}, Location{26, 29, 9, 31}}
+	if !properlyLocated(input, output) {
+		t.Error(Locate(input))
 	}
 }
