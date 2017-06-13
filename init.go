@@ -110,15 +110,6 @@ func buildTree(harfs []rune, location Location) {
 			node.Children = append(node.Children, Child{harf, child})
 		}
 		node = child
-		node.Locations = appendUniqueLocation(node.Locations, location)
+		node.Locations = append(node.Locations, location)
 	}
-}
-
-func appendUniqueLocation(locations []Location, newLocation Location) []Location {
-	for _, location := range locations {
-		if newLocation == location {
-			return locations
-		}
-	}
-	return append(locations, newLocation)
 }
