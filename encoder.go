@@ -9,10 +9,10 @@ var memo = make(map[string][]string)
 
 func inTree(harfs []rune, node *Node) bool {
 	for _, harf := range harfs {
-		if node.Children[harf] == nil {
+		if node.Children.Get(harf) == nil {
 			return false
 		}
-		node = node.Children[harf]
+		node = node.Children.Get(harf)
 	}
 	return true
 }

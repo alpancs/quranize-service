@@ -8,9 +8,12 @@ import (
 
 type (
 	Location struct{ Sura, Aya, Begin, End int }
-	Children map[rune]*Node
-
-	Node struct {
+	Child    struct {
+		Key   rune
+		Value *Node
+	}
+	Children []Child
+	Node     struct {
 		Locations []Location
 		Children
 	}
@@ -19,7 +22,7 @@ type (
 var (
 	maxWidth int
 
-	root     = &Node{Children: make(Children)}
+	root     = &Node{}
 	hijaiyas = make(map[string][]string)
 
 	Quran struct {
@@ -34,6 +37,25 @@ var (
 		} `xml:"sura"`
 	}
 )
+
+func (cs Children) Get(key rune) *Node {
+	for _, c := range cs {
+		if c.Key == key {
+			return c.Value
+		}
+	}
+	return nil
+}
+
+func (cs Children) Set(key rune, value *Node) Children {
+	for _, c := range cs {
+		if c.Key == key {
+			c.Value = value
+			return cs
+		}
+	}
+	return append(cs, Child{key, value})
+}
 
 func init() {
 	loadHijaiyas()
@@ -95,10 +117,10 @@ func indexAya(text string, location Location) {
 func buildTree(harfs []rune, location Location, node *Node) {
 	for i, harf := range harfs {
 		location.End = location.Begin + i + 1
-		if node.Children[harf] == nil {
-			node.Children[harf] = &Node{Children: make(Children)}
+		if node.Children.Get(harf) == nil {
+			node.Children = node.Children.Set(harf, &Node{})
 		}
-		node = node.Children[harf]
+		node = node.Children.Get(harf)
 		node.Locations = insertLocation(node.Locations, location)
 	}
 }

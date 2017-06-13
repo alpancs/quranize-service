@@ -4,10 +4,10 @@ var emptyLocation = []Location{}
 
 func queryTree(harfs []rune, node *Node) []Location {
 	for _, harf := range harfs {
-		if node.Children[harf] == nil {
+		if node.Children.Get(harf) == nil {
 			return emptyLocation
 		}
-		node = node.Children[harf]
+		node = node.Children.Get(harf)
 	}
 	return node.Locations
 }
