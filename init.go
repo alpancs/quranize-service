@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	Location struct{ Sura, Aya, Begin, End int }
+	Location struct{ Sura, Aya, Index int }
 	Child    struct {
 		Key   rune
 		Value *Node
@@ -96,36 +96,34 @@ func loadQuran() {
 func buildIndex() {
 	for s, sura := range Quran.Suras {
 		for a, aya := range sura.Ayas {
-			indexAya(aya.Text, Location{Sura: s, Aya: a})
+			indexAya([]rune(aya.Text), s, a)
 		}
 	}
 }
 
-func indexAya(text string, location Location) {
-	start := 0
-	for {
-		location.Begin = start
-		text = text[start:]
-		buildTree([]rune(text), location, root)
-		start = strings.Index(text, " ") + 1
-		if start == 0 {
-			break
+func indexAya(harfs []rune, sura, aya int) {
+	index := 0
+	for index < len(harfs) {
+		buildTree(harfs[index:], Location{sura, aya, index})
+		for index < len(harfs) && harfs[index] != ' ' {
+			index++
 		}
+		index++
 	}
 }
 
-func buildTree(harfs []rune, location Location, node *Node) {
-	for i, harf := range harfs {
-		location.End = location.Begin + i + 1
+func buildTree(harfs []rune, location Location) {
+	node := root
+	for _, harf := range harfs {
 		if node.Children.Get(harf) == nil {
 			node.Children = node.Children.Set(harf, &Node{})
 		}
 		node = node.Children.Get(harf)
-		node.Locations = insertLocation(node.Locations, location)
+		node.Locations = appendUniqueLocation(node.Locations, location)
 	}
 }
 
-func insertLocation(locations []Location, newLocation Location) []Location {
+func appendUniqueLocation(locations []Location, newLocation Location) []Location {
 	for _, location := range locations {
 		if newLocation == location {
 			return locations

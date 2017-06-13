@@ -86,7 +86,7 @@ func TestEncodeWatasimuFull(t *testing.T) {
 
 func TestLocate(t *testing.T) {
 	input := "بسم الله الرحمن الرحيم"
-	output := []Location{Location{0, 0, 0, 22}, Location{26, 29, 9, 31}}
+	output := []Location{Location{0, 0, 0}, Location{26, 29, 19}}
 	if !properlyLocated(input, output) {
 		t.Error(Locate(input))
 	}
