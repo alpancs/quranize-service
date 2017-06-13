@@ -72,21 +72,23 @@ func removeDoubleChar(text string) string {
 	return buffer.String()
 }
 
-func unique(results []string) []string {
-	uniqueResult := []string{}
-	inSlice := make(map[string]bool)
+func insertResult(results []string, newResult string) []string {
 	for _, result := range results {
-		if !inSlice[result] {
-			inSlice[result] = true
-			uniqueResult = append(uniqueResult, result)
+		if result == newResult {
+			return results
 		}
 	}
-	return uniqueResult
+	return append(results, newResult)
 }
 
 func Encode(text string) []string {
 	text = strings.Replace(text, " ", "", -1)
-	results1 := quranize(text)
-	results2 := quranize(removeDoubleChar(text))
-	return unique(append(results1, results2...))
+	results := []string{}
+	for _, result := range quranize(text) {
+		results = insertResult(results, result)
+	}
+	for _, result := range quranize(removeDoubleChar(text)) {
+		results = insertResult(results, result)
+	}
+	return results
 }
