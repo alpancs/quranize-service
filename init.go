@@ -12,10 +12,9 @@ type (
 		Key   rune
 		Value *Node
 	}
-	Children []Child
-	Node     struct {
+	Node struct {
 		Locations []Location
-		Children
+		Children  []Child
 	}
 )
 
@@ -38,23 +37,13 @@ var (
 	}
 )
 
-func (cs Children) Get(key rune) *Node {
-	for _, c := range cs {
-		if c.Key == key {
-			return c.Value
+func getChild(children []Child, key rune) *Node {
+	for _, child := range children {
+		if child.Key == key {
+			return child.Value
 		}
 	}
 	return nil
-}
-
-func (cs Children) Set(key rune, value *Node) Children {
-	for _, c := range cs {
-		if c.Key == key {
-			c.Value = value
-			return cs
-		}
-	}
-	return append(cs, Child{key, value})
 }
 
 func init() {
@@ -115,10 +104,12 @@ func indexAya(harfs []rune, sura, aya int) {
 func buildTree(harfs []rune, location Location) {
 	node := root
 	for _, harf := range harfs {
-		if node.Children.Get(harf) == nil {
-			node.Children = node.Children.Set(harf, &Node{})
+		child := getChild(node.Children, harf)
+		if child == nil {
+			child = &Node{}
+			node.Children = append(node.Children, Child{harf, child})
 		}
-		node = node.Children.Get(harf)
+		node = child
 		node.Locations = appendUniqueLocation(node.Locations, location)
 	}
 }
