@@ -7,7 +7,8 @@ import (
 
 var memo = make(map[string][]string)
 
-func inTree(harfs []rune, node *Node) bool {
+func inTree(harfs []rune) bool {
+	node := root
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {
@@ -51,7 +52,7 @@ func quranize(text string) []string {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width])
 			for _, combination := range combine(heads, tails) {
-				if inTree([]rune(combination), root) {
+				if inTree([]rune(combination)) {
 					kalimas = append(kalimas, combination)
 				}
 			}
