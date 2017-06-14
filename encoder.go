@@ -27,10 +27,8 @@ func combine(heads, tails []string) []string {
 			} else {
 				combinations = append(combinations, head+tail)
 				combinations = append(combinations, head+" "+tail)
-				combinations = append(combinations, head+"ال"+tail)
 				combinations = append(combinations, head+" ال"+tail)
-				combinations = append(combinations, head+"ا"+tail)
-				combinations = append(combinations, head+"ا "+tail)
+				combinations = append(combinations, head+tail+"ا")
 			}
 		}
 	}
