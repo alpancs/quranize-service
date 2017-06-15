@@ -18,6 +18,17 @@ func inTree(harfs []rune) bool {
 	return true
 }
 
+func wholeWord(harfs []rune) bool {
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return len(node.Children) == 0 || getChild(node.Children, ' ') != nil
+}
+
 func combine(heads, tails []string) []string {
 	combinations := []string{}
 	for _, head := range heads {
@@ -72,6 +83,9 @@ func removeDoubleChar(text string) string {
 }
 
 func insertResult(results []string, newResult string) []string {
+	if !wholeWord([]rune(newResult)) {
+		return results
+	}
 	for _, result := range results {
 		if result == newResult {
 			return results
