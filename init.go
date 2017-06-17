@@ -53,7 +53,7 @@ func init() {
 }
 
 func loadHijaiyas() {
-	filePath := "corpus/arabic-to-alphabet"
+	filePath := "./corpus/arabic-to-alphabet"
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		panic(err)
@@ -72,7 +72,7 @@ func loadHijaiyas() {
 }
 
 func loadQuran() {
-	filePath := "corpus/quran-simple-clean.xml"
+	filePath := "./corpus/quran-simple-clean.xml"
 	raw, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		err = xml.Unmarshal(raw, &Quran)

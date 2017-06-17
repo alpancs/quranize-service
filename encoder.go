@@ -5,8 +5,6 @@ import (
 	"strings"
 )
 
-var memo = make(map[string][]string)
-
 func inTree(harfs []rune) bool {
 	node := root
 	for _, harf := range harfs {
@@ -46,7 +44,7 @@ func combine(heads, tails []string) []string {
 	return combinations
 }
 
-func quranize(text string) []string {
+func quranize(text string, memo map[string][]string) []string {
 	if text == "" {
 		return []string{""}
 	}
@@ -59,7 +57,7 @@ func quranize(text string) []string {
 	l := len(text)
 	for width := 1; width <= maxWidth && width <= l; width++ {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
-			heads := quranize(text[:l-width])
+			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
 				if inTree([]rune(combination)) {
 					kalimas = append(kalimas, combination)
@@ -95,12 +93,13 @@ func insertResult(results []string, newResult string) []string {
 }
 
 func Encode(text string) []string {
+	var memo = make(map[string][]string)
 	text = strings.Replace(text, " ", "", -1)
 	results := []string{}
-	for _, result := range quranize(text) {
+	for _, result := range quranize(text, memo) {
 		results = insertResult(results, result)
 	}
-	for _, result := range quranize(removeDoubleChar(text)) {
+	for _, result := range quranize(removeDoubleChar(text), memo) {
 		results = insertResult(results, result)
 	}
 	return results
