@@ -3,7 +3,6 @@ package quranize
 import (
 	"encoding/xml"
 	"io/ioutil"
-	"os"
 	"strings"
 )
 
@@ -54,7 +53,7 @@ func init() {
 }
 
 func loadHijaiyas() {
-	filePath := os.Getenv("GOPATH") + "/src/github.com/alpancs/quranize/corpus/arabic-to-alphabet"
+	filePath := "../../alpancs/quranize/corpus/arabic-to-alphabet"
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		panic(err)
@@ -73,7 +72,7 @@ func loadHijaiyas() {
 }
 
 func loadQuran() {
-	filePath := os.Getenv("GOPATH") + "/src/github.com/alpancs/quranize/corpus/quran-simple-clean.xml"
+	filePath := "../../alpancs/quranize/corpus/quran-simple-clean.xml"
 	raw, err := ioutil.ReadFile(filePath)
 	if err == nil {
 		err = xml.Unmarshal(raw, &Quran)
