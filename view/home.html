@@ -30,14 +30,16 @@
           <!-- output -->
           <div class="small-12 columns">
             <div class="text-center subheader" v-show="noResult">no results</div>
-            <dl v-for="result in results">
-              <dt class="text-right"><button type="button" class="hollow button">{{"{{ result }}"}}</button></dt>
-              <dd class="text-right" v-if="locations">
-                <ul>
-                  <li v-for="location in locations">
-                    {{"{{ location }}"}}
+            <dl v-for="encoded in encodeds">
+              <dt class="text-right" @click="locate(encoded)" style="text-decoration: underline; cursor: pointer;">{{"{{ encoded.text }}"}}</dt>
+              <dd class="text-right" v-if="encoded.locations">
+                <div v-show="encoded.loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
+                <ol>
+                  <li v-for="location in encoded.locations">
+                    <div class="text-left">Sura {{"{{ location.Sura }}"}} aya {{"{{ location.Location.Aya+1 }}"}}:</div>
+                    {{"{{ location.Aya }}"}}
                   </li>
-                </ul>
+                </ol>
               </dd>
             </dl>
           </div>

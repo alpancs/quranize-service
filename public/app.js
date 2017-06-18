@@ -3,7 +3,7 @@ let app = new Vue({
 
   data: {
     input: '',
-    results: [],
+    encodeds: [],
     loading: false,
   },
 
@@ -12,13 +12,13 @@ let app = new Vue({
       return this.input.trim()
     },
     noResult() {
-      return this.trimmedInput && !this.results.length
+      return this.trimmedInput && !this.encodeds.length
     },
     alphabet() {
       return this.noResult ? '' : this.trimmedInput
     },
     quran() {
-      return this.noResult ? '' : this.results[0]
+      return this.noResult ? '' : (this.encodeds[0] || {}).text
     },
   },
 
@@ -32,9 +32,17 @@ let app = new Vue({
     updateResult: _.debounce(function() {
       this.loading = true
       axios.get('/api/encode/' + this.input.trim())
-      .then((response) => this.results = response.data)
-      .catch(() => this.results = [])
+      .then((response) => this.encodeds = response.data.map((e) => ({text: e})))
+      .catch(() => this.encodeds = [])
       .then(() => this.loading = false)
-    }, 500)
+    }, 500),
+
+    locate(encoded) {
+      this.$set(encoded, 'loading', true)
+      axios.get('/api/locate/' + encoded.text)
+      .then((response) => this.$set(encoded, 'locations', response.data))
+      .catch(() => this.$set(encoded, 'locations', undefined))
+      .then(() => this.$set(encoded, 'loading', false))
+    },
   },
 })
