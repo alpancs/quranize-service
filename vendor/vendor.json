@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "0ZV3KyuugZCPSdU24Gi0lE7PN34=",
+			"path": "github.com/pressly/chi",
+			"revision": "7998bc755af98de4fcfe57a00f8846ee7dc1dfe3",
+			"revisionTime": "2017-05-31T14:01:50Z"
+		}
+	],
+	"rootPath": "github.com/alpancs/quranize"
+}
