@@ -23,7 +23,7 @@
           <div class="small-12 columns">
             <div class="input-group">
               <input class="input-group-field" type="text" placeholder="tajri" v-model="input" autofocus>
-              <span class="input-group-label" v-show="loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span>
+              <span class="input-group-label" v-show="loading"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></span>
             </div>
           </div>
 
@@ -31,7 +31,14 @@
           <div class="small-12 columns">
             <div class="text-center subheader" v-show="noResult">no results</div>
             <dl v-for="result in results">
-              <dt class="text-right">{{"{{ result }}"}}</dt>
+              <dt class="text-right"><button type="button" class="hollow button tiny">{{"{{ result }}"}}</button></dt>
+              <dd class="text-right" v-if="locations">
+                <ul>
+                  <li v-for="location in locations">
+                    {{"{{ location }}"}}
+                  </li>
+                </ul>
+              </dd>
             </dl>
           </div>
         </div>

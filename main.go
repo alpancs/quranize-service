@@ -27,7 +27,8 @@ func setUpRouter() http.Handler {
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
-		apiRouter.Get("/encode/:text", route.Encode)
+		apiRouter.Get("/encode/:input", route.Encode)
+		apiRouter.Get("/locate/:input", route.Locate)
 	})
 
 	router.FileServer("/", http.Dir("public"))

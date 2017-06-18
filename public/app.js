@@ -5,10 +5,6 @@ let app = new Vue({
     input: '',
     results: [],
     loading: false,
-    // trimmedInput: '',
-    // noResult: true,
-    // alphabet: '',
-    // quran: '',
   },
 
   computed: {
