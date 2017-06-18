@@ -11,7 +11,7 @@ import (
 
 func main() {
 	if os.Getenv("PORT") == "" {
-		os.Setenv("PORT", "8000")
+		os.Setenv("PORT", "7000")
 	}
 	log.Println("Linguist is running in port " + os.Getenv("PORT"))
 	http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter())
@@ -20,6 +20,7 @@ func main() {
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
+	router.Get("/", route.Home)
 	router.Get("/api/encode/:text", route.Encode)
 
 	return router
