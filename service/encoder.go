@@ -1,4 +1,4 @@
-package quranize
+package service
 
 import (
 	"bytes"

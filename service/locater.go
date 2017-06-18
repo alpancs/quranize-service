@@ -1,4 +1,4 @@
-package quranize
+package service
 
 var emptyLocation = []Location{}
 
