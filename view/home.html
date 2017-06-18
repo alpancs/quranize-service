@@ -5,30 +5,47 @@
   <meta name="description" content="Quranize transforms alphabet into Qur'an text.">
   <meta name=viewport content="width=device-width, initial-scale=1">
   <link rel="preload" href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation-flex.min.css" onload="this.rel='stylesheet'" />
+  <link rel="preload" href="/font-awesome-4.7.0/css/font-awesome.min.css" onload="this.rel='stylesheet'" />
 </head>
 <body>
-  <div id="app">
+  <div id="app" hidden :hidden="false">
+    <!-- header -->
     <h1 class="text-center">Quranize</h1>
-    <h3 class="text-center">Quranize transforms alphabet into Qur'an text.</h3>
+    <h5 class="text-center subheader">Quranize transforms <strong>{{"{{ alphabet || 'alphabet' }}"}}</strong> into <strong>{{`{{ quran || "Qur'an text" }}`}}</strong>.</h5>
 
     <div class="row">
-      <div class="medium-3 columns"></div>
-      <div class="small-12 medium-6 columns">
-        <div class="input-group">
-          <input class="input-group-field" type="text" placeholder="tajri">
-          <div class="input-group-button">
-            <button type="button" class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+      <div class="small-1 medium-3 columns"></div>
+      <div class="small-10 medium-6 columns">
+
+        <!-- main content -->
+        <div class="row">
+          <!-- input -->
+          <div class="small-12 columns">
+            <div class="input-group">
+              <input class="input-group-field" type="text" placeholder="tajri" v-model="input" autofocus>
+              <span class="input-group-label" v-show="loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span>
+            </div>
+          </div>
+
+          <!-- output -->
+          <div class="small-12 columns">
+            <div class="text-center subheader" v-show="noResult">no results</div>
+            <dl v-for="result in results">
+              <dt class="text-right">{{"{{ result }}"}}</dt>
+            </dl>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </body>
-<script async src="https://use.fontawesome.com/856743dd7b.js"></script>
+<script async src="//unpkg.com/axios/dist/axios.min.js"></script>
 {{if .Production}}
   <script src="//unpkg.com/vue@2.3.4/dist/vue.min.js"></script>
 {{else}}
   <script src="//unpkg.com/vue@2.3.4/dist/vue.js"></script>
 {{end}}
+<script src="//cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
 <script src="/app.js"></script>
 </html>

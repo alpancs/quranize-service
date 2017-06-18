@@ -9,22 +9,27 @@ import (
 	"github.com/pressly/chi"
 )
 
-func main() {
+func init() {
 	if os.Getenv("PORT") == "" {
 		os.Setenv("PORT", "7000")
 	}
+}
+
+func main() {
 	log.Println("Linguist is running in port " + os.Getenv("PORT"))
-	panic(http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter()))
+	http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter())
 }
 
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
 	router.Get("/", route.Home)
+
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
 		apiRouter.Get("/encode/:text", route.Encode)
 	})
+
 	router.FileServer("/", http.Dir("public"))
 
 	return router
