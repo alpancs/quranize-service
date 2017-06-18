@@ -14,14 +14,25 @@ func main() {
 		os.Setenv("PORT", "7000")
 	}
 	log.Println("Linguist is running in port " + os.Getenv("PORT"))
-	http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter())
+	panic(http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter()))
 }
 
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
 	router.Get("/", route.Home)
-	router.Get("/api/encode/:text", route.Encode)
+	router.Route("/api", func(apiRouter chi.Router) {
+		apiRouter.Use(jsonify)
+		apiRouter.Get("/encode/:text", route.Encode)
+	})
+	router.FileServer("/", http.Dir("public"))
 
 	return router
+}
+
+func jsonify(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		next.ServeHTTP(w, r)
+	})
 }

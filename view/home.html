@@ -25,5 +25,10 @@
   </div>
 </body>
 <script async src="https://use.fontawesome.com/856743dd7b.js"></script>
-<script src="//unpkg.com/vue@2.3.4/dist/vue.js"></script>
+{{if .Production}}
+  <script src="//unpkg.com/vue@2.3.4/dist/vue.min.js"></script>
+{{else}}
+  <script src="//unpkg.com/vue@2.3.4/dist/vue.js"></script>
+{{end}}
+<script src="/app.js"></script>
 </html>
