@@ -95,6 +95,7 @@ func insertResult(results []string, newResult string) []string {
 func Encode(text string) []string {
 	var memo = make(map[string][]string)
 	text = strings.Replace(text, " ", "", -1)
+	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
 		results = insertResult(results, result)
