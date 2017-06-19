@@ -14,34 +14,45 @@
     <h5 class="text-center subheader">Quranize transforms <strong>{{"{{ alphabet || 'alphabet' }}"}}</strong> into <strong>{{`{{ quran || "Qur'an text" }}`}}</strong>.</h5>
 
     <div class="row">
-      <div class="small-1 medium-3 columns"></div>
-      <div class="small-10 medium-6 columns">
+      <div class="small-1 medium-2 columns"></div>
+      
+      <!-- main content -->
+      <div class="small-10 medium-8 columns">
 
-        <!-- main content -->
+        <!-- input -->
         <div class="row">
-          <!-- input -->
           <div class="small-12 columns">
             <div class="input-group">
+              <span class="input-group-label"><i :class="{'fa-pulse fa-spinner': loading, 'fa-search': !loading}" class="fa" aria-hidden="true"></i></span>
               <input class="input-group-field" type="text" placeholder="tajri" v-model="input" autofocus>
-              <span class="input-group-label" v-show="loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span>
             </div>
           </div>
+        </div>
 
-          <!-- output -->
+        <!-- output -->
+        <div class="row">
           <div class="small-12 columns">
             <div class="text-center subheader" v-show="noResult">no results</div>
-            <dl v-for="encoded in encodeds">
-              <dt class="text-right" @click="locate(encoded)" style="text-decoration: underline; cursor: pointer;">{{"{{ encoded.text }}"}}</dt>
-              <dd class="text-right" v-if="encoded.locations">
-                <div v-show="encoded.loading"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
-                <ol>
-                  <li v-for="location in encoded.locations">
-                    <div class="text-left">Sura {{"{{ location.Sura }}"}} aya {{"{{ location.Location.Aya+1 }}"}}:</div>
-                    {{"{{ location.Aya }}"}}
-                  </li>
-                </ol>
-              </dd>
+
+            <dl>
+              <div v-for="encoded in encodeds">
+                <dt class="text-right">
+                  <i v-show="encoded.loading" class="fa fa-fw fa-spinner fa-pulse" aria-hidden="true"></i>
+                  <span v-show="!encoded.locations && !encoded.loading" class="badge" style="cursor: pointer;">
+                    <i @click="locate(encoded)" class="fa fa-fw fa-search" aria-hidden="true"></i>
+                  </span>
+                  {{"{{ encoded.text }}"}}
+                </dt>
+                <dd v-for="(location, index) in encoded.locations">
+                  <div class="row">
+                    <div class="text-left columns small-12 medium-6">{{"{{ index+1 }}"}}. Sura {{"{{ location.Sura }}"}} aya {{"{{ location.Location.Aya+1 }}"}}:</div>
+                    <div class="text-right columns">{{"{{ location.Aya }}"}}</div>
+                  </div>
+                </dd>
+                <hr>
+              </div>
             </dl>
+
           </div>
         </div>
 
@@ -56,5 +67,5 @@
   <script src="//unpkg.com/vue@2.3.4/dist/vue.js"></script>
 {{end}}
 <script src="//cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
-<script src="/app.js"></script>
+<script src="/home.js"></script>
 </html>

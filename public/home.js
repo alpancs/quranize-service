@@ -1,4 +1,4 @@
-let app = new Vue({
+new Vue({
   el: '#app',
 
   data: {
@@ -15,10 +15,10 @@ let app = new Vue({
       return this.trimmedInput && !this.encodeds.length
     },
     alphabet() {
-      return this.noResult ? '' : this.trimmedInput
+      return this.encodeds.length ? this.trimmedInput : ''
     },
     quran() {
-      return this.noResult ? '' : (this.encodeds[0] || {}).text
+      return this.encodeds.length ? this.encodeds[0].text : ''
     },
   },
 
