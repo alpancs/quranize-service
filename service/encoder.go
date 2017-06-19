@@ -1,7 +1,6 @@
 package service
 
 import (
-	"bytes"
 	"strings"
 )
 
@@ -70,16 +69,6 @@ func quranize(text string, memo map[string][]string) []string {
 	return kalimas
 }
 
-func removeDoubleChar(text string) string {
-	buffer := bytes.NewBuffer(nil)
-	for i := range text {
-		if i == 0 || text[i-1] != text[i] {
-			buffer.WriteByte(text[i])
-		}
-	}
-	return buffer.String()
-}
-
 func insertResult(results []string, newResult string) []string {
 	if !wholeWord([]rune(newResult)) {
 		return results
@@ -98,9 +87,6 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		results = insertResult(results, result)
-	}
-	for _, result := range quranize(removeDoubleChar(text), memo) {
 		results = insertResult(results, result)
 	}
 	return results
