@@ -23,7 +23,7 @@
         <div class="row">
           <div class="small-12 columns">
             <div class="input-group">
-              <span class="input-group-label"><i :class="{'fa-pulse fa-spinner': loading, 'fa-search': !loading}" class="fa" aria-hidden="true"></i></span>
+              <span class="input-group-label"><i :class="{'fa-pulse fa-spinner': loading, 'fa-search': !loading}" class="fa fa-fw" aria-hidden="true"></i></span>
               <input class="input-group-field" type="text" placeholder="tajri" v-model="input" autofocus>
             </div>
           </div>
@@ -39,7 +39,7 @@
                 <dt class="text-right">
                   <i v-show="encoded.loading" class="fa fa-fw fa-spinner fa-pulse" aria-hidden="true"></i>
                   <span v-show="!encoded.locations && !encoded.loading" class="badge" style="cursor: pointer;">
-                    <i @click="locate(encoded)" class="fa fa-fw fa-search" aria-hidden="true"></i>
+                    <i @click="locate(encoded)" class="fa fa-fw fa-list" aria-hidden="true"></i>
                   </span>
                   {{"{{ encoded.text }}"}}
                 </dt>
