@@ -4,41 +4,17 @@ import (
 	"strings"
 )
 
-func inTree(harfs []rune) bool {
-	node := root
-	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
-		if node == nil {
-			return false
+func Encode(text string) []string {
+	var memo = make(map[string][]string)
+	text = strings.Replace(text, " ", "", -1)
+	text = strings.ToLower(text)
+	results := []string{}
+	for _, result := range quranize(text, memo) {
+		if wholeWord([]rune(result)) {
+			results = appendUniq(results, result)
 		}
 	}
-	return true
-}
-
-func wholeWord(harfs []rune) bool {
-	node := root
-	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
-		if node == nil {
-			return false
-		}
-	}
-	return len(node.Children) == 0 || getChild(node.Children, ' ') != nil
-}
-
-func combine(heads, tails []string) []string {
-	combinations := []string{}
-	for _, head := range heads {
-		for _, tail := range tails {
-			if head != "" {
-				combinations = append(combinations, head+" "+tail)
-				combinations = append(combinations, head+" ال"+tail)
-			}
-			combinations = append(combinations, head+tail)
-			combinations = append(combinations, head+tail+"ا")
-		}
-	}
-	return combinations
+	return results
 }
 
 func quranize(text string, memo map[string][]string) []string {
@@ -67,6 +43,43 @@ func quranize(text string, memo map[string][]string) []string {
 	return kalimas
 }
 
+func combine(heads, tails []string) []string {
+	combinations := []string{}
+	for _, head := range heads {
+		for _, tail := range tails {
+			if head != "" {
+				combinations = append(combinations, head+" "+tail)
+				combinations = append(combinations, head+" ال"+tail)
+			}
+			combinations = append(combinations, head+tail)
+			combinations = append(combinations, head+tail+"ا")
+		}
+	}
+	return combinations
+}
+
+func inTree(harfs []rune) bool {
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return true
+}
+
+func wholeWord(harfs []rune) bool {
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return len(node.Children) == 0 || getChild(node.Children, ' ') != nil
+}
+
 func appendUniq(results []string, newResult string) []string {
 	for _, result := range results {
 		if result == newResult {
@@ -74,17 +87,4 @@ func appendUniq(results []string, newResult string) []string {
 		}
 	}
 	return append(results, newResult)
-}
-
-func Encode(text string) []string {
-	var memo = make(map[string][]string)
-	text = strings.Replace(text, " ", "", -1)
-	text = strings.ToLower(text)
-	results := []string{}
-	for _, result := range quranize(text, memo) {
-		if wholeWord([]rune(result)) {
-			results = appendUniq(results, result)
-		}
-	}
-	return results
 }
