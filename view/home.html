@@ -46,7 +46,11 @@
                 <dd v-for="(location, index) in encoded.locations">
                   <div class="row">
                     <div class="text-left columns small-12 medium-6">{{"{{ index+1 }}"}}. Sura {{"{{ location.Sura }}"}} aya {{"{{ location.Location.Aya+1 }}"}}:</div>
-                    <div class="text-right columns">{{"{{ location.Aya }}"}}</div>
+                    <div class="text-right columns">
+                      {{"{{ location.AyaBeforeHL }}"}}
+                      <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
+                      {{"{{ location.AyaAfterHL }}"}}
+                    </div>
                   </div>
                 </dd>
                 <hr>
