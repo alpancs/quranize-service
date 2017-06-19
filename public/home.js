@@ -30,7 +30,6 @@ new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      if (!this.trimmedInput) return
       this.loading = true
       axios.get('/api/encode/' + this.trimmedInput)
       .then((response) => this.encodeds = response.data.map((e) => ({text: e})))
