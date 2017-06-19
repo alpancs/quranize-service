@@ -35,10 +35,9 @@
 
             <dl>
               <div v-for="encoded in encodeds">
-                <dt class="text-center" @click="locate(encoded)" >
-                  <i v-show="encoded.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
-                  <i class="fa" aria-hidden="true" :class="{'fa-chevron-circle-left': !encoded.locations, 'fa-chevron-circle-down': encoded.locations}" style="cursor: pointer;"></i>
-                  <span style="text-decoration: underline;">{{"{{ encoded.text }}"}}</span>
+                <dt class="text-center">
+                  <i @click="locate(encoded)" :class="{'fa-chevron-circle-left': !encoded.locations && !encoded.loading, 'fa-chevron-circle-down': encoded.locations && !encoded.loading, 'fa-spinner fa-pulse': encoded.loading}" class="fa" aria-hidden="true" style="cursor: pointer;"></i>
+                  <span>{{"{{ encoded.text }}"}}</span>
                 </dt>
                 <dd v-for="(location, index) in encoded.locations">
                   <div class="text-left">{{"{{ index+1 }}"}}. Surah {{"{{ location.Sura }}"}} ayah {{"{{ location.Location.Aya+1 }}"}}:</div>
