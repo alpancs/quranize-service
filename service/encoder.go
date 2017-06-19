@@ -30,14 +30,12 @@ func combine(heads, tails []string) []string {
 	combinations := []string{}
 	for _, head := range heads {
 		for _, tail := range tails {
-			if head == "" {
-				combinations = append(combinations, tail)
-			} else {
-				combinations = append(combinations, head+tail)
+			if head != "" {
 				combinations = append(combinations, head+" "+tail)
 				combinations = append(combinations, head+" ال"+tail)
-				combinations = append(combinations, head+tail+"ا")
 			}
+			combinations = append(combinations, head+tail)
+			combinations = append(combinations, head+tail+"ا")
 		}
 	}
 	return combinations
