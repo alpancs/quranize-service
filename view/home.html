@@ -36,7 +36,7 @@
             <dl>
               <div v-for="encoded in encodeds">
                 <dt class="text-center">
-                  <i @click="locate(encoded)" :class="{'fa-chevron-circle-left': !encoded.locations && !encoded.loading, 'fa-chevron-circle-down': encoded.locations && !encoded.loading, 'fa-spinner fa-pulse': encoded.loading}" class="fa" aria-hidden="true" style="cursor: pointer;"></i>
+                  <i @click="locate(encoded)" :class="{'fa-chevron-circle-left': !encoded.locations && !encoded.loading, 'fa-chevron-circle-down': encoded.locations && !encoded.loading, 'fa-spinner fa-pulse': encoded.loading}" class="fa" aria-hidden="true" style="cursor: pointer; color: lightskyblue;"></i>
                   <span>{{"{{ encoded.text }}"}}</span>
                 </dt>
                 <dd v-for="(location, index) in encoded.locations">
