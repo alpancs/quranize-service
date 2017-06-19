@@ -57,7 +57,7 @@ func quranize(text string, memo map[string][]string) []string {
 			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
 				if inTree([]rune(combination)) {
-					kalimas = append(kalimas, combination)
+					kalimas = appendUniq(kalimas, combination)
 				}
 			}
 		}
@@ -67,10 +67,7 @@ func quranize(text string, memo map[string][]string) []string {
 	return kalimas
 }
 
-func insertResult(results []string, newResult string) []string {
-	if !wholeWord([]rune(newResult)) {
-		return results
-	}
+func appendUniq(results []string, newResult string) []string {
 	for _, result := range results {
 		if result == newResult {
 			return results
@@ -85,7 +82,9 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		results = insertResult(results, result)
+		if wholeWord([]rune(result)) {
+			results = appendUniq(results, result)
+		}
 	}
 	return results
 }
