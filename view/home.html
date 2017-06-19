@@ -35,12 +35,12 @@
 
             <dl>
               <div v-for="encoded in encodeds">
-                <dt class="text-right">
+                <dt class="text-center">
                   <i v-show="encoded.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
-                  <span v-show="!encoded.locations && !encoded.loading" class="badge" style="cursor: pointer;">
-                    <i @click="locate(encoded)" class="fa fa-angle-double-left" aria-hidden="true"></i>
+                  <span class="badge secondary" @click="locate(encoded)" v-show="!encoded.locations && !encoded.loading" style="cursor: pointer;">
+                    <i class="fa fa-caret-left" aria-hidden="true"></i>
                   </span>
-                  {{"{{ encoded.text }}"}}
+                  <span>{{"{{ encoded.text }}"}}</span>
                 </dt>
                 <dd v-for="(location, index) in encoded.locations">
                   <div class="row">
@@ -51,8 +51,9 @@
                       {{"{{ location.AyaAfterHL }}"}}
                     </div>
                   </div>
+                  <hr>
                 </dd>
-                <hr>
+                <!-- <hr> -->
               </div>
             </dl>
 
