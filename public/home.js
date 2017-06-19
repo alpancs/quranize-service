@@ -38,6 +38,7 @@ new Vue({
     }, 500),
 
     locate(encoded) {
+      if (encoded.locations) return this.$set(encoded, 'locations', undefined)
       this.$set(encoded, 'loading', true)
       axios.get('/api/locate/' + encoded.text)
       .then((response) => {

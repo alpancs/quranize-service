@@ -35,23 +35,20 @@
 
             <dl>
               <div v-for="encoded in encodeds">
-                <dt class="text-center">
+                <dt class="text-center" @click="locate(encoded)" >
                   <i v-show="encoded.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
-                  <i class="fa fa-chevron-circle-left" aria-hidden="true" @click="locate(encoded)" v-show="!encoded.locations && !encoded.loading" style="cursor: pointer;"></i>
-                  <span>{{"{{ encoded.text }}"}}</span>
+                  <i class="fa" aria-hidden="true" :class="{'fa-chevron-circle-left': !encoded.locations, 'fa-chevron-circle-down': encoded.locations}" style="cursor: pointer;"></i>
+                  <span style="text-decoration: underline;">{{"{{ encoded.text }}"}}</span>
                 </dt>
                 <dd v-for="(location, index) in encoded.locations">
-                  <div class="row">
-                    <div class="text-left columns small-12 medium-6">{{"{{ index+1 }}"}}. Surah {{"{{ location.Sura }}"}} ayah {{"{{ location.Location.Aya+1 }}"}}:</div>
-                    <div class="text-right columns">
-                      {{"{{ location.AyaBeforeHL }}"}}
-                      <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
-                      {{"{{ location.AyaAfterHL }}"}}
-                    </div>
-                  </div>
+                  <div class="text-left">{{"{{ index+1 }}"}}. Surah {{"{{ location.Sura }}"}} ayah {{"{{ location.Location.Aya+1 }}"}}:</div>
+                  <p class="text-right">
+                    {{"{{ location.AyaBeforeHL }}"}}
+                    <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
+                    {{"{{ location.AyaAfterHL }}"}}
+                  </p>
                   <hr>
                 </dd>
-                <!-- <hr> -->
               </div>
             </dl>
 
