@@ -12,7 +12,7 @@ new Vue({
       return this.input.trim()
     },
     noResult() {
-      return this.trimmedInput && !this.encodeds.length
+      return !this.loading && this.trimmedInput && !this.encodeds.length
     },
     alphabet() {
       return this.encodeds.length ? this.trimmedInput : ''
