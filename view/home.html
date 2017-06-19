@@ -14,17 +14,17 @@
     <h5 class="text-center subheader">Quranize transforms <strong>{{"{{ alphabet || 'alphabet' }}"}}</strong> into <strong>{{`{{ quran || "Qur'an text" }}`}}</strong>.</h5>
 
     <div class="row">
-      <div class="small-1 medium-2 columns"></div>
+      <div class="medium-2 columns"></div>
       
       <!-- main content -->
-      <div class="small-10 medium-8 columns">
+      <div class="small-12 medium-8 columns">
 
         <!-- input -->
         <div class="row">
           <div class="small-12 columns">
             <div class="input-group">
-              <span class="input-group-label"><i :class="{'fa-pulse fa-spinner': loading, 'fa-search': !loading}" class="fa fa-fw" aria-hidden="true"></i></span>
-              <input class="input-group-field" type="text" placeholder="tajri" v-model="input" autofocus>
+              <span class="input-group-label"><i :class="{'fa-pulse fa-spinner': loading, 'fa-password': !loading}" class="fa fa-fw" aria-hidden="true"></i></span>
+              <input class="input-group-field" type="text" placeholder="bismillah" v-model="input" autofocus>
             </div>
           </div>
         </div>
