@@ -51,23 +51,28 @@ func giveHarakah(kalima string) string {
 	return string(ayaEnhanced[begin : end+1])
 }
 
-func inSlice(target rune, slice []rune) bool {
-	for _, e := range slice {
-		if target == e {
-			return true
-		}
-	}
-	return false
-}
-
 func offset(runes []rune, n int) int {
 	for i, harf := range runes {
 		if n == 0 {
 			return i
 		}
-		if inSlice(harf, simpleHarfs) {
+		if inSlice(harf, simpleHarfs, 0, len(simpleHarfs)-1) {
 			n--
 		}
 	}
 	return -1
+}
+
+func inSlice(target rune, slice []rune, begin, end int) bool {
+	for begin <= end {
+		mid := (begin + end) / 2
+		if target > slice[mid] {
+			begin = mid + 1
+		} else if target < slice[mid] {
+			end = mid - 1
+		} else {
+			return true
+		}
+	}
+	return false
 }
