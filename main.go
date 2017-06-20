@@ -16,7 +16,7 @@ func init() {
 }
 
 func main() {
-	log.Println("Linguist is running in port " + os.Getenv("PORT"))
+	log.Println("Quranize is running in port " + os.Getenv("PORT"))
 	http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter())
 }
 
