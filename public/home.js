@@ -15,10 +15,10 @@ new Vue({
       return !this.loading && this.trimmedInput !== '' && this.encodeds.length === 0
     },
     alphabet() {
-      return this.encodeds.length ? this.trimmedInput : ''
+      return this.encodeds.length ? this.trimmedInput : 'alphabet'
     },
     quran() {
-      return this.encodeds.length ? this.encodeds[0].text : ''
+      return this.encodeds.length ? this.encodeds[0].text : "Al-Qu'ran"
     },
   },
 
@@ -32,7 +32,7 @@ new Vue({
     updateResult: _.debounce(function() {
       this.loading = true
       axios.get('/api/encode/' + this.trimmedInput)
-      .then((response) => this.encodeds = response.data.map((e) => ({text: e})))
+      .then((response) => this.encodeds = response.data.map((text) => ({text})))
       .catch(() => this.encodeds = [])
       .then(() => this.loading = false)
     }, 500),
