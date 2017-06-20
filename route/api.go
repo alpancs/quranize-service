@@ -10,9 +10,9 @@ import (
 
 type (
 	CleanEnhanced struct{ Clean, Enhanced string }
-	AyaLocation   struct {
-		Sura, Aya string
-		Location  service.Location
+	Location      struct {
+		Sura, Aya, Index  int
+		SuraName, AyaText string
 	}
 )
 
@@ -33,13 +33,14 @@ func Encode(w http.ResponseWriter, r *http.Request) {
 
 func Locate(w http.ResponseWriter, r *http.Request) {
 	input := chi.URLParam(r, "input")
-	ret := []AyaLocation{}
+	locations := []Location{}
 	for _, loc := range service.Locate(input) {
-		sura := quranClean.Suras[loc.Sura].Name
-		aya := quranClean.Suras[loc.Sura].Ayas[loc.Aya].Text
-		ret = append(ret, AyaLocation{sura, aya, loc})
+		suraName := quranEnhanced.Suras[loc.Sura].Name
+		ayaText := quranEnhanced.Suras[loc.Sura].Ayas[loc.Aya].Text
+		index := offset([]rune(ayaText), loc.Index)
+		locations = append(locations, Location{loc.Sura, loc.Aya, index, suraName, ayaText})
 	}
-	json.NewEncoder(w).Encode(ret)
+	json.NewEncoder(w).Encode(locations)
 }
 
 func giveHarakah(kalima string) string {

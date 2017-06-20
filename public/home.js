@@ -43,16 +43,16 @@ new Vue({
       this.$set(encoded, 'loading', true)
       axios.get('/api/locate/' + encoded.text.Clean)
       .then((response) => {
-        let data = response.data
-        data.forEach((location) => {
-          let aya = location.Aya
-          let begin = location.Location.Index
-          let end = location.Location.Index + encoded.text.Clean.length
+        let locations = response.data
+        locations.forEach((location) => {
+          let aya = location.AyaText
+          let begin = location.Index
+          let end = location.Index + encoded.text.Enhanced.length
           location.AyaBeforeHL = aya.substring(0, begin)
           location.AyaHL = aya.substring(begin, end)
           location.AyaAfterHL = aya.substring(end)
         })
-        this.$set(encoded, 'locations', data)
+        this.$set(encoded, 'locations', locations)
       })
       .catch(() => this.$set(encoded, 'locations', undefined))
       .then(() => this.$set(encoded, 'loading', false))
