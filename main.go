@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/alpancs/quranize/route"
-	"github.com/alpancs/quranize/service"
 	"github.com/pressly/chi"
 )
 
@@ -17,24 +15,7 @@ func init() {
 	}
 }
 
-func dummy() {
-	runeSet := make(map[rune]bool)
-	for _, sura := range service.QuranSimple.Suras {
-		for _, aya := range sura.Ayas {
-			for _, r := range []rune(aya.Text) {
-				runeSet[r] = true
-			}
-		}
-	}
-	fmt.Println(len(runeSet))
-	for r := range runeSet {
-		fmt.Printf("%c %d\n", r, r)
-	}
-}
-
 func main() {
-	dummy()
-	return
 	log.Println("Quranize is running in port " + os.Getenv("PORT"))
 	http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter())
 }

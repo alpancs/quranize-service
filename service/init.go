@@ -33,7 +33,7 @@ type (
 )
 
 var (
-	QuranSimple, QuranUthmani Alquran
+	QuranClean, QuranEnhanced Alquran
 	maxWidth                  int
 
 	root     = &Node{}
@@ -51,8 +51,8 @@ func getChild(children []Child, key rune) *Node {
 
 func init() {
 	loadHijaiyas("corpus/arabic-to-alphabet")
-	loadQuran("corpus/quran-simple-clean.xml", &QuranSimple)
-	loadQuran("corpus/quran-uthmani.xml", &QuranUthmani)
+	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
+	loadQuran("corpus/quran-simple-enhanced.xml", &QuranEnhanced)
 	buildIndex()
 }
 
@@ -102,7 +102,7 @@ func loadQuran(filePath string, quran *Alquran) {
 }
 
 func buildIndex() {
-	for s, sura := range QuranSimple.Suras {
+	for s, sura := range QuranClean.Suras {
 		for a, aya := range sura.Ayas {
 			indexAya([]rune(aya.Text), s, a)
 		}

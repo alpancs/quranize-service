@@ -18,7 +18,7 @@ new Vue({
       return this.encodeds.length ? this.trimmedInput : 'alphabet'
     },
     quran() {
-      return this.encodeds.length ? this.encodeds[0].text : "Al-Qu'ran"
+      return this.encodeds.length ? this.encodeds[0].text.Enhanced : "Al-Qu'ran"
     },
   },
 
@@ -41,13 +41,13 @@ new Vue({
       this.$set(encoded, 'expanded', !encoded.expanded)
       if (encoded.locations) return
       this.$set(encoded, 'loading', true)
-      axios.get('/api/locate/' + encoded.text)
+      axios.get('/api/locate/' + encoded.text.Clean)
       .then((response) => {
         let data = response.data
         data.forEach((location) => {
           let aya = location.Aya
           let begin = location.Location.Index
-          let end = location.Location.Index + encoded.text.length
+          let end = location.Location.Index + encoded.text.Clean.length
           location.AyaBeforeHL = aya.substring(0, begin)
           location.AyaHL = aya.substring(begin, end)
           location.AyaAfterHL = aya.substring(end)
