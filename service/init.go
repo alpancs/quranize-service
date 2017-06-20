@@ -56,7 +56,10 @@ func loadHijaiyas() {
 	filePath := "corpus/arabic-to-alphabet"
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		panic(err)
+		raw, err = ioutil.ReadFile("service/" + filePath)
+		if err != nil {
+			panic(err)
+		}
 	}
 	trimmed := strings.TrimSpace(string(raw))
 	for _, line := range strings.Split(trimmed, "\n") {
@@ -64,8 +67,18 @@ func loadHijaiyas() {
 		arabic := components[0]
 		for _, alphabet := range components[1:] {
 			hijaiyas[alphabet] = append(hijaiyas[alphabet], arabic)
-			if maxWidth < len(alphabet) {
-				maxWidth = len(alphabet)
+
+			length := len(alphabet)
+			ending := alphabet[length-1]
+			if ending == 'a' || ending == 'i' || ending == 'o' || ending == 'u' {
+				alphabet = alphabet[:length-1] + alphabet[:length-1] + alphabet[length-1:]
+			} else {
+				alphabet += alphabet
+			}
+			hijaiyas[alphabet] = append(hijaiyas[alphabet], arabic)
+			length = len(alphabet)
+			if length > maxWidth {
+				maxWidth = length
 			}
 		}
 	}
@@ -74,9 +87,13 @@ func loadHijaiyas() {
 func loadQuran() {
 	filePath := "corpus/quran-simple-clean.xml"
 	raw, err := ioutil.ReadFile(filePath)
-	if err == nil {
-		err = xml.Unmarshal(raw, &Quran)
+	if err != nil {
+		raw, err = ioutil.ReadFile("service/" + filePath)
+		if err != nil {
+			panic(err)
+		}
 	}
+	err = xml.Unmarshal(raw, &Quran)
 	if err != nil {
 		panic(err)
 	}

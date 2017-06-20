@@ -11,7 +11,7 @@
   <div id="app" hidden :hidden="false">
     <!-- header -->
     <h1 class="top-bar"><div class="text-center top-bar-left"><strong>Quranize</strong></div></h1>
-    <h5 class="text-center subheader">Quranize transforms <strong>{{"{{ alphabet || 'alphabet' }}"}}</strong> into <strong>{{`{{ quran || "Qur'an text" }}`}}</strong>.</h5>
+    <h5 class="text-center subheader">Quranize transforms <strong>{{"{{ alphabet }}"}}</strong> into <strong>{{`{{ quran }}`}}</strong>.</h5>
 
     <div class="row">
       <div class="medium-2 columns"></div>
@@ -36,22 +36,19 @@
             <dl>
               <div v-for="encoded in encodeds">
                 <dt class="text-center">
-                  <i v-show="encoded.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
-                  <i class="fa fa-chevron-circle-left" aria-hidden="true" @click="locate(encoded)" v-show="!encoded.locations && !encoded.loading" style="cursor: pointer;"></i>
+                  <i @click="locate(encoded)" :class="{'fa-chevron-circle-left': !encoded.expanded, 'fa-chevron-circle-down': encoded.expanded}" class="fa" aria-hidden="true" style="cursor: pointer; color: lightblue;"></i>
                   <span>{{"{{ encoded.text }}"}}</span>
                 </dt>
-                <dd v-for="(location, index) in encoded.locations">
-                  <div class="row">
-                    <div class="text-left columns small-12 medium-6">{{"{{ index+1 }}"}}. Surah {{"{{ location.Sura }}"}} ayah {{"{{ location.Location.Aya+1 }}"}}:</div>
-                    <div class="text-right columns">
-                      {{"{{ location.AyaBeforeHL }}"}}
-                      <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
-                      {{"{{ location.AyaAfterHL }}"}}
-                    </div>
-                  </div>
+                <div v-show="encoded.expanded && encoded.loading" class="text-center"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
+                <dd v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
+                  <div class="text-left">{{"{{ index+1 }}"}}. Surah {{"{{ location.Sura }}"}} ayah {{"{{ location.Location.Aya+1 }}"}}:</div>
+                  <p class="text-right">
+                    {{"{{ location.AyaBeforeHL }}"}}
+                    <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
+                    {{"{{ location.AyaAfterHL }}"}}
+                  </p>
                   <hr>
                 </dd>
-                <!-- <hr> -->
               </div>
             </dl>
 

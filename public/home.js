@@ -12,13 +12,13 @@ new Vue({
       return this.input.trim()
     },
     noResult() {
-      return !this.loading && this.trimmedInput && !this.encodeds.length
+      return !this.loading && this.trimmedInput !== '' && this.encodeds.length === 0
     },
     alphabet() {
-      return this.encodeds.length ? this.trimmedInput : ''
+      return this.encodeds.length ? this.trimmedInput : 'alphabet'
     },
     quran() {
-      return this.encodeds.length ? this.encodeds[0].text : ''
+      return this.encodeds.length ? this.encodeds[0].text : "Al-Qu'ran"
     },
   },
 
@@ -30,15 +30,16 @@ new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      if (!this.trimmedInput) return
       this.loading = true
       axios.get('/api/encode/' + this.trimmedInput)
-      .then((response) => this.encodeds = response.data.map((e) => ({text: e})))
+      .then((response) => this.encodeds = response.data.map((text) => ({text})))
       .catch(() => this.encodeds = [])
       .then(() => this.loading = false)
     }, 500),
 
     locate(encoded) {
+      this.$set(encoded, 'expanded', !encoded.expanded)
+      if (encoded.locations) return
       this.$set(encoded, 'loading', true)
       axios.get('/api/locate/' + encoded.text)
       .then((response) => {

@@ -43,7 +43,7 @@ func TestEncode5(t *testing.T) {
 }
 
 func TestEncode6(t *testing.T) {
-	input := "ihdinas shirothol mustaqim"
+	input := "ihdinash shirothol mustaqim"
 	output := []string{"اهدنا الصراط المستقيم"}
 	if !properlyEncoded(input, output) {
 		t.Error(Encode(input))
@@ -51,7 +51,7 @@ func TestEncode6(t *testing.T) {
 }
 
 func TestEncode7(t *testing.T) {
-	input := "shirotholladzina an'am ta'alaihim ghoiril magdu bi'alaihim walad dhollin"
+	input := "shirotholladzina an'am ta'alaihim ghoiril maghdzu bi'alaihim waladh dhollin"
 	output := []string{"صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين"}
 	if !properlyEncoded(input, output) {
 		t.Error(Encode(input))
