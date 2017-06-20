@@ -56,7 +56,10 @@ func loadHijaiyas() {
 	filePath := "corpus/arabic-to-alphabet"
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		panic(err)
+		raw, err = ioutil.ReadFile("service/" + filePath)
+		if err != nil {
+			panic(err)
+		}
 	}
 	trimmed := strings.TrimSpace(string(raw))
 	for _, line := range strings.Split(trimmed, "\n") {
@@ -84,9 +87,13 @@ func loadHijaiyas() {
 func loadQuran() {
 	filePath := "corpus/quran-simple-clean.xml"
 	raw, err := ioutil.ReadFile(filePath)
-	if err == nil {
-		err = xml.Unmarshal(raw, &Quran)
+	if err != nil {
+		raw, err = ioutil.ReadFile("service/" + filePath)
+		if err != nil {
+			panic(err)
+		}
 	}
+	err = xml.Unmarshal(raw, &Quran)
 	if err != nil {
 		panic(err)
 	}
