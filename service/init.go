@@ -7,24 +7,7 @@ import (
 )
 
 type (
-	Location struct{ Sura, Aya, Index int }
-	Child    struct {
-		Key   rune
-		Value *Node
-	}
-	Node struct {
-		Locations []Location
-		Children  []Child
-	}
-)
-
-var (
-	maxWidth int
-
-	root     = &Node{}
-	hijaiyas = make(map[string][]string)
-
-	Quran struct {
+	Alquran struct {
 		Suras []struct {
 			Index int    `xml:"index,attr"`
 			Name  string `xml:"name,attr"`
@@ -35,6 +18,26 @@ var (
 			} `xml:"aya"`
 		} `xml:"sura"`
 	}
+
+	Location struct{ Sura, Aya, Index int }
+
+	Child struct {
+		Key   rune
+		Value *Node
+	}
+
+	Node struct {
+		Locations []Location
+		Children  []Child
+	}
+)
+
+var (
+	QuranSimple, QuranUthmani Alquran
+	maxWidth                  int
+
+	root     = &Node{}
+	hijaiyas = make(map[string][]string)
 )
 
 func getChild(children []Child, key rune) *Node {
@@ -47,13 +50,13 @@ func getChild(children []Child, key rune) *Node {
 }
 
 func init() {
-	loadHijaiyas()
-	loadQuran()
+	loadHijaiyas("corpus/arabic-to-alphabet")
+	loadQuran("corpus/quran-simple-clean.xml", &QuranSimple)
+	loadQuran("corpus/quran-uthmani.xml", &QuranUthmani)
 	buildIndex()
 }
 
-func loadHijaiyas() {
-	filePath := "corpus/arabic-to-alphabet"
+func loadHijaiyas(filePath string) {
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		raw, err = ioutil.ReadFile("service/" + filePath)
@@ -84,8 +87,7 @@ func loadHijaiyas() {
 	}
 }
 
-func loadQuran() {
-	filePath := "corpus/quran-simple-clean.xml"
+func loadQuran(filePath string, quran *Alquran) {
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		raw, err = ioutil.ReadFile("service/" + filePath)
@@ -93,14 +95,14 @@ func loadQuran() {
 			panic(err)
 		}
 	}
-	err = xml.Unmarshal(raw, &Quran)
+	err = xml.Unmarshal(raw, quran)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func buildIndex() {
-	for s, sura := range Quran.Suras {
+	for s, sura := range QuranSimple.Suras {
 		for a, aya := range sura.Ayas {
 			indexAya([]rune(aya.Text), s, a)
 		}

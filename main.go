@@ -19,7 +19,7 @@ func init() {
 
 func dummy() {
 	runeSet := make(map[rune]bool)
-	for _, sura := range service.Quran.Suras {
+	for _, sura := range service.QuranSimple.Suras {
 		for _, aya := range sura.Ayas {
 			for _, r := range []rune(aya.Text) {
 				runeSet[r] = true

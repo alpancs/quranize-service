@@ -13,7 +13,7 @@ type AyaLocation struct {
 	Location  service.Location
 }
 
-var quran = &service.Quran
+var quran = &service.QuranSimple
 
 func Encode(w http.ResponseWriter, r *http.Request) {
 	input := chi.URLParam(r, "input")
