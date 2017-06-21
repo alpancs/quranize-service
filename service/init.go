@@ -33,8 +33,8 @@ type (
 )
 
 var (
-	QuranClean, QuranEnhanced Alquran
-	maxWidth                  int
+	QuranClean, QuranMin Alquran
+	maxWidth             int
 
 	root     = &Node{}
 	hijaiyas = make(map[string][]string)
@@ -52,14 +52,14 @@ func getChild(children []Child, key rune) *Node {
 func init() {
 	loadHijaiyas("corpus/arabic-to-alphabet")
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
-	loadQuran("corpus/quran-simple-enhanced.xml", &QuranEnhanced)
+	loadQuran("corpus/quran-simple-min.xml", &QuranMin)
 	buildIndex()
 }
 
 func loadHijaiyas(filePath string) {
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		raw, err = ioutil.ReadFile("service/" + filePath)
+		raw, err = ioutil.ReadFile("../" + filePath)
 		if err != nil {
 			panic(err)
 		}
@@ -90,7 +90,7 @@ func loadHijaiyas(filePath string) {
 func loadQuran(filePath string, quran *Alquran) {
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		raw, err = ioutil.ReadFile("service/" + filePath)
+		raw, err = ioutil.ReadFile("../" + filePath)
 		if err != nil {
 			panic(err)
 		}

@@ -36,7 +36,7 @@
               <div v-for="encoded in encodeds">
                 <dt class="text-center">
                   <i @click="locate(encoded)" :class="{'fa-chevron-circle-left': !encoded.expanded, 'fa-chevron-circle-down': encoded.expanded}" class="fa" aria-hidden="true" style="cursor: pointer; color: lightblue;"></i>
-                  <span>{{"{{ encoded.text.Enhanced }}"}}</span>
+                  <span>{{"{{ encoded.text.Min }}"}}</span>
                 </dt>
                 <div v-show="encoded.expanded && encoded.loading" class="text-center"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
                 <dd v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
