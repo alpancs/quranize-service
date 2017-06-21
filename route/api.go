@@ -56,19 +56,20 @@ func offset(runes []rune, n int) int {
 		if n == 0 {
 			return i
 		}
-		if inSlice(harf, simpleHarfs, 0, len(simpleHarfs)-1) {
+		if isSimpleHarf(harf) {
 			n--
 		}
 	}
-	return -1
+	return len(runes)
 }
 
-func inSlice(target rune, slice []rune, begin, end int) bool {
+func isSimpleHarf(harf rune) bool {
+	begin, end := 0, len(simpleHarfs)-1
 	for begin <= end {
 		mid := (begin + end) / 2
-		if target > slice[mid] {
+		if harf > simpleHarfs[mid] {
 			begin = mid + 1
-		} else if target < slice[mid] {
+		} else if harf < simpleHarfs[mid] {
 			end = mid - 1
 		} else {
 			return true
