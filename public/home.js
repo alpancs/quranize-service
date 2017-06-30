@@ -1,4 +1,4 @@
-new Vue({
+let app = new Vue({
   el: '#app',
 
   data: {
@@ -44,7 +44,6 @@ new Vue({
       axios.get('/api/locate/' + encoded.text.Clean)
       .then((response) => {
         let locations = response.data
-        console.log(locations)
         locations.forEach((location) => {
           let aya = location.AyaText
           let begin = location.Index

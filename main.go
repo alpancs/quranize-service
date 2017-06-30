@@ -23,7 +23,7 @@ func main() {
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
-	router.Get("/", route.Home)
+	router.Get("/:input", route.Home)
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
@@ -31,7 +31,7 @@ func setUpRouter() http.Handler {
 		apiRouter.Get("/locate/:input", route.Locate)
 	})
 
-	router.FileServer("/", http.Dir("public"))
+	router.FileServer("/file", http.Dir("public"))
 
 	return router
 }
