@@ -5,16 +5,27 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/alpancs/quranize/service"
 	"github.com/pressly/chi"
 )
 
 type Data struct {
-	Production bool
-	Input      string
+	Production                 bool
+	Input, Alphabet, QuranText string
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	data := Data{os.Getenv("GO_ENV") == "production", chi.URLParam(r, "input")}
+	input := chi.URLParam(r, "input")
+
+	alphabet := "alphabet"
+	quranText := "Al-Qur'an"
+	encodeds := service.Encode(input)
+	if len(encodeds) > 0 {
+		alphabet = input
+		quranText = encodeds[0]
+	}
+
+	data := Data{os.Getenv("GO_ENV") == "production", input, alphabet, quranText}
 	t, err := template.ParseFiles("view/home.html")
 	if err != nil {
 		if !data.Production {

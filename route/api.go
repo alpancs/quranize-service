@@ -9,10 +9,9 @@ import (
 )
 
 type (
-	CleanMin struct{ Clean, Min string }
 	Location struct {
-		Sura, Aya, Index  int
-		SuraName, AyaText string
+		Sura, Aya, Begin, End int
+		SuraName, AyaText     string
 	}
 )
 
@@ -24,11 +23,7 @@ var (
 
 func Encode(w http.ResponseWriter, r *http.Request) {
 	input := chi.URLParam(r, "input")
-	couples := []CleanMin{}
-	for _, clean := range service.Encode(input) {
-		couples = append(couples, CleanMin{clean, giveHarakah(clean)})
-	}
-	json.NewEncoder(w).Encode(couples)
+	json.NewEncoder(w).Encode(service.Encode(input))
 }
 
 func Locate(w http.ResponseWriter, r *http.Request) {
@@ -37,18 +32,11 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 	for _, loc := range service.Locate(input) {
 		suraName := quranMin.Suras[loc.Sura].Name
 		ayaText := quranMin.Suras[loc.Sura].Ayas[loc.Aya].Text
-		index := offset([]rune(ayaText), loc.Index)
-		locations = append(locations, Location{loc.Sura, loc.Aya, index, suraName, ayaText})
+		begin := offset([]rune(ayaText), loc.Index)
+		end := begin + len(input) - 2
+		locations = append(locations, Location{loc.Sura, loc.Aya, begin, end, suraName, ayaText})
 	}
 	json.NewEncoder(w).Encode(locations)
-}
-
-func giveHarakah(kalima string) string {
-	loc := service.Locate(kalima)[0]
-	ayaMin := []rune(quranMin.Suras[loc.Sura].Ayas[loc.Aya].Text)
-	begin := offset(ayaMin, loc.Index)
-	end := begin + offset(ayaMin[begin:], len([]rune(kalima)))
-	return string(ayaMin[begin : end+1])
 }
 
 func offset(runes []rune, n int) int {
