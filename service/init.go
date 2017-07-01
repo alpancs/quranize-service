@@ -6,31 +6,29 @@ import (
 	"strings"
 )
 
-type (
-	Alquran struct {
-		Suras []struct {
-			Index int    `xml:"index,attr"`
-			Name  string `xml:"name,attr"`
-			Ayas  []struct {
-				Index     int    `xml:"index,attr"`
-				Text      string `xml:"text,attr"`
-				Bismillah string `xml:"bismillah,attr"`
-			} `xml:"aya"`
-		} `xml:"sura"`
-	}
+type Alquran struct {
+	Suras []struct {
+		Index int    `xml:"index,attr"`
+		Name  string `xml:"name,attr"`
+		Ayas  []struct {
+			Index     int    `xml:"index,attr"`
+			Text      string `xml:"text,attr"`
+			Bismillah string `xml:"bismillah,attr"`
+		} `xml:"aya"`
+	} `xml:"sura"`
+}
 
-	Location struct{ Sura, Aya, Index int }
+type Location struct{ Sura, Aya, Index int }
 
-	Child struct {
-		Key   rune
-		Value *Node
-	}
+type Child struct {
+	Key   rune
+	Value *Node
+}
 
-	Node struct {
-		Locations []Location
-		Children  []Child
-	}
-)
+type Node struct {
+	Locations []Location
+	Children  []Child
+}
 
 var (
 	QuranClean, QuranMin Alquran
