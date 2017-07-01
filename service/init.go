@@ -32,10 +32,10 @@ type Node struct {
 
 var (
 	QuranClean, QuranMin Alquran
-	maxWidth             int
 
-	root     = &Node{}
-	hijaiyas = make(map[string][]string)
+	maxWidth int
+	root     *Node
+	hijaiyas map[string][]string
 )
 
 func getChild(children []Child, key rune) *Node {
@@ -51,10 +51,11 @@ func init() {
 	loadHijaiyas("corpus/arabic-to-alphabet")
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
 	loadQuran("corpus/quran-simple-min.xml", &QuranMin)
-	buildIndex()
+	root = buildIndex(&QuranClean)
 }
 
 func loadHijaiyas(filePath string) {
+	hijaiyas = make(map[string][]string)
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		raw, err = ioutil.ReadFile("../" + filePath)
@@ -99,18 +100,20 @@ func loadQuran(filePath string, quran *Alquran) {
 	}
 }
 
-func buildIndex() {
+func buildIndex(quran *Alquran) *Node {
+	node := &Node{}
 	for s, sura := range QuranClean.Suras {
 		for a, aya := range sura.Ayas {
-			indexAya([]rune(aya.Text), s, a)
+			indexAya([]rune(aya.Text), s, a, node)
 		}
 	}
+	return node
 }
 
-func indexAya(harfs []rune, sura, aya int) {
+func indexAya(harfs []rune, sura, aya int, node *Node) {
 	index := 0
 	for index < len(harfs) {
-		buildTree(harfs[index:], Location{sura, aya, index})
+		buildTree(harfs[index:], Location{sura, aya, index}, node)
 		for index < len(harfs) && harfs[index] != ' ' {
 			index++
 		}
@@ -118,8 +121,7 @@ func indexAya(harfs []rune, sura, aya int) {
 	}
 }
 
-func buildTree(harfs []rune, location Location) {
-	node := root
+func buildTree(harfs []rune, location Location, node *Node) {
 	for _, harf := range harfs {
 		child := getChild(node.Children, harf)
 		if child == nil {
