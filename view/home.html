@@ -42,9 +42,9 @@
                 <dd v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
                   <div class="text-left">{{"{{ index+1 }}"}}. Surah {{"{{ location.SuraName }}"}} ayah {{"{{ location.Aya+1 }}"}}:</div>
                   <p class="text-right">
-                    {{"{{ location.AyaBeforeHL }}"}}
+                    <span>{{"{{ location.AyaBeforeHL }}"}}</span>
                     <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
-                    {{"{{ location.AyaAfterHL }}"}}
+                    <span>{{"{{ location.AyaAfterHL }}"}}</span>
                   </p>
                   <hr>
                 </dd>
