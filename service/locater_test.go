@@ -15,9 +15,9 @@ func properlyLocated(input string, output []Location) bool {
 	return true
 }
 
-func TestLocate(t *testing.T) {
+func TestLocateBismillahFull(t *testing.T) {
 	input := "بسم الله الرحمن الرحيم"
-	output := []Location{Location{0, 0, 0}, Location{26, 29, 19}}
+	output := []Location{Location{0, 0, 0}, Location{26, 29, 4}}
 	if !properlyLocated(input, output) {
 		t.Error(Locate(input))
 	}

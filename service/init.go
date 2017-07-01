@@ -18,7 +18,7 @@ type Alquran struct {
 	} `xml:"sura"`
 }
 
-type Location struct{ Sura, Aya, Index int }
+type Location struct{ Sura, Aya, SliceIndex int }
 
 type Child struct {
 	Key   rune
@@ -111,13 +111,13 @@ func buildIndex(quran *Alquran) *Node {
 }
 
 func indexAya(harfs []rune, sura, aya int, node *Node) {
-	index := 0
+	index, sliceIndex := -1, -1
 	for index < len(harfs) {
-		buildTree(harfs[index:], Location{sura, aya, index}, node)
+		index, sliceIndex = index+1, sliceIndex+1
+		buildTree(harfs[index:], Location{sura, aya, sliceIndex}, node)
 		for index < len(harfs) && harfs[index] != ' ' {
 			index++
 		}
-		index++
 	}
 }
 
