@@ -112,22 +112,24 @@ func buildIndex(quran *Alquran) *Node {
 
 func indexAya(harfs []rune, sura, aya int, node *Node) {
 	sliceIndex := 0
-	for index := range harfs {
-		if index == 0 || harfs[index-1] == ' ' {
-			buildTree(harfs[index:], Location{sura, aya, sliceIndex}, node)
+	for i := range harfs {
+		if i == 0 || harfs[i-1] == ' ' {
+			buildTree(harfs[i:], Location{sura, aya, sliceIndex}, node)
 			sliceIndex++
 		}
 	}
 }
 
 func buildTree(harfs []rune, location Location, node *Node) {
-	for _, harf := range harfs {
+	for i, harf := range harfs {
 		child := getChild(node.Children, harf)
 		if child == nil {
 			child = &Node{}
 			node.Children = append(node.Children, Child{harf, child})
 		}
 		node = child
-		node.Locations = append(node.Locations, location)
+		if i == len(harfs)-1 || harfs[i+1] == ' ' {
+			node.Locations = append(node.Locations, location)
+		}
 	}
 }
