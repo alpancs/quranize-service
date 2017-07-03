@@ -10,7 +10,7 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		if wholeWord([]rune(result)) {
+		if len(Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
 	}
@@ -67,17 +67,6 @@ func inTree(harfs []rune) bool {
 		}
 	}
 	return true
-}
-
-func wholeWord(harfs []rune) bool {
-	node := root
-	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
-		if node == nil {
-			return false
-		}
-	}
-	return len(node.Children) == 0 || getChild(node.Children, ' ') != nil
 }
 
 func appendUniq(results []string, newResult string) []string {
