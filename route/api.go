@@ -25,8 +25,9 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 	for _, loc := range service.Locate(input) {
 		suraName := service.QuranMin.Suras[loc.Sura].Name
 		ayaText := service.QuranMin.Suras[loc.Sura].Ayas[loc.Aya].Text
-		begin := indexAfterSpaces([]rune(ayaText), loc.SliceIndex)
-		end := indexAfterSpaces([]rune(ayaText), loc.SliceIndex+strings.Count(input, " ")+1) - 1
+		ayaTextRune := []rune(ayaText)
+		begin := indexAfterSpaces(ayaTextRune, loc.SliceIndex)
+		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(input, " ")+1) - 1
 		locations = append(locations, Location{loc.Sura, loc.Aya, begin, end, suraName, ayaText})
 	}
 	json.NewEncoder(w).Encode(locations)
