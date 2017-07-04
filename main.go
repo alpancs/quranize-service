@@ -31,6 +31,8 @@ func setUpRouter() http.Handler {
 		apiRouter.Get("/locate/{input}", route.Locate)
 	})
 
+	router.Get("/log/{input}", route.Log)
+
 	fileServer(router, "/file", http.Dir("public"))
 
 	return router
