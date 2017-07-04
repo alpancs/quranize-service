@@ -14,7 +14,7 @@ import (
 
 type History struct {
 	Timestamp time.Time
-	Input     string
+	Keyword   string
 }
 
 func Log(w http.ResponseWriter, r *http.Request) {
@@ -27,8 +27,8 @@ func Log(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer session.Close()
-	input, _ := url.QueryUnescape(chi.URLParam(r, "input"))
-	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{time.Now(), input})
+	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
+	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{time.Now(), keyword})
 	if err != nil {
 		w.WriteHeader(500)
 		log.Println(err.Error())

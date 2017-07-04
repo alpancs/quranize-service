@@ -15,17 +15,17 @@ type Data struct {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	input := chi.URLParam(r, "input")
+	keyword := chi.URLParam(r, "keyword")
 
 	alphabet := "alphabet"
 	quranText := "Al-Qur'an"
-	encodeds := service.Encode(input)
+	encodeds := service.Encode(keyword)
 	if len(encodeds) > 0 {
-		alphabet = input
+		alphabet = keyword
 		quranText = encodeds[0]
 	}
 
-	data := Data{os.Getenv("GO_ENV") == "production", input, alphabet, quranText}
+	data := Data{os.Getenv("GO_ENV") == "production", keyword, alphabet, quranText}
 	t, err := template.ParseFiles("view/home.html")
 	if err != nil {
 		if !data.Production {

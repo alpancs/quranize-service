@@ -16,19 +16,19 @@ type Location struct {
 }
 
 func Encode(w http.ResponseWriter, r *http.Request) {
-	input, _ := url.QueryUnescape(chi.URLParam(r, "input"))
-	json.NewEncoder(w).Encode(service.Encode(input))
+	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
+	json.NewEncoder(w).Encode(service.Encode(keyword))
 }
 
 func Locate(w http.ResponseWriter, r *http.Request) {
-	input := chi.URLParam(r, "input")
+	keyword := chi.URLParam(r, "keyword")
 	locations := []Location{}
-	for _, loc := range service.Locate(input) {
+	for _, loc := range service.Locate(keyword) {
 		suraName := service.QuranMin.Suras[loc.Sura].Name
 		ayaText := service.QuranMin.Suras[loc.Sura].Ayas[loc.Aya].Text
 		ayaTextRune := []rune(ayaText)
 		begin := indexAfterSpaces(ayaTextRune, loc.SliceIndex)
-		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(input, " ")+1) - 1
+		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(keyword, " ")+1) - 1
 		locations = append(locations, Location{loc.Sura, loc.Aya, begin, end, suraName, ayaText})
 	}
 	json.NewEncoder(w).Encode(locations)
