@@ -3,6 +3,7 @@ package route
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/alpancs/quranize/service"
@@ -15,7 +16,7 @@ type Location struct {
 }
 
 func Encode(w http.ResponseWriter, r *http.Request) {
-	input := chi.URLParam(r, "input")
+	input, _ := url.QueryUnescape(chi.URLParam(r, "input"))
 	json.NewEncoder(w).Encode(service.Encode(input))
 }
 
