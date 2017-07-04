@@ -29,6 +29,7 @@ func setUpRouter() http.Handler {
 		apiRouter.Use(jsonify)
 		apiRouter.Get("/encode/{keyword}", route.Encode)
 		apiRouter.Get("/locate/{keyword}", route.Locate)
+		apiRouter.Get("/top-keywords", route.TopKeywords)
 	})
 
 	router.Get("/log/{keyword}", route.Log)

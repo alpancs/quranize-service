@@ -32,6 +32,7 @@ type Node struct {
 
 var (
 	QuranClean, QuranMin Alquran
+	TopKeywords          []string
 
 	maxWidth int
 	root     *Node
@@ -52,6 +53,7 @@ func init() {
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
 	loadQuran("corpus/quran-simple-min.xml", &QuranMin)
 	root = buildIndex(&QuranClean)
+	go WatchTopKeywords()
 }
 
 func loadHijaiyas(filePath string) {

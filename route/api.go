@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/alpancs/quranize/service"
@@ -14,6 +15,8 @@ type Location struct {
 	Sura, Aya, Begin, End int
 	SuraName, AyaText     string
 }
+
+const DEFAULT_TOP_KEYWORDS_LIMIT = 5
 
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
@@ -34,6 +37,11 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(locations)
 }
 
+func TopKeywords(w http.ResponseWriter, r *http.Request) {
+	limit := normalizeLimit(r.URL.Query().Get("limit"))
+	json.NewEncoder(w).Encode(service.TopKeywords[:limit])
+}
+
 func indexAfterSpaces(text []rune, remain int) int {
 	for i, r := range text {
 		if remain == 0 {
@@ -44,4 +52,18 @@ func indexAfterSpaces(text []rune, remain int) int {
 		}
 	}
 	return len(text) + 1
+}
+
+func normalizeLimit(queryLimit string) int {
+	limit, err := strconv.Atoi(queryLimit)
+	if err != nil {
+		limit = DEFAULT_TOP_KEYWORDS_LIMIT
+	}
+	if limit < 0 {
+		limit = 0
+	}
+	if limit > len(service.TopKeywords) {
+		limit = len(service.TopKeywords)
+	}
+	return limit
 }

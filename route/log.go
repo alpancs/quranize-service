@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/go-chi/chi"
 )
@@ -28,7 +29,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 
 	defer session.Close()
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
-	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{time.Now(), keyword})
+	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{bson.Now(), keyword})
 	if err != nil {
 		w.WriteHeader(500)
 		log.Println(err.Error())
