@@ -23,8 +23,6 @@ func main() {
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
-	FileServer(router, "/file", http.Dir("public"))
-
 	router.Get("/{input}", route.Home)
 
 	router.Route("/api", func(apiRouter chi.Router) {
@@ -32,6 +30,8 @@ func setUpRouter() http.Handler {
 		apiRouter.Get("/encode/{input}", route.Encode)
 		apiRouter.Get("/locate/{input}", route.Locate)
 	})
+
+	FileServer(router, "/file", http.Dir("public"))
 
 	return router
 }
