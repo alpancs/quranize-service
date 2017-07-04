@@ -31,21 +31,21 @@ func setUpRouter() http.Handler {
 		apiRouter.Get("/locate/{input}", route.Locate)
 	})
 
-	FileServer(router, "/file", http.Dir("public"))
+	fileServer(router, "/file", http.Dir("public"))
 
 	return router
 }
 
-func FileServer(r chi.Router, path string, root http.FileSystem) {
+func fileServer(router chi.Router, path string, root http.FileSystem) {
 	fs := http.StripPrefix(path, http.FileServer(root))
 
 	if path != "/" && path[len(path)-1] != '/' {
-		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		router.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
 
-	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
 }
