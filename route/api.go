@@ -16,7 +16,7 @@ type Location struct {
 	SuraName, AyaText     string
 }
 
-const DEFAULT_TOP_KEYWORDS_LIMIT = 5
+const DEFAULT_TOP_KEYWORDS_LIMIT = 6
 
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
