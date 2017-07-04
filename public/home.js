@@ -2,21 +2,21 @@ let app = new Vue({
   el: '#app',
 
   data: {
-    input: '',
+    keyword: '',
     encodeds: [],
     loading: false,
     logged: false,
   },
 
   computed: {
-    trimmedInput() {
-      return this.input.trim()
+    trimmedKeyword() {
+      return this.keyword.trim()
     },
     noResult() {
-      return !this.loading && this.trimmedInput !== '' && this.encodeds.length === 0
+      return !this.loading && this.trimmedKeyword !== '' && this.encodeds.length === 0
     },
     alphabet() {
-      return this.encodeds.length ? this.trimmedInput : 'alphabet'
+      return this.encodeds.length ? this.trimmedKeyword : 'alphabet'
     },
     quran() {
       return this.encodeds.length ? this.encodeds[0].text : "Al-Qu'ran"
@@ -24,7 +24,7 @@ let app = new Vue({
   },
 
   watch: {
-    input: function(newInput) {
+    keyword() {
       this.updateResult()
     },
   },
@@ -33,7 +33,7 @@ let app = new Vue({
     updateResult: _.debounce(function() {
       this.logged = false
       this.loading = true
-      axios.get('/api/encode/' + this.trimmedInput)
+      axios.get('/api/encode/' + this.trimmedKeyword)
       .then((response) => this.encodeds = response.data.map((text) => ({text})))
       .catch(() => this.encodeds = [])
       .then(() => this.loading = false)
@@ -61,7 +61,7 @@ let app = new Vue({
     log() {
       if (!this.logged) {
         this.logged = true
-        axios.get('/log/' + this.trimmedInput)
+        axios.get('/log/' + this.trimmedKeyword)
         .catch(() => this.logged = false)
       }
     },

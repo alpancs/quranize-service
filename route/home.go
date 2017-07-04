@@ -10,8 +10,8 @@ import (
 )
 
 type Data struct {
-	Production                 bool
-	Input, Alphabet, QuranText string
+	Production                   bool
+	Keyword, Alphabet, QuranText string
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
