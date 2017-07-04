@@ -5,6 +5,7 @@ let app = new Vue({
     input: '',
     encodeds: [],
     loading: false,
+    logged: false,
   },
 
   computed: {
@@ -30,6 +31,7 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
+      this.logged = false
       this.loading = true
       axios.get('/api/encode/' + this.trimmedInput)
       .then((response) => this.encodeds = response.data.map((text) => ({text})))
@@ -38,6 +40,7 @@ let app = new Vue({
     }, 500),
 
     locate(encoded) {
+      this.log()
       this.$set(encoded, 'expanded', !encoded.expanded)
       if (encoded.locations) return
       this.$set(encoded, 'loading', true)
@@ -53,6 +56,14 @@ let app = new Vue({
       })
       .catch(() => this.$set(encoded, 'locations', undefined))
       .then(() => this.$set(encoded, 'loading', false))
+    },
+
+    log() {
+      if (!this.logged) {
+        this.logged = true
+        axios.get('/log/' + this.trimmedInput)
+        .catch(() => this.logged = false)
+      }
     },
   },
 })
