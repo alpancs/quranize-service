@@ -18,7 +18,7 @@ type History struct {
 }
 
 func Log(w http.ResponseWriter, r *http.Request) {
-	mongodbURL := "mongodb://" + os.Getenv("MONGODB_USERNAME") + ":" + os.Getenv("MONGODB_PASSWORD") + "@" + os.Getenv("MONGODB_HOST")
+	mongodbURL := os.Getenv("MONGODB_HOST")
 	session, err := mgo.Dial(mongodbURL)
 	if err != nil {
 		w.WriteHeader(500)
