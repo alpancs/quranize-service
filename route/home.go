@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/alpancs/quranize/service"
-	"github.com/pressly/chi"
+	"github.com/go-chi/chi"
 )
 
 type Data struct {

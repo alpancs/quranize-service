@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/alpancs/quranize/route"
-	"github.com/pressly/chi"
+	"github.com/go-chi/chi"
 )
 
 func init() {
@@ -23,17 +23,31 @@ func main() {
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
-	router.Get("/:input", route.Home)
+	FileServer(router, "/file", http.Dir("public"))
+
+	router.Get("/{input}", route.Home)
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
-		apiRouter.Get("/encode/:input", route.Encode)
-		apiRouter.Get("/locate/:input", route.Locate)
+		apiRouter.Get("/encode/{input}", route.Encode)
+		apiRouter.Get("/locate/{input}", route.Locate)
 	})
 
-	router.FileServer("/file", http.Dir("public"))
-
 	return router
+}
+
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	fs := http.StripPrefix(path, http.FileServer(root))
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}))
 }
 
 func jsonify(next http.Handler) http.Handler {
