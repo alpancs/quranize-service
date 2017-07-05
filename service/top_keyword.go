@@ -31,10 +31,15 @@ func (keywordScores KeywordScores) Swap(i, j int) {
 
 const DEFAULT_TOP_KEYWORD_LIMIT = 100
 
+var lastId string
+
 func UpdateTopKeywords() {
 	startTime := time.Now()
-	mongodbURL := os.Getenv("MONGODB_HOST")
-	session, err := mgo.Dial(mongodbURL)
+	if !needToUpdate() {
+		return
+	}
+
+	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -71,4 +76,21 @@ func getTopKeywords(iter *mgo.Iter) []string {
 	}
 
 	return topKeywords
+}
+
+func needToUpdate() bool {
+	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
+	if err != nil {
+		log.Println(err.Error())
+		return false
+	}
+	defer session.Close()
+
+	var doc struct {
+		Id string `bson:"_id"`
+	}
+	session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(nil).Sort("-timestamp").One(&doc)
+
+	defer func() { lastId = doc.Id }()
+	return lastId != doc.Id
 }
