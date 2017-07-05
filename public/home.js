@@ -70,8 +70,10 @@ let app = new Vue({
   },
 })
 
-app.topKeywordsLoading = true
-axios.get('/api/top-keywords')
-.then((response) => app.topKeywords = response.data)
-.catch(() => {})
-.then(() => app.topKeywordsLoading = false)
+setTimeout(() => {
+  app.topKeywordsLoading = true
+  axios.get('/api/top-keywords')
+  .then((response) => app.topKeywords = response.data)
+  .catch(() => {})
+  .then(() => app.topKeywordsLoading = false)
+}, 500)
