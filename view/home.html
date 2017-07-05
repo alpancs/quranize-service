@@ -15,7 +15,7 @@
 
     <div class="row">
       <div class="medium-2 columns"></div>
-      
+
       <!-- main content -->
       <div class="small-12 medium-8 columns">
 
@@ -23,6 +23,19 @@
         <div class="row">
           <div class="small-12 columns">
             <input class="text-center" type="text" placeholder="bismillah" v-model="keyword" autofocus>
+          </div>
+        </div>
+
+        <!-- top keywords -->
+        <div class="row">
+          <div class="small-12 columns">
+            <div class="text-center header">Top Keywords</div>
+            <div v-show="topKeywordsLoading" class="text-center"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
+          </div>
+        </div>
+        <div class="row">
+          <div v-for="topKeyword in topKeywords" class="small-6 medium-2 columns text-center">
+            <a :href="'/'+topKeyword">{{"{{ topKeyword }}"}}</a>
           </div>
         </div>
 
@@ -60,13 +73,13 @@
   </div>
 </body>
 <script async src="https://use.fontawesome.com/856743dd7b.js"></script>
-<script async src="//unpkg.com/axios/dist/axios.min.js"></script>
 {{if .Production}}
   <script src="//unpkg.com/vue@2.3.4/dist/vue.min.js"></script>
 {{else}}
   <script src="//unpkg.com/vue@2.3.4/dist/vue.js"></script>
 {{end}}
 <script src="//cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+<script src="//unpkg.com/axios/dist/axios.min.js"></script>
 <script src="/file/home.js"></script>
 <script type="text/javascript">app.keyword = {{.Keyword}}</script>
 </html>

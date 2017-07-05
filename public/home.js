@@ -6,6 +6,8 @@ let app = new Vue({
     encodeds: [],
     loading: false,
     logged: false,
+    topKeywords: [],
+    topKeywordsLoading: false,
   },
 
   computed: {
@@ -67,3 +69,9 @@ let app = new Vue({
     },
   },
 })
+
+app.topKeywordsLoading = true
+axios.get('/api/top-keywords')
+.then((response) => app.topKeywords = response.data)
+.catch(() => {})
+.then(() => app.topKeywordsLoading = false)
