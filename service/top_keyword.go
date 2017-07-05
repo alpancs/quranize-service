@@ -41,8 +41,8 @@ func UpdateTopKeywords() {
 	}
 	defer session.Close()
 
-	lastDay := bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -1)}}
-	iter := session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(lastDay).Iter()
+	last7Days := bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
+	iter := session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(last7Days).Iter()
 	defer iter.Close()
 
 	TopKeywords = getTopKeywords(iter)
