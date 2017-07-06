@@ -1,6 +1,6 @@
 @font-face {
     font-family: me_quran;
-    src: url(http://tanzil.net/res/font/org/me_quran.ttf);
+    src: url(/file/me_quran.ttf);
 }
 
 .quran-text {
