@@ -14,7 +14,11 @@
 <body>
   <div id="app" hidden :hidden="false">
     <!-- header -->
-    <h1 class="top-bar"><div class="text-center top-bar-left"><strong><a href="/" style="color:#0a0a0a">Quranize</a></strong></div></h1>
+    <div class="top-bar-left" style="background-color: rgba(68,138,255,0.85);">
+      <h2 class="menu-text text-center">
+        <a href="/" style="color: white;">Quranize</a>
+      </h2>
+    </div>
     <h5 class="text-center subheader">Quranize transforms <strong>{{"{{ alphabet }}"}}</strong> into <strong>{{"{{ quran }}"}}</strong>.</h5>
 
     <div class="row">
@@ -38,7 +42,7 @@
           </div>
         </div>
         <div class="row">
-          <div v-for="trendingKeyword in trendingKeywords" class="small-6 medium-2 columns text-center">
+          <div v-for="trendingKeyword in trendingKeywords" class="small-6 medium-4 columns text-center">
             <a :href="'/'+trendingKeyword">{{"{{ trendingKeyword }}"}}</a>
           </div>
         </div>
