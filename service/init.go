@@ -32,7 +32,7 @@ type Node struct {
 
 var (
 	QuranClean, QuranMin Alquran
-	TopKeywords          []string
+	TrendingKeywords     []string
 
 	maxWidth int
 	root     *Node

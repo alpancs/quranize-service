@@ -15,7 +15,7 @@ type Data struct {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	go service.UpdateTopKeywords()
+	go service.UpdateTrendingKeywords()
 	keyword := chi.URLParam(r, "keyword")
 
 	alphabet := "alphabet"

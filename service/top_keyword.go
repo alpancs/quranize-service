@@ -29,11 +29,11 @@ func (keywordScores KeywordScores) Swap(i, j int) {
 	keywordScores[i], keywordScores[j] = keywordScores[j], keywordScores[i]
 }
 
-const DEFAULT_TOP_KEYWORD_LIMIT = 100
+const DEFAULT_TRENDING_KEYWORD_LIMIT = 100
 
 var lastId string
 
-func UpdateTopKeywords() {
+func UpdateTrendingKeywords() {
 	startTime := time.Now()
 	if !needToUpdate() {
 		return
@@ -50,11 +50,11 @@ func UpdateTopKeywords() {
 	iter := session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(last7Days).Iter()
 	defer iter.Close()
 
-	TopKeywords = getTopKeywords(iter)
-	log.Println("update top keywords elapsed time:", time.Since(startTime))
+	TrendingKeywords = getTrendingKeywords(iter)
+	log.Println("update trending keywords elapsed time:", time.Since(startTime))
 }
 
-func getTopKeywords(iter *mgo.Iter) []string {
+func getTrendingKeywords(iter *mgo.Iter) []string {
 	frequency := make(map[string]int)
 	var doc struct{ Keyword string }
 	for iter.Next(&doc) {
@@ -67,15 +67,15 @@ func getTopKeywords(iter *mgo.Iter) []string {
 	}
 	sort.Sort(keywordScores)
 
-	topKeywords := []string{}
+	trendingKeywords := []string{}
 	for _, keywordScore := range keywordScores {
-		if len(topKeywords) == DEFAULT_TOP_KEYWORD_LIMIT {
+		if len(trendingKeywords) == DEFAULT_TRENDING_KEYWORD_LIMIT {
 			break
 		}
-		topKeywords = append(topKeywords, keywordScore.Keyword)
+		trendingKeywords = append(trendingKeywords, keywordScore.Keyword)
 	}
 
-	return topKeywords
+	return trendingKeywords
 }
 
 func needToUpdate() bool {

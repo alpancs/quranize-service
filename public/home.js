@@ -6,8 +6,8 @@ let app = new Vue({
     encodeds: [],
     loading: false,
     logged: false,
-    topKeywords: [],
-    topKeywordsLoading: false,
+    trendingKeywords: [],
+    trendingKeywordsLoading: false,
   },
 
   computed: {
@@ -71,9 +71,9 @@ let app = new Vue({
 })
 
 setTimeout(() => {
-  app.topKeywordsLoading = true
-  axios.get('/api/top-keywords')
-  .then((response) => app.topKeywords = response.data)
+  app.trendingKeywordsLoading = true
+  axios.get('/api/trending-keywords')
+  .then((response) => app.trendingKeywords = response.data)
   .catch(() => {})
-  .then(() => app.topKeywordsLoading = false)
-}, 500)
+  .then(() => app.trendingKeywordsLoading = false)
+}, 1000)
