@@ -33,13 +33,13 @@
         <!-- trending keywords -->
         <div class="row">
           <div class="small-12 columns">
-            <div v-show="topKeywords.length" class="text-center header">Trending Keywords</div>
-            <div v-show="topKeywordsLoading" class="text-center"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
+            <div v-show="trendingKeywords.length" class="text-center header">Trending Keywords</div>
+            <div v-show="trendingKeywordsLoading" class="text-center"><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></div>
           </div>
         </div>
         <div class="row">
-          <div v-for="topKeyword in topKeywords" class="small-6 medium-2 columns text-center">
-            <a :href="'/'+topKeyword">{{"{{ topKeyword }}"}}</a>
+          <div v-for="trendingKeyword in trendingKeywords" class="small-6 medium-2 columns text-center">
+            <a :href="'/'+trendingKeyword">{{"{{ trendingKeyword }}"}}</a>
           </div>
         </div>
 
