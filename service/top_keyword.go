@@ -89,7 +89,7 @@ func needToUpdate() bool {
 	var doc struct {
 		Id string `bson:"_id"`
 	}
-	session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(nil).Sort("-timestamp").One(&doc)
+	session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(nil).Sort("-timestamp").Limit(1).One(&doc)
 
 	defer func() { lastId = doc.Id }()
 	return lastId != doc.Id
