@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/alpancs/quranize/route"
+	"github.com/alpancs/quranize/service"
 	"github.com/go-chi/chi"
 )
 
@@ -13,6 +14,8 @@ func init() {
 	if os.Getenv("PORT") == "" {
 		os.Setenv("PORT", "7000")
 	}
+	service.UpdateTrendingKeywords()
+	go service.WatchTrendingKeywords()
 }
 
 func main() {

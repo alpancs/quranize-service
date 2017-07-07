@@ -53,8 +53,6 @@ func init() {
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
 	loadQuran("corpus/quran-simple-min.xml", &QuranMin)
 	root = buildIndex(&QuranClean)
-	UpdateTrendingKeywords()
-	go WatchTrendingKeywords()
 }
 
 func loadHijaiyas(filePath string) {
