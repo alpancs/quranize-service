@@ -14,7 +14,7 @@ let app = new Vue({
     trimmedKeyword() {
       return this.keyword.trim()
     },
-    noResult() {
+    noResults() {
       return !this.loading && this.trimmedKeyword !== '' && this.encodeds.length === 0
     },
     alphabet() {
