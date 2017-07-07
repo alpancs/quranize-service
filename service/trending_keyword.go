@@ -35,8 +35,8 @@ var lastId string
 
 func WatchTrendingKeywords() {
 	for {
-		UpdateTrendingKeywords()
 		time.Sleep(5 * time.Minute)
+		UpdateTrendingKeywords()
 	}
 }
 
