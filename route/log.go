@@ -30,7 +30,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 
 	defer session.Close()
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
-	keyword = strings.ToLower(keyword)
+	keyword = strings.ToLower(strings.TrimSpace(keyword))
 	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{bson.Now(), keyword})
 	if err != nil {
 		w.WriteHeader(500)
