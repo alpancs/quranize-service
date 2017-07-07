@@ -33,6 +33,13 @@ const DEFAULT_TRENDING_KEYWORD_LIMIT = 100
 
 var lastId string
 
+func WatchTrendingKeywords() {
+	for {
+		UpdateTrendingKeywords()
+		time.Sleep(5 * time.Minute)
+	}
+}
+
 func UpdateTrendingKeywords() {
 	startTime := time.Now()
 	if !needToUpdate() {

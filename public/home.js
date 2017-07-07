@@ -7,7 +7,6 @@ let app = new Vue({
     loading: false,
     logged: false,
     trendingKeywords: [],
-    trendingKeywordsLoading: false,
   },
 
   computed: {
@@ -70,10 +69,6 @@ let app = new Vue({
   },
 })
 
-setTimeout(() => {
-  app.trendingKeywordsLoading = true
-  axios.get('/api/trending-keywords')
-  .then((response) => app.trendingKeywords = response.data)
-  .catch(() => {})
-  .then(() => app.trendingKeywordsLoading = false)
-}, 1000)
+axios.get('/api/trending-keywords')
+.then((response) => app.trendingKeywords = response.data)
+.catch(() => {})
