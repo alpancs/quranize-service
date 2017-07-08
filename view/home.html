@@ -61,32 +61,31 @@
             <!-- output -->
             <div class="mdl-grid mdl-grid--no-spacing">
               <div class="mdl-cell mdl-cell--12-col">
+
                 <div class="text-center" v-show="loading"><div class="mdl-spinner mdl-js-spinner is-active"></div></div>
                 <div class="text-center" v-show="noResults">no results</div>
-                <div class="mdl-grid mdl-grid--no-spacing">
-                  <div class="mdl-cell mdl-cell--12-col">
-                    <dl v-for="encoded in encodeds">
-                      <dt class="text-center">
-                        <button @click="locate(encoded)" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-                          <i class="material-icons">{{"{{ encoded.expanded ? 'arrow_drop_up' : 'arrow_drop_down' }}"}}</i>
-                        </button>
-                        <span class="quran-text">{{"{{ encoded.text }}"}}</span>
-                      </dt>
 
-                      <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active"></div></div>
+                <div v-for="encoded in encodeds">
+                  <div class="text-center">
+                    <button @click="locate(encoded)" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                      <i class="material-icons">{{"{{ encoded.expanded ? 'arrow_drop_up' : 'arrow_drop_down' }}"}}</i>
+                    </button>
+                    <span class="quran-text">{{"{{ encoded.text }}"}}</span>
+                  </div>
 
-                      <dd v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
-                        <div class="text-left">{{"{{ index+1 }}"}}. Surah <span class="quran-text">{{"{{ location.SuraName }}"}}</span> ayah {{"{{ location.Aya+1 }}"}}:</div>
-                        <p class="text-right quran-text">
-                          <span>{{"{{ location.AyaBeforeHL }}"}}</span>
-                          <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
-                          <span>{{"{{ location.AyaAfterHL }}"}}</span>
-                        </p>
-                        <hr>
-                      </dd>
-                    </dl>
+                  <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active"></div></div>
+
+                  <div v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
+                    <div class="text-left">{{"{{ index+1 }}"}}. Surah <span class="quran-text">{{"{{ location.SuraName }}"}}</span> ayah {{"{{ location.Aya+1 }}"}}:</div>
+                    <p class="text-right quran-text" style="line-height: 2">
+                      <span>{{"{{ location.AyaBeforeHL }}"}}</span>
+                      <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
+                      <span>{{"{{ location.AyaAfterHL }}"}}</span>
+                    </p>
+                    <hr>
                   </div>
                 </div>
+
               </div>
             </div>
             <!-- end of output -->
