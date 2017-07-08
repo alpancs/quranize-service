@@ -20,6 +20,12 @@ type History struct {
 }
 
 func Log(w http.ResponseWriter, r *http.Request) {
+	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
+	keyword = strings.ToLower(strings.TrimSpace(keyword))
+	if keyword == "" {
+		return
+	}
+
 	mongodbURL := os.Getenv("MONGODB_HOST")
 	session, err := mgo.Dial(mongodbURL)
 	if err != nil {
@@ -29,8 +35,6 @@ func Log(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer session.Close()
-	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
-	keyword = strings.ToLower(strings.TrimSpace(keyword))
 	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{bson.Now(), keyword})
 	if err != nil {
 		w.WriteHeader(500)
