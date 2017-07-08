@@ -53,7 +53,7 @@
             <!-- trending keywords -->
             <div v-show="!trimmedKeyword && !encodeds.length && !loading" class="mdl-grid">
               <div v-show="trendingKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Trending Keywords</div>
-              <a a :href="'/'+trendingKeyword" v-for="(trendingKeyword, i) in trendingKeywords" class="text-center mdl-chip mdl-cell mdl-cell--6-col-phone mdl-cell--4-col-tablet mdl-cell--4-col-desktop">
+              <a a :href="'/'+trendingKeyword" v-for="(trendingKeyword, i) in trendingKeywords" class="text-center mdl-chip mdl-cell mdl-cell--4-col-tablet mdl-cell--4-col-desktop">
                 <span class="mdl-chip__text">{{"{{ trendingKeyword }}"}}</span>
               </a>
             </div>
