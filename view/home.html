@@ -73,7 +73,7 @@
                     <span class="quran-text">{{"{{ encoded.text }}"}}</span>
                   </div>
 
-                  <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active"></div></div>
+                  <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div></div>
 
                   <div v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
                     <div class="text-left">{{"{{ index+1 }}"}}. Surah <span class="quran-text">{{"{{ location.SuraName }}"}}</span> ayah {{"{{ location.Aya+1 }}"}}:</div>

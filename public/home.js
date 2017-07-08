@@ -42,6 +42,7 @@ let app = new Vue({
 
     locate(encoded) {
       this.log()
+      componentHandler.upgradeElement(this.$refs[encoded.text][0])
       this.$set(encoded, 'expanded', !encoded.expanded)
       if (encoded.locations) return
       this.$set(encoded, 'loading', true)
