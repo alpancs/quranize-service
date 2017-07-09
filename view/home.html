@@ -42,7 +42,7 @@
         </div>
 
         <div class="mdl-grid">
-          <div class="mdl-cell mdl-cell--12-col-phone mdl-cell--8-col-tablet mdl-cell--2-offset-tablet mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
+          <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-desktop mdl-cell--2-offset-desktop">
             <!-- input -->
             <div class="mdl-grid mdl-grid--no-spacing">
               <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col">
@@ -54,7 +54,7 @@
             <!-- trending keywords -->
             <div v-show="!trimmedKeyword && !encodeds.length && !loading" class="mdl-grid">
               <div v-show="trendingKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Trending Keywords</div>
-              <a a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell mdl-cell--4-col-tablet mdl-cell--4-col-desktop">
+              <a a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell">
                 <span class="mdl-chip__text">{{"{{ trendingKeyword }}"}}</span>
               </a>
             </div>
