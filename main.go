@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/route"
 	"github.com/go-chi/chi"
 )
+
+import _ "github.com/alpancs/quranize/job"
 
 func init() {
 	if os.Getenv("PORT") == "" {
 		os.Setenv("PORT", "7000")
 	}
-	go job.WatchTrendingKeywords()
 }
 
 func main() {

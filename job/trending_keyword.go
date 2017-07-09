@@ -38,6 +38,7 @@ var (
 
 func init() {
 	UpdateTrendingKeywords()
+	go WatchTrendingKeywords()
 }
 
 func WatchTrendingKeywords() {
