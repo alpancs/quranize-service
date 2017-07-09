@@ -78,9 +78,9 @@
 
                   <div v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
                     <div class="text-left">{{"{{ index+1 }}"}}. Surah <span class="quran-text">{{"{{ location.SuraName }}"}}</span> ayah {{"{{ location.Aya+1 }}"}}:</div>
-                    <p class="text-right quran-text" style="line-height: 2">
+                    <p class="text-right quran-text">
                       <span>{{"{{ location.AyaBeforeHL }}"}}</span>
-                      <span style="background-color: yellow;">{{"{{ location.AyaHL }}"}}</span>
+                      <span style="background-color: rgba(255,255,0,0.75);">{{"{{ location.AyaHL }}"}}</span>
                       <span>{{"{{ location.AyaAfterHL }}"}}</span>
                     </p>
                     <hr>
