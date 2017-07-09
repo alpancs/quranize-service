@@ -31,8 +31,8 @@ type Node struct {
 }
 
 var (
-	QuranClean, QuranMin Alquran
-	TrendingKeywords     = []string{}
+	QuranClean, QuranEnhanced Alquran
+	TrendingKeywords          = []string{}
 
 	maxWidth int
 	root     *Node
@@ -51,7 +51,7 @@ func getChild(children []Child, key rune) *Node {
 func init() {
 	loadHijaiyas("corpus/arabic-to-alphabet")
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
-	loadQuran("corpus/quran-simple-min.xml", &QuranMin)
+	loadQuran("corpus/quran-simple-enhanced.xml", &QuranEnhanced)
 	root = buildIndex(&QuranClean)
 }
 

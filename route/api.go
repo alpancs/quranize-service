@@ -27,8 +27,8 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 	keyword := chi.URLParam(r, "keyword")
 	locations := []Location{}
 	for _, loc := range service.Locate(keyword) {
-		suraName := service.QuranMin.Suras[loc.Sura].Name
-		ayaText := service.QuranMin.Suras[loc.Sura].Ayas[loc.Aya].Text
+		suraName := service.QuranEnhanced.Suras[loc.Sura].Name
+		ayaText := service.QuranEnhanced.Suras[loc.Sura].Ayas[loc.Aya].Text
 		ayaTextRune := []rune(ayaText)
 		begin := indexAfterSpaces(ayaTextRune, loc.SliceIndex)
 		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(keyword, " ")+1) - 1
