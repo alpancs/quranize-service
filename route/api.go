@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/service"
 	"github.com/go-chi/chi"
 )
@@ -39,7 +40,7 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 
 func TrendingKeywords(w http.ResponseWriter, r *http.Request) {
 	limit := normalizeLimit(r.URL.Query().Get("limit"))
-	json.NewEncoder(w).Encode(service.TrendingKeywords[:limit])
+	json.NewEncoder(w).Encode(job.TrendingKeywords[:limit])
 }
 
 func indexAfterSpaces(text []rune, remain int) int {
@@ -62,8 +63,8 @@ func normalizeLimit(queryLimit string) int {
 	if limit < 0 {
 		limit = 0
 	}
-	if limit > len(service.TrendingKeywords) {
-		limit = len(service.TrendingKeywords)
+	if limit > len(job.TrendingKeywords) {
+		limit = len(job.TrendingKeywords)
 	}
 	return limit
 }

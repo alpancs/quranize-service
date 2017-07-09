@@ -70,3 +70,59 @@ func TestEncodeWatasimuFull(t *testing.T) {
 		t.Error(Encode(input))
 	}
 }
+
+func TestEncodeAlfatihah1(t *testing.T) {
+	input := "bismilla hirrohma nirrohim"
+	output := []string{"بسم الله الرحمن الرحيم"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestEncodeAlfatihah2(t *testing.T) {
+	input := "alhamdu lillahi robbil 'alamin"
+	output := []string{"الحمد لله رب العالمين"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestEncodeAlfatihah3(t *testing.T) {
+	input := "arrohma nirrohim"
+	output := []string{"الرحمن الرحيم"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestEncodeAlfatihah4(t *testing.T) {
+	input := "maliki yau middin"
+	output := []string{"مالك يوم الدين"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestEncodeAlfatihah5(t *testing.T) {
+	input := "iyya kanakbudu waiyya kanastain"
+	output := []string{"إياك نعبد وإياك نستعين"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestEncodeAlfatihah6(t *testing.T) {
+	input := "ihdinash shirothol mustaqim"
+	output := []string{"اهدنا الصراط المستقيم"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestEncodeAlfatihah7(t *testing.T) {
+	input := "shirotholladzina an'am ta'alaihim ghoiril maghdzu bi'alaihim waladh dhollin"
+	output := []string{"صراط الذين أنعمت عليهم غير المغضوب عليهم ولا الضالين"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}

@@ -1,4 +1,4 @@
-package service
+package job
 
 import (
 	"log"
@@ -31,7 +31,14 @@ func (keywordScores KeywordScores) Swap(i, j int) {
 
 const DEFAULT_TRENDING_KEYWORD_LIMIT = 100
 
-var lastId string
+var (
+	TrendingKeywords []string
+	lastId           string
+)
+
+func init() {
+	UpdateTrendingKeywords()
+}
 
 func WatchTrendingKeywords() {
 	for {
