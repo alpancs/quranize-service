@@ -20,7 +20,7 @@ let app = new Vue({
       return this.encodeds.length ? this.trimmedKeyword : 'alphabet'
     },
     quran() {
-      return this.encodeds.length ? this.encodeds[0].text : "Al-Qu'ran"
+      return this.encodeds.length ? this.encodeds[0].text : "Alquran"
     },
   },
 

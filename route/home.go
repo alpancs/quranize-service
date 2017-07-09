@@ -19,7 +19,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
 
 	alphabet := "alphabet"
-	quranText := "Al-Qur'an"
+	quranText := "Alquran"
 	encodeds := service.Encode(keyword)
 	if len(encodeds) > 0 {
 		alphabet = keyword
