@@ -36,13 +36,13 @@ let app = new Vue({
       this.loading = true
       axios.get('/api/encode/' + this.trimmedKeyword)
       .then((response) => this.encodeds = response.data.map((text) => ({text})))
+      .then(() => componentHandler.upgradeElements(this.$refs.encodeds))
       .catch(() => this.encodeds = [])
       .then(() => this.loading = false)
     }, 500),
 
     locate(encoded) {
       this.log()
-      componentHandler.upgradeElement(this.$refs[encoded.text][0])
       this.$set(encoded, 'expanded', !encoded.expanded)
       if (encoded.locations) return
       this.$set(encoded, 'loading', true)
