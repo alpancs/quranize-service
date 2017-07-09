@@ -63,7 +63,7 @@ let app = new Vue({
     log() {
       if (!this.logged) {
         this.logged = true
-        axios.get('/log/' + this.trimmedKeyword)
+        axios.post('/api/log/' + this.trimmedKeyword)
         .catch(() => this.logged = false)
       }
     },

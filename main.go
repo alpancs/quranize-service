@@ -32,9 +32,8 @@ func setUpRouter() http.Handler {
 		apiRouter.Get("/encode/{keyword}", route.Encode)
 		apiRouter.Get("/locate/{keyword}", route.Locate)
 		apiRouter.Get("/trending-keywords", route.TrendingKeywords)
+		apiRouter.Post("/log/{keyword}", route.Log)
 	})
-
-	router.Get("/log/{keyword}", route.Log)
 
 	fileServer(router, "/", http.Dir("public"))
 
