@@ -3,6 +3,7 @@ package route
 import (
 	"html/template"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/alpancs/quranize/service"
@@ -15,7 +16,7 @@ type Data struct {
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
-	keyword := chi.URLParam(r, "keyword")
+	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
 
 	alphabet := "alphabet"
 	quranText := "Al-Qur'an"
