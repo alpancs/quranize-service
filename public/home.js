@@ -57,7 +57,7 @@ let app = new Vue({
         this.$set(encoded, 'locations', locations)
       })
       .then(() => componentHandler.upgradeElements(this.$refs[encoded.text]))
-      .catch(() => this.$set(encoded, 'locations', undefined))
+      .catch(() => this.$set(encoded, 'expanded', false))
       .then(() => this.$set(encoded, 'loading', false))
     },
 
