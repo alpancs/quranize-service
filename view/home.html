@@ -94,7 +94,7 @@
                       </button>
                       <div v-show="location.loading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
-                    <p class="text-left">{{"{{ location.Translation }}"}}</p>
+                    <p v-show="location.Translation" class="text-left">{{"{{ location.Translation }}"}}</p>
                     <hr>
                   </div>
                 </div>
