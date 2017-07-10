@@ -56,8 +56,17 @@ let app = new Vue({
         })
         this.$set(encoded, 'locations', locations)
       })
+      .then(() => componentHandler.upgradeElements(this.$refs[encoded.text]))
       .catch(() => this.$set(encoded, 'locations', undefined))
       .then(() => this.$set(encoded, 'loading', false))
+    },
+
+    translate(location) {
+      this.$set(location, 'loading', true)
+      axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
+      .then((response) => this.$set(location, 'Translation', response.data))
+      .catch(() => {})
+      .then(() => this.$set(location, 'loading', false))
     },
 
     log() {

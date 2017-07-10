@@ -30,6 +30,17 @@ type History struct {
 
 const DEFAULT_TRENDING_KEYWORDS_LIMIT = 6
 
+var history *mgo.Collection
+
+func init() {
+	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
+	if err == nil {
+		history = session.DB(os.Getenv("MONGODB_DATABASE")).C("history")
+	} else {
+		log.Println(err.Error())
+	}
+}
+
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
 	json.NewEncoder(w).Encode(service.Encode(keyword))
@@ -61,15 +72,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
-	if err != nil {
-		w.WriteHeader(500)
-		log.Println(err.Error())
-		return
-	}
-
-	defer session.Close()
-	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{bson.Now(), keyword})
+	err := history.Insert(History{bson.Now(), keyword})
 	if err != nil {
 		w.WriteHeader(500)
 		log.Println(err.Error())

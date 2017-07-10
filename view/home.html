@@ -88,6 +88,13 @@
                       <span style="background-color: rgba(255,255,0,0.75);">{{"{{ location.AyaHL }}"}}</span>
                       <span>{{"{{ location.AyaAfterHL }}"}}</span>
                     </p>
+                    <div class="text-right">
+                      <button @click="translate(location)" v-show="!location.Translation && !location.loading" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+                        <i class="material-icons">translate</i>
+                      </button>
+                      <div v-show="location.loading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                    </div>
+                    <p class="text-left">{{"{{ location.Translation }}"}}</p>
                     <hr>
                   </div>
                 </div>
