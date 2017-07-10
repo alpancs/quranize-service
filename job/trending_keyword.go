@@ -33,10 +33,19 @@ const DEFAULT_TRENDING_KEYWORD_LIMIT = 100
 
 var (
 	TrendingKeywords []string
-	lastId           string
+
+	lastId  string
+	history *mgo.Collection
 )
 
 func init() {
+	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	history = session.DB(os.Getenv("MONGODB_DATABASE")).C("history")
+
 	UpdateTrendingKeywords()
 	go WatchTrendingKeywords()
 }
@@ -54,15 +63,8 @@ func UpdateTrendingKeywords() {
 		return
 	}
 
-	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-	defer session.Close()
-
 	last7Days := bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
-	iter := session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(last7Days).Iter()
+	iter := history.Find(last7Days).Iter()
 	defer iter.Close()
 
 	TrendingKeywords = getTrendingKeywords(iter)
@@ -94,18 +96,14 @@ func getTrendingKeywords(iter *mgo.Iter) []string {
 }
 
 func needToUpdate() bool {
-	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
-	if err != nil {
-		log.Println(err.Error())
-		return false
-	}
-	defer session.Close()
-
-	var doc struct {
+	var lastDoc struct {
 		Id string `bson:"_id"`
 	}
-	session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Find(nil).Sort("-timestamp").Limit(1).One(&doc)
+	history.Find(nil).Sort("-timestamp").Limit(1).One(&lastDoc)
 
-	defer func() { lastId = doc.Id }()
-	return lastId != doc.Id
+	if lastId == lastDoc.Id {
+		return false
+	}
+	lastId = lastDoc.Id
+	return true
 }

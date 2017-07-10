@@ -34,11 +34,11 @@ var history *mgo.Collection
 
 func init() {
 	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
-	if err == nil {
-		history = session.DB(os.Getenv("MONGODB_DATABASE")).C("history")
-	} else {
+	if err != nil {
 		log.Println(err.Error())
+		return
 	}
+	history = session.DB(os.Getenv("MONGODB_DATABASE")).C("history")
 }
 
 func Encode(w http.ResponseWriter, r *http.Request) {
