@@ -2,10 +2,16 @@ package route
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
+	"time"
+
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 
 	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/service"
@@ -15,6 +21,11 @@ import (
 type Location struct {
 	Sura, Aya, Begin, End int
 	SuraName, AyaText     string
+}
+
+type History struct {
+	Timestamp time.Time
+	Keyword   string
 }
 
 const DEFAULT_TRENDING_KEYWORDS_LIMIT = 6
@@ -43,6 +54,38 @@ func TrendingKeywords(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(job.TrendingKeywords[:limit])
 }
 
+func Log(w http.ResponseWriter, r *http.Request) {
+	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
+	keyword = strings.ToLower(strings.TrimSpace(keyword))
+	if keyword == "" {
+		return
+	}
+
+	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
+	if err != nil {
+		w.WriteHeader(500)
+		log.Println(err.Error())
+		return
+	}
+
+	defer session.Close()
+	err = session.DB(os.Getenv("MONGODB_DATABASE")).C("history").Insert(History{bson.Now(), keyword})
+	if err != nil {
+		w.WriteHeader(500)
+		log.Println(err.Error())
+	}
+}
+
+func Translate(w http.ResponseWriter, r *http.Request) {
+	sura, errSura := strconv.Atoi(chi.URLParam(r, "sura"))
+	aya, errAya := strconv.Atoi(chi.URLParam(r, "aya"))
+	if errSura == nil && errAya == nil && validIndex(sura, aya) {
+		json.NewEncoder(w).Encode(service.QuranTranslationID.Suras[sura-1].Ayas[aya-1].Text)
+	} else {
+		w.WriteHeader(400)
+	}
+}
+
 func indexAfterSpaces(text []rune, remain int) int {
 	for i, r := range text {
 		if remain == 0 {
@@ -67,4 +110,14 @@ func normalizeLimit(queryLimit string) int {
 		limit = len(job.TrendingKeywords)
 	}
 	return limit
+}
+
+func validIndex(sura, aya int) bool {
+	if sura < 1 || sura > len(service.QuranTranslationID.Suras) {
+		return false
+	}
+	if aya < 1 || aya > len(service.QuranTranslationID.Suras[sura-1].Ayas) {
+		return false
+	}
+	return true
 }
