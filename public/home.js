@@ -76,6 +76,10 @@ let app = new Vue({
         .catch(() => this.logged = false)
       }
     },
+
+    showError() {
+      this.$refs['network-error'].MaterialSnackbar.showSnackbar({message: 'network error'})
+    },
   },
 })
 
