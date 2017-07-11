@@ -78,7 +78,7 @@ let app = new Vue({
     },
 
     showError() {
-      this.$refs['network-error'].MaterialSnackbar.showSnackbar({message: 'network error'})
+      this.$refs['network-error'].MaterialSnackbar.showSnackbar({message: 'network error', timeout: 1000000})
     },
   },
 })
