@@ -37,7 +37,7 @@ let app = new Vue({
       axios.get('/api/encode/' + this.trimmedKeyword)
       .then((response) => this.encodeds = response.data.map((text) => ({text})))
       .then(() => componentHandler.upgradeElements(this.$refs.encodeds))
-      .catch(() => this.encodeds = [])
+      .catch(() => {this.encodeds = []; this.showError()})
       .then(() => this.loading = false)
     }, 500),
 
@@ -57,7 +57,7 @@ let app = new Vue({
         this.$set(encoded, 'locations', locations)
       })
       .then(() => componentHandler.upgradeElements(this.$refs[encoded.text]))
-      .catch(() => this.$set(encoded, 'expanded', false))
+      .catch(() => {this.$set(encoded, 'expanded', false); this.showError()})
       .then(() => this.$set(encoded, 'loading', false))
     },
 
@@ -65,7 +65,7 @@ let app = new Vue({
       this.$set(location, 'loading', true)
       axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Translation', response.data))
-      .catch(() => {})
+      .catch(() => {this.showError()})
       .then(() => this.$set(location, 'loading', false))
     },
 
