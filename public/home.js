@@ -1,7 +1,3 @@
-let willRequest = false
-let logged = false
-let lastRequestTime = 0
-
 let app = new Vue({
   el: '#app',
 
@@ -10,6 +6,10 @@ let app = new Vue({
     encodeds: [],
     loading: false,
     trendingKeywords: [],
+
+    logged: false,
+    lastRequestTime: 0,
+    willRequest: false,
   },
 
   computed: {
@@ -17,7 +17,7 @@ let app = new Vue({
       return this.keyword.trim()
     },
     noResults() {
-      return !willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
+      return !this.willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
     },
     alphabet() {
       return this.encodeds.length ? this.trimmedKeyword : 'alphabet'
@@ -29,20 +29,20 @@ let app = new Vue({
 
   watch: {
     keyword() {
-      willRequest = true
+      this.willRequest = true
       this.updateResult()
     },
   },
 
   methods: {
     updateResult: _.debounce(function() {
-      logged = false
+      this.logged = false
       this.loading = true
       let currentRequestTime = Date.now()
       axios.get('/api/encode/' + this.trimmedKeyword)
       .then((response) => {
-        if (lastRequestTime < currentRequestTime) {
-          lastRequestTime = currentRequestTime
+        if (this.lastRequestTime < currentRequestTime) {
+          this.lastRequestTime = currentRequestTime
           this.encodeds = response.data.map((text) => ({text}))
         }
       })
@@ -51,7 +51,7 @@ let app = new Vue({
           componentHandler.upgradeElements(this.$refs.encodeds)
       })
       .catch(() => {this.encodeds = []; this.showError()})
-      .then(() => {this.loading = false; willRequest = false})
+      .then(() => {this.loading = false; this.willRequest = false})
     }, 500),
 
     locate(encoded) {
@@ -83,10 +83,10 @@ let app = new Vue({
     },
 
     log() {
-      if (!logged) {
-        logged = true
+      if (!this.logged) {
+        this.logged = true
         axios.post('/api/log/' + this.trimmedKeyword)
-        .catch(() => logged = false)
+        .catch(() => this.logged = false)
       }
     },
 
