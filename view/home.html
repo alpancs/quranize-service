@@ -57,7 +57,7 @@
             </div>
             <!-- end of input -->
             <!-- trending keywords -->
-            <div v-show="!trimmedKeyword && !encodeds.length && !loading" class="mdl-grid">
+            <div v-show="!willRequest && !trimmedKeyword" class="mdl-grid">
               <div v-show="trendingKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Trending Keywords</div>
               <a a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell">
                 <span class="mdl-chip__text">{{"{{ trendingKeyword }}"}}</span>
