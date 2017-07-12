@@ -1,3 +1,4 @@
+let willRequest = false
 let logged = false
 let lastRequestTime = 0
 
@@ -16,7 +17,7 @@ let app = new Vue({
       return this.keyword.trim()
     },
     noResults() {
-      return !this.loading && this.trimmedKeyword !== '' && this.encodeds.length === 0
+      return !willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
     },
     alphabet() {
       return this.encodeds.length ? this.trimmedKeyword : 'alphabet'
@@ -28,6 +29,7 @@ let app = new Vue({
 
   watch: {
     keyword() {
+      willRequest = true
       this.updateResult()
     },
   },
@@ -44,9 +46,12 @@ let app = new Vue({
           this.encodeds = response.data.map((text) => ({text}))
         }
       })
-      .then(() => componentHandler.upgradeElements(this.$refs.encodeds))
+      .then(() => {
+        if (this.$refs.encodeds)
+          componentHandler.upgradeElements(this.$refs.encodeds)
+      })
       .catch(() => {this.encodeds = []; this.showError()})
-      .then(() => this.loading = false)
+      .then(() => {this.loading = false; willRequest = false})
     }, 500),
 
     locate(encoded) {
