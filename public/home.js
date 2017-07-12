@@ -1,3 +1,6 @@
+let logged = false
+let lastRequestTime = 0
+
 let app = new Vue({
   el: '#app',
 
@@ -5,7 +8,6 @@ let app = new Vue({
     keyword: '',
     encodeds: [],
     loading: false,
-    logged: false,
     trendingKeywords: [],
   },
 
@@ -32,10 +34,16 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      this.logged = false
+      logged = false
       this.loading = true
+      let currentRequestTime = Date.now()
       axios.get('/api/encode/' + this.trimmedKeyword)
-      .then((response) => this.encodeds = response.data.map((text) => ({text})))
+      .then((response) => {
+        if (lastRequestTime < currentRequestTime) {
+          lastRequestTime = currentRequestTime
+          this.encodeds = response.data.map((text) => ({text}))
+        }
+      })
       .then(() => componentHandler.upgradeElements(this.$refs.encodeds))
       .catch(() => {this.encodeds = []; this.showError()})
       .then(() => this.loading = false)
@@ -70,10 +78,10 @@ let app = new Vue({
     },
 
     log() {
-      if (!this.logged) {
-        this.logged = true
+      if (!logged) {
+        logged = true
         axios.post('/api/log/' + this.trimmedKeyword)
-        .catch(() => this.logged = false)
+        .catch(() => logged = false)
       }
     },
 
