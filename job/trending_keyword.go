@@ -53,20 +53,17 @@ func init() {
 func WatchTrendingKeywords() {
 	for {
 		time.Sleep(5 * time.Minute)
-		UpdateTrendingKeywords()
+		if needToUpdate() {
+			UpdateTrendingKeywords()
+		}
 	}
 }
 
 func UpdateTrendingKeywords() {
 	startTime := time.Now()
-	if !needToUpdate() {
-		return
-	}
-
 	last7Days := bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
 	iter := history.Find(last7Days).Iter()
 	defer iter.Close()
-
 	TrendingKeywords = getTrendingKeywords(iter)
 	log.Println("update trending keywords elapsed time:", time.Since(startTime))
 }
