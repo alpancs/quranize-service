@@ -31,8 +31,10 @@ type Node struct {
 }
 
 var (
-	QuranClean, QuranEnhanced Alquran
-	QuranTranslationID        Alquran
+	QuranClean          Alquran
+	QuranEnhanced       Alquran
+	QuranTranslationID  Alquran
+	QuranTafsirJalalayn Alquran
 
 	maxWidth int
 	root     *Node
@@ -53,6 +55,7 @@ func init() {
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
 	loadQuran("corpus/quran-simple-enhanced.xml", &QuranEnhanced)
 	loadQuran("corpus/id.indonesian.xml", &QuranTranslationID)
+	loadQuran("corpus/id.jalalayn.xml", &QuranTafsirJalalayn)
 	root = buildIndex(&QuranClean)
 }
 

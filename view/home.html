@@ -83,18 +83,33 @@
 
                   <div v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
                     <div class="text-left">{{"{{ index+1 }}"}}. Surah <span class="quran-text">{{"{{ location.SuraName }}"}}</span> ayah {{"{{ location.Aya+1 }}"}}:</div>
+
                     <p class="text-right quran-text">
                       {{"{{ location.AyaBeforeHL }}"}}
                       <mark>{{"{{ location.AyaHL }}"}}</mark>
                       {{"{{ location.AyaAfterHL }}"}}
                     </p>
+
                     <div class="text-right">
-                      <button @click="translate(location)" v-show="!location.Translation && !location.loading" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" title="Translate" type="button">
+                      <button @click="translate(location)" v-show="!location.Translation && !location.loadingTranslation" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" title="Translate" type="button">
                         <i class="material-icons">translate</i>
                       </button>
-                      <div v-show="location.loading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                      <div v-show="location.loadingTranslation" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+
+                      <button @click="tafsir(location)" v-show="!location.Tafsir && !location.loadingTafsir" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
+                        <i class="material-icons">description</i>
+                      </button>
+                      <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
-                    <p v-show="location.Translation" class="text-left">{{"{{ location.Translation }}"}}</p>
+
+                    <div v-show="location.Translation">
+                      <strong>Translation</strong>
+                      <p class="text-left">{{"{{ location.Translation }}"}}</p>
+                    </div>
+                    <div v-show="location.Tafsir">
+                      <strong>Tafsir</strong>
+                      <p class="text-left">{{"{{ location.Tafsir }}"}}</p>
+                    </div>
                     <hr>
                   </div>
                 </div>
@@ -107,7 +122,7 @@
       </div>
     </main>
 
-    <div ref="network-error" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+    <div ref="connection-problem" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
       <div class="mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
           <div class="mdl-snackbar__text"></div>

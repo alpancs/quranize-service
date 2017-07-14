@@ -89,6 +89,16 @@ func Translate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func Tafsir(w http.ResponseWriter, r *http.Request) {
+	sura, errSura := strconv.Atoi(chi.URLParam(r, "sura"))
+	aya, errAya := strconv.Atoi(chi.URLParam(r, "aya"))
+	if errSura == nil && errAya == nil && validIndex(sura, aya) {
+		json.NewEncoder(w).Encode(service.QuranTafsirJalalayn.Suras[sura-1].Ayas[aya-1].Text)
+	} else {
+		w.WriteHeader(400)
+	}
+}
+
 func indexAfterSpaces(text []rune, remain int) int {
 	for i, r := range text {
 		if remain == 0 {

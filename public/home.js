@@ -75,11 +75,19 @@ let app = new Vue({
     },
 
     translate(location) {
-      this.$set(location, 'loading', true)
+      this.$set(location, 'loadingTranslate', true)
       axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Translation', response.data))
       .catch(() => {this.showError()})
-      .then(() => this.$set(location, 'loading', false))
+      .then(() => this.$set(location, 'loadingTranslate', false))
+    },
+
+    tafsir(location) {
+      this.$set(location, 'loadingTafsir', true)
+      axios.get(`/api/tafsir/${location.Sura+1}-${location.Aya+1}`)
+      .then((response) => this.$set(location, 'Tafsir', response.data))
+      .catch(() => {this.showError()})
+      .then(() => this.$set(location, 'loadingTafsir', false))
     },
 
     log() {
@@ -91,7 +99,7 @@ let app = new Vue({
     },
 
     showError() {
-      this.$refs['network-error'].MaterialSnackbar.showSnackbar({message: 'network error'})
+      this.$refs['connection-problem'].MaterialSnackbar.showSnackbar({message: 'connection problem'})
     },
   },
 })

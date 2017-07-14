@@ -32,6 +32,7 @@ func setUpRouter() http.Handler {
 		apiRouter.Get("/encode/{keyword}", route.Encode)
 		apiRouter.Get("/locate/{keyword}", route.Locate)
 		apiRouter.Get("/translate/{sura}-{aya}", route.Translate)
+		apiRouter.Get("/tafsir/{sura}-{aya}", route.Tafsir)
 		apiRouter.Get("/trending-keywords", route.TrendingKeywords)
 		apiRouter.Post("/log/{keyword}", route.Log)
 	})
