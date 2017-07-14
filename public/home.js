@@ -79,11 +79,11 @@ let app = new Vue({
     },
 
     translate(location) {
-      this.$set(location, 'loadingTranslate', true)
+      this.$set(location, 'loadingTranslation', true)
       axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Translation', response.data))
       .catch(() => {this.showError()})
-      .then(() => this.$set(location, 'loadingTranslate', false))
+      .then(() => this.$set(location, 'loadingTranslation', false))
     },
 
     tafsir(location) {
