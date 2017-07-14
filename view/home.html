@@ -119,11 +119,10 @@
 
             <!-- sharing -->
             <div v-show="encodeds.length" class="mdl-grid">
-              <div class="mdl-cell mdl-cell--12-col text-center">Share Result</div>
               <div class="mdl-cell mdl-cell--12-col text-center">
-                <button id="share-link" :data-clipboard-text="shareLink" class="text-center mdl-chip" style="cursor: pointer;">
-                  <span class="mdl-chip__text">{{"{{ shareLink }}"}}</span>
-                </button>
+              <button id="share-link" :data-clipboard-text="shareLink" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                <i class="material-icons">share</i>
+              </button>
               </div>
             </div>
             <!-- end of sharing -->

@@ -111,4 +111,4 @@ axios.get('/api/trending-keywords')
 .catch(() => {})
 
 let clipboard = new Clipboard('#share-link')
-clipboard.on('success', () => app.notify('text copied to clipboard'))
+clipboard.on('success', () => app.notify('share link copied to clipboard'))
