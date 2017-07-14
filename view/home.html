@@ -120,7 +120,7 @@
             <!-- sharing -->
             <div v-show="encodeds.length" class="mdl-grid">
               <div class="mdl-cell mdl-cell--12-col text-center">
-              <button id="share-link" :data-clipboard-text="shareLink" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+              <button id="share-link" :data-clipboard-text="shareLink" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
                 <i class="material-icons">share</i>
               </button>
               </div>
@@ -142,7 +142,7 @@
   </div>
 </body>
 <script async src="//code.getmdl.io/1.3.0/material.min.js"></script>
-<script async src="//cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
 {{if .Production}}
 <script src="//unpkg.com/vue@2.3.4/dist/vue.min.js"></script>
 {{else}}
