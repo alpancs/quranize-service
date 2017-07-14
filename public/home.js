@@ -19,11 +19,15 @@ let app = new Vue({
     noResults() {
       return !this.willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
     },
-    alphabet() {
-      return this.encodeds.length ? this.trimmedKeyword : 'alphabet'
+    transliteration() {
+      return this.encodeds.length ? this.trimmedKeyword : 'transliteration'
     },
     quran() {
       return this.encodeds.length ? this.encodeds[0].text : "Alquran"
+    },
+
+    shareLink() {
+      return location.origin+'/'+encodeURIComponent(this.trimmedKeyword)
     },
   },
 

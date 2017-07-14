@@ -3,7 +3,7 @@
 <head>
   <title>Quranize</title>
 
-  <meta name="description" content="Quranize transforms {{.Alphabet}} into {{.QuranText}}.">
+  <meta name="description" content="Quranize transforms {{.Transliteration}} into {{.QuranText}}.">
   <meta content="/android-chrome-192x192.png" property="og:image">
   <meta name=viewport content="width=device-width, initial-scale=1">
 
@@ -17,7 +17,7 @@
   <meta name="theme-color" content="#ffffff">
 
   <link rel="preload" href="//fonts.googleapis.com/icon?family=Material+Icons" onload="this.rel='stylesheet'">
-  <link rel="preload" href="//code.getmdl.io/1.3.0/material.blue-purple.min.css" onload="this.rel='stylesheet'">
+  <link rel="preload" href="//code.getmdl.io/1.3.0/material.blue-pink.min.css" onload="this.rel='stylesheet'">
 
   <link rel="preload" href="/home.css" onload="this.rel='stylesheet'"/>
 </head>
@@ -42,7 +42,7 @@
       <div class="page-content">
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--12-col">
-            <div class="mdl-typography--title text-center">Quranize transforms <strong>{{"{{ alphabet }}"}}</strong> into <strong>{{"{{ quran }}"}}</strong>.</div>
+            <div class="mdl-typography--title text-center">Quranize transforms <strong>{{"{{ transliteration }}"}}</strong> into <strong>{{"{{ quran }}"}}</strong>.</div>
           </div>
         </div>
 
@@ -59,7 +59,7 @@
             <!-- trending keywords -->
             <div v-show="!willRequest && !trimmedKeyword" class="mdl-grid">
               <div v-show="trendingKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Trending Keywords</div>
-              <a a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell">
+              <a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell">
                 <span class="mdl-chip__text">{{"{{ trendingKeyword }}"}}</span>
               </a>
             </div>
@@ -73,7 +73,7 @@
 
                 <div v-for="encoded in encodeds">
                   <div class="text-center">
-                    <button @click="locate(encoded)" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" type="button">
+                    <button @click="locate(encoded)" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" type="button">
                       <i class="material-icons">{{"{{ encoded.expanded ? 'arrow_drop_up' : 'arrow_drop_down' }}"}}</i>
                     </button>
                     <span class="quran-text">{{"{{ encoded.text }}"}}</span>
@@ -91,12 +91,11 @@
                     </p>
 
                     <div class="text-right">
-                      <button @click="translate(location)" v-show="!location.Translation && !location.loadingTranslation" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" title="Translate" type="button">
+                      <button @click="translate(location)" v-show="!location.Translation && !location.loadingTranslation" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
                         <i class="material-icons">translate</i>
                       </button>
                       <div v-show="location.loadingTranslation" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
-
-                      <button @click="tafsir(location)" v-show="!location.Tafsir && !location.loadingTafsir" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
+                      <button @click="tafsir(location)" v-show="!location.Tafsir && !location.loadingTafsir" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
                       <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
@@ -117,6 +116,17 @@
               </div>
             </div>
             <!-- end of output -->
+
+            <!-- sharing -->
+            <!-- <div v-show="encodeds.length" class="mdl-grid">
+              <div class="mdl-cell mdl-cell--12-col text-center">Share Quranize Result</div>
+              <div class="mdl-cell mdl-cell--12-col text-center">
+                <button class="text-center mdl-chip" style="cursor: pointer;">
+                  <span class="mdl-chip__text">{{"{{ shareLink }}"}}</span>
+                </button>
+              </div>
+            </div> -->
+            <!-- end of sharing -->
           </div>
         </div>
       </div>
