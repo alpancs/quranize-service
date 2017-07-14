@@ -6,6 +6,7 @@ let app = new Vue({
     encodeds: [],
     loading: false,
     trendingKeywords: [],
+    shareLink: '',
 
     logged: false,
     lastRequestTime: 0,
@@ -24,10 +25,6 @@ let app = new Vue({
     },
     quran() {
       return this.encodeds.length ? this.encodeds[0].text : "Alquran"
-    },
-
-    shareLink() {
-      return location.origin+'/'+encodeURIComponent(this.trimmedKeyword)
     },
   },
 
@@ -48,13 +45,14 @@ let app = new Vue({
         if (this.lastRequestTime < currentRequestTime) {
           this.lastRequestTime = currentRequestTime
           this.encodeds = response.data.map((text) => ({text}))
+          this.shareLink = location.origin+'/'+encodeURIComponent(this.trimmedKeyword)
         }
       })
       .then(() => {
         if (this.$refs.encodeds)
           componentHandler.upgradeElements(this.$refs.encodeds)
       })
-      .catch(() => {this.encodeds = []; this.showError()})
+      .catch(() => {this.encodeds = []; this.notify('connection problem')})
       .then(() => {this.loading = false; this.willRequest = false})
     }, 500),
 
@@ -74,7 +72,7 @@ let app = new Vue({
         this.$set(encoded, 'locations', locations)
       })
       .then(() => componentHandler.upgradeElements(this.$refs[encoded.text]))
-      .catch(() => {this.$set(encoded, 'expanded', false); this.showError()})
+      .catch(() => {this.$set(encoded, 'expanded', false); this.notify('connection problem')})
       .then(() => this.$set(encoded, 'loading', false))
     },
 
@@ -82,7 +80,7 @@ let app = new Vue({
       this.$set(location, 'loadingTranslation', true)
       axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Translation', response.data))
-      .catch(() => {this.showError()})
+      .catch(() => {this.notify('connection problem')})
       .then(() => this.$set(location, 'loadingTranslation', false))
     },
 
@@ -90,7 +88,7 @@ let app = new Vue({
       this.$set(location, 'loadingTafsir', true)
       axios.get(`/api/tafsir/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Tafsir', response.data))
-      .catch(() => {this.showError()})
+      .catch(() => {this.notify('connection problem')})
       .then(() => this.$set(location, 'loadingTafsir', false))
     },
 
@@ -102,8 +100,8 @@ let app = new Vue({
       }
     },
 
-    showError() {
-      this.$refs['connection-problem'].MaterialSnackbar.showSnackbar({message: 'connection problem'})
+    notify(message) {
+      this.$refs['notification'].MaterialSnackbar.showSnackbar({message})
     },
   },
 })
@@ -111,3 +109,6 @@ let app = new Vue({
 axios.get('/api/trending-keywords')
 .then((response) => app.trendingKeywords = response.data)
 .catch(() => {})
+
+let clipboard = new Clipboard('#share-link')
+clipboard.on('success', () => app.notify('text copied to clipboard'))

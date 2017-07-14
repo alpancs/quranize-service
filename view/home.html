@@ -118,21 +118,21 @@
             <!-- end of output -->
 
             <!-- sharing -->
-            <!-- <div v-show="encodeds.length" class="mdl-grid">
-              <div class="mdl-cell mdl-cell--12-col text-center">Share Quranize Result</div>
+            <div v-show="encodeds.length" class="mdl-grid">
+              <div class="mdl-cell mdl-cell--12-col text-center">Share Result</div>
               <div class="mdl-cell mdl-cell--12-col text-center">
-                <button class="text-center mdl-chip" style="cursor: pointer;">
+                <button id="share-link" :data-clipboard-text="shareLink" class="text-center mdl-chip" style="cursor: pointer;">
                   <span class="mdl-chip__text">{{"{{ shareLink }}"}}</span>
                 </button>
               </div>
-            </div> -->
+            </div>
             <!-- end of sharing -->
           </div>
         </div>
       </div>
     </main>
 
-    <div ref="connection-problem" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+    <div ref="notification" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
       <div class="mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
           <div class="mdl-snackbar__text"></div>
@@ -142,7 +142,8 @@
     </div>
   </div>
 </body>
-<script src="//code.getmdl.io/1.3.0/material.min.js"></script>
+<script async src="//code.getmdl.io/1.3.0/material.min.js"></script>
+<script async src="//cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
 {{if .Production}}
 <script src="//unpkg.com/vue@2.3.4/dist/vue.min.js"></script>
 {{else}}
