@@ -20,15 +20,15 @@ type Data struct {
 func Home(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
 
-	alphabet := "alphabet"
+	transliteration := "transliteration"
 	quranText := "Alquran"
 	encodeds := service.Encode(keyword)
 	if len(encodeds) > 0 {
-		alphabet = keyword
+		transliteration = keyword
 		quranText = encodeds[0]
 	}
 
-	data := Data{os.Getenv("GO_ENV") == "production", keyword, alphabet, quranText}
+	data := Data{os.Getenv("GO_ENV") == "production", keyword, transliteration, quranText}
 	t, err := template.ParseFiles("view/home.html")
 	if err != nil {
 		if !data.Production {

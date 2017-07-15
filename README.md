@@ -1,4 +1,4 @@
 # Quranize
-Transform alphabet into Qur'an text.
+Transform transliteration into Alquran.
 
 https://quranize.herokuapp.com
