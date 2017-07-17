@@ -52,7 +52,7 @@ func init() {
 
 func WatchTrendingKeywords() {
 	for {
-		time.Sleep(5 * time.Minute)
+		time.Sleep(1 * time.Minute)
 		if needToUpdate() {
 			UpdateTrendingKeywords()
 		}
