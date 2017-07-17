@@ -77,18 +77,22 @@ let app = new Vue({
     },
 
     translate(location) {
+      this.$set(location, 'showTranslation', !location.showTranslation)
+      if (location.Translation) return
       this.$set(location, 'loadingTranslation', true)
       axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Translation', response.data))
-      .catch(() => {this.notify('connection problem')})
+      .catch(() => {this.$set(location, 'showTranslation', false); this.notify('connection problem')})
       .then(() => this.$set(location, 'loadingTranslation', false))
     },
 
     tafsir(location) {
+      this.$set(location, 'showTafsir', !location.showTafsir)
+      if (location.Tafsir) return
       this.$set(location, 'loadingTafsir', true)
       axios.get(`/api/tafsir/${location.Sura+1}-${location.Aya+1}`)
       .then((response) => this.$set(location, 'Tafsir', response.data))
-      .catch(() => {this.notify('connection problem')})
+      .catch(() => {this.$set(location, 'showTafsir', false); this.notify('connection problem')})
       .then(() => this.$set(location, 'loadingTafsir', false))
     },
 
