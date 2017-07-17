@@ -10,6 +10,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+type Document struct {
+	Id      string `bson:"_id"`
+	Keyword string
+}
+
 type KeywordScore struct {
 	Keyword string
 	Score   int
@@ -62,7 +67,7 @@ func WatchTrendingKeywords() {
 func UpdateTrendingKeywords() {
 	startTime := time.Now()
 	last7Days := bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
-	iter := history.Find(last7Days).Iter()
+	iter := history.Find(last7Days).Sort("timestamp").Iter()
 	defer iter.Close()
 	TrendingKeywords = getTrendingKeywords(iter)
 	log.Println("update trending keywords elapsed time:", time.Since(startTime))
@@ -70,9 +75,10 @@ func UpdateTrendingKeywords() {
 
 func getTrendingKeywords(iter *mgo.Iter) []string {
 	frequency := make(map[string]int)
-	var doc struct{ Keyword string }
+	var doc Document
 	for iter.Next(&doc) {
 		frequency[doc.Keyword]++
+		lastId = doc.Id
 	}
 
 	keywordScores := KeywordScores{}
@@ -93,14 +99,7 @@ func getTrendingKeywords(iter *mgo.Iter) []string {
 }
 
 func needToUpdate() bool {
-	var lastDoc struct {
-		Id string `bson:"_id"`
-	}
+	var lastDoc Document
 	history.Find(nil).Sort("-timestamp").Limit(1).One(&lastDoc)
-
-	if lastId == lastDoc.Id {
-		return false
-	}
-	lastId = lastDoc.Id
-	return true
+	return lastId != lastDoc.Id
 }
