@@ -3,10 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "CtP5X/r7mMSXDpOp1MkXC0n+lX4=",
+			"checksumSHA1": "2zpNx6PRSUGzrYLrwIryYb4k0wI=",
 			"path": "github.com/go-chi/chi",
-			"revision": "316a2378f7d5e8b76526c5dfc44b33ae892362a7",
-			"revisionTime": "2017-07-05T22:26:22Z"
+			"revision": "4c5a584b324b74af3e9cfeaf6265d14ae2fdfc99",
+			"revisionTime": "2017-07-12T12:12:00Z"
 		},
 		{
 			"checksumSHA1": "1D8GzeoFGUs5FZOoyC2DpQg8c5Y=",

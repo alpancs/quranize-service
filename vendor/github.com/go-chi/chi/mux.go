@@ -285,21 +285,23 @@ func (mx *Mux) Mount(pattern string, handler http.Handler) {
 	// Wrap the sub-router in a handlerFunc to scope the request path for routing.
 	subHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		rctx := RouteContext(r.Context())
-
-		nsx := len(rctx.URLParams) - 1          // index of current stacked router
-		nx := len(rctx.URLParams[nsx].keys) - 1 // index of last param in list
-
 		rctx.RoutePath = "/"
-		if nx >= 0 && rctx.URLParams[nsx].keys[nx] == "*" {
-			rctx.RoutePath += rctx.URLParams[nsx].values[nx]
+
+		nx := len(rctx.routeParams.Keys) - 1 // index of last param in list
+		if nx >= 0 && rctx.routeParams.Keys[nx] == "*" {
+			rctx.RoutePath += rctx.routeParams.Values[nx]
 		}
 
 		handler.ServeHTTP(w, r)
 	})
 
 	if pattern == "" || pattern[len(pattern)-1] != '/' {
+		notFoundHandler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			mx.NotFoundHandler().ServeHTTP(w, r)
+		})
+
 		mx.handle(mALL|mSTUB, pattern, subHandler)
-		mx.handle(mALL|mSTUB, pattern+"/", mx.NotFoundHandler())
+		mx.handle(mALL|mSTUB, pattern+"/", notFoundHandler)
 		pattern += "/"
 	}
 
@@ -398,20 +400,19 @@ func (mx *Mux) routeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Find the route
-	hs := mx.tree.FindRoute(rctx, routePath)
+	hs := mx.tree.FindRoute(rctx, method, routePath)
 	if hs == nil {
-		mx.NotFoundHandler().ServeHTTP(w, r)
+		if rctx.methodNotAllowed {
+			mx.MethodNotAllowedHandler().ServeHTTP(w, r)
+		} else {
+			mx.NotFoundHandler().ServeHTTP(w, r)
+		}
 		return
 	}
-
-	h, ok := hs[method]
-	if !ok {
-		mx.MethodNotAllowedHandler().ServeHTTP(w, r)
-		return
-	}
+	h, _ := hs[method]
 
 	// Serve it up
-	h.ServeHTTP(w, r)
+	h.handler.ServeHTTP(w, r)
 }
 
 // Recursively update data on child routers.

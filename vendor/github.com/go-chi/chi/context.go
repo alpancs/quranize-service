@@ -11,21 +11,34 @@ var (
 )
 
 // Context is the default routing context set on the root node of a
-// request context to track URL parameters and an optional routing path.
+// request context to track route patterns, URL parameters and
+// an optional routing path.
 type Context struct {
-	// Routing path override used by subrouters.
+	// Routing path override used during the route search.
+	// See Mux#routeHTTP method.
 	RoutePath string
 
-	// Routing pattern matching the path.
-	RoutePattern string
-
-	// Routing patterns throughout the lifecycle of the request,
-	// across all connected routers.
+	// Routing pattern stack throughout the lifecycle of the request,
+	// across all connected routers. It is a record of all matching
+	// patterns across a stack of sub-routers.
 	RoutePatterns []string
 
-	// URL routing parameter keys and values.
-	URLParams   []routeParams
-	routeParams routeParams
+	// URLParams are the stack of routeParams captured during the
+	// routing lifecycle across a stack of sub-routers.
+	URLParams RouteParamsStack
+
+	// The endpoint routing pattern that matched the request URI path
+	// or `RoutePath` of the current sub-router. This value will update
+	// during the lifecycle of a request passing through a stack of
+	// sub-routers.
+	routePattern string
+
+	// Route parameters matched for the current sub-router. It is
+	// intentionally unexported so it cant be tampered.
+	routeParams RouteParams
+
+	// methodNotAllowed hint
+	methodNotAllowed bool
 }
 
 // NewRouteContext returns a new routing Context object.
@@ -36,19 +49,20 @@ func NewRouteContext() *Context {
 // reset a routing context to its initial state.
 func (x *Context) reset() {
 	x.RoutePath = ""
-	x.RoutePattern = ""
 	x.RoutePatterns = x.RoutePatterns[:0]
-
 	x.URLParams = x.URLParams[:0]
-	x.routeParams.keys = x.routeParams.keys[:0]
-	x.routeParams.values = x.routeParams.values[:0]
+
+	x.routePattern = ""
+	x.routeParams.Keys = x.routeParams.Keys[:0]
+	x.routeParams.Values = x.routeParams.Values[:0]
+	x.methodNotAllowed = false
 }
 
 func (x *Context) URLParam(key string) string {
 	for s := len(x.URLParams) - 1; s >= 0; s-- {
-		for k := len(x.URLParams[s].keys) - 1; k >= 0; k-- {
-			if x.URLParams[s].keys[k] == key {
-				return x.URLParams[s].values[k]
+		for k := len(x.URLParams[s].Keys) - 1; k >= 0; k-- {
+			if x.URLParams[s].Keys[k] == key {
+				return x.URLParams[s].Values[k]
 			}
 		}
 	}
@@ -77,8 +91,21 @@ func URLParamFromCtx(ctx context.Context, key string) string {
 	return ""
 }
 
-type routeParams struct {
-	keys, values []string
+type RouteParams struct {
+	Keys, Values []string
+}
+
+type RouteParamsStack []RouteParams
+
+// Add will append a URL parameter to the end of the route param stack
+func (s *RouteParamsStack) Add(key, value string) {
+	x := len(*s) - 1
+	if x < 0 {
+		*s = append(*s, RouteParams{})
+		x = 0
+	}
+	(*s)[x].Keys = append((*s)[x].Keys, key)
+	(*s)[x].Values = append((*s)[x].Values, value)
 }
 
 // ServerBaseContext wraps an http.Handler to set the request context to the

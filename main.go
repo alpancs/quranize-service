@@ -25,7 +25,8 @@ func main() {
 func setUpRouter() http.Handler {
 	router := chi.NewRouter()
 
-	router.Get("/{keyword:^([A-Za-z' ]|%20)*$}", route.Home)
+	router.Get("/", route.Home)
+	router.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
