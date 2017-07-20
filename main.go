@@ -5,40 +5,41 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/route"
+	"github.com/alpancs/quranize/route/api"
 	"github.com/go-chi/chi"
 )
 
-import _ "github.com/alpancs/quranize/job"
-
-func init() {
-	if os.Getenv("PORT") == "" {
-		os.Setenv("PORT", "7000")
-	}
-}
-
 func main() {
-	log.Println("Quranize is running in port " + os.Getenv("PORT"))
-	http.ListenAndServe(":"+os.Getenv("PORT"), setUpRouter())
+	job.RunInBackground()
+	log.Println("Quranize is running in port " + getPort())
+	http.ListenAndServe(":"+getPort(), newRouter())
 }
 
-func setUpRouter() http.Handler {
+func getPort() string {
+	if os.Getenv("PORT") == "" {
+		return "7000"
+	}
+	return os.Getenv("PORT")
+}
+
+func newRouter() http.Handler {
 	router := chi.NewRouter()
 
 	router.Get("/", route.Home)
 	router.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
+	fileServer(router, "/", http.Dir("public"))
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
-		apiRouter.Get("/encode/{keyword}", route.Encode)
-		apiRouter.Get("/locate/{keyword}", route.Locate)
-		apiRouter.Get("/translate/{sura}-{aya}", route.Translate)
-		apiRouter.Get("/tafsir/{sura}-{aya}", route.Tafsir)
-		apiRouter.Get("/trending-keywords", route.TrendingKeywords)
-		apiRouter.Post("/log/{keyword}", route.Log)
+		apiRouter.Get("/encode/{keyword}", api.Encode)
+		apiRouter.Get("/locate/{keyword}", api.Locate)
+		apiRouter.Get("/translate/{sura}-{aya}", api.Translate)
+		apiRouter.Get("/tafsir/{sura}-{aya}", api.Tafsir)
+		apiRouter.Get("/trending-keywords", api.TrendingKeywords)
+		apiRouter.Post("/log/{keyword}", api.Log)
 	})
-
-	fileServer(router, "/", http.Dir("public"))
 
 	return router
 }
