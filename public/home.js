@@ -37,6 +37,11 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
+      if (!this.trimmedKeyword) {
+        this.encodeds = []
+        this.willRequest = false
+        return
+      }
       this.logged = false
       this.loading = true
       let currentRequestTime = Date.now()
