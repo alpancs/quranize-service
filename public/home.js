@@ -45,7 +45,7 @@ let app = new Vue({
         if (this.lastRequestTime < currentRequestTime) {
           this.lastRequestTime = currentRequestTime
           this.encodeds = response.data.map((text) => ({text}))
-          this.shareLink = location.origin+'/'+encodeURIComponent(this.trimmedKeyword.toLowerCase())
+          this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
         }
       })
       .then(() => {
