@@ -126,3 +126,11 @@ func TestEncodeAlfatihah7(t *testing.T) {
 		t.Error(Encode(input))
 	}
 }
+
+func TestShummunBukmun(t *testing.T) {
+	input := "shummun bukmun"
+	output := []string{"صم وبكم", "صم بكم"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
