@@ -42,12 +42,23 @@ var (
 )
 
 func init() {
+	loadChannel := make(chan struct{})
+	go loadTransliterationAsync("corpus/arabic-to-alphabet", loadChannel)
+	go loadQuranAndIndexAsync("corpus/quran-simple-clean.xml", &QuranClean, loadChannel)
+	go loadQuranAsync("corpus/quran-simple-enhanced.xml", &QuranEnhanced, loadChannel)
+	go loadQuranAsync("corpus/id.indonesian.xml", &QuranTranslationID, loadChannel)
+	go loadQuranAsync("corpus/id.jalalayn.xml", &QuranTafsirJalalayn, loadChannel)
+	<-loadChannel
+	<-loadChannel
+	<-loadChannel
+	<-loadChannel
+	<-loadChannel
+	close(loadChannel)
+}
+
+func loadTransliterationAsync(filePath string, loadChannel chan struct{}) {
 	hijaiyas = loadTransliteration("corpus/arabic-to-alphabet")
-	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
-	root = buildIndex(&QuranClean)
-	loadQuran("corpus/quran-simple-enhanced.xml", &QuranEnhanced)
-	loadQuran("corpus/id.indonesian.xml", &QuranTranslationID)
-	loadQuran("corpus/id.jalalayn.xml", &QuranTafsirJalalayn)
+	loadChannel <- struct{}{}
 }
 
 func loadTransliteration(filePath string) map[string][]string {
@@ -81,6 +92,17 @@ func loadTransliteration(filePath string) map[string][]string {
 		}
 	}
 	return dictionary
+}
+
+func loadQuranAsync(filePath string, quran *Alquran, loadChannel chan struct{}) {
+	loadQuran(filePath, quran)
+	loadChannel <- struct{}{}
+}
+
+func loadQuranAndIndexAsync(filePath string, quran *Alquran, loadChannel chan struct{}) {
+	loadQuran("corpus/quran-simple-clean.xml", quran)
+	root = buildIndex(quran)
+	loadChannel <- struct{}{}
 }
 
 func loadQuran(filePath string, quran *Alquran) {
