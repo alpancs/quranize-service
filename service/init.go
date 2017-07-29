@@ -36,31 +36,22 @@ var (
 	QuranTranslationID  Alquran
 	QuranTafsirJalalayn Alquran
 
+	hijaiyas map[string][]string
 	maxWidth int
 	root     *Node
-	hijaiyas map[string][]string
 )
 
-func getChild(children []Child, key rune) *Node {
-	for _, child := range children {
-		if child.Key == key {
-			return child.Value
-		}
-	}
-	return nil
-}
-
 func init() {
-	loadHijaiyas("corpus/arabic-to-alphabet")
+	hijaiyas = loadTransliteration("corpus/arabic-to-alphabet")
 	loadQuran("corpus/quran-simple-clean.xml", &QuranClean)
+	root = buildIndex(&QuranClean)
 	loadQuran("corpus/quran-simple-enhanced.xml", &QuranEnhanced)
 	loadQuran("corpus/id.indonesian.xml", &QuranTranslationID)
 	loadQuran("corpus/id.jalalayn.xml", &QuranTafsirJalalayn)
-	root = buildIndex(&QuranClean)
 }
 
-func loadHijaiyas(filePath string) {
-	hijaiyas = make(map[string][]string)
+func loadTransliteration(filePath string) map[string][]string {
+	dictionary := make(map[string][]string)
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		raw, err = ioutil.ReadFile("../" + filePath)
@@ -73,7 +64,7 @@ func loadHijaiyas(filePath string) {
 		components := strings.Split(line, " ")
 		arabic := components[0]
 		for _, alphabet := range components[1:] {
-			hijaiyas[alphabet] = append(hijaiyas[alphabet], arabic)
+			dictionary[alphabet] = append(dictionary[alphabet], arabic)
 
 			length := len(alphabet)
 			ending := alphabet[length-1]
@@ -82,13 +73,14 @@ func loadHijaiyas(filePath string) {
 			} else {
 				alphabet += alphabet
 			}
-			hijaiyas[alphabet] = append(hijaiyas[alphabet], arabic)
+			dictionary[alphabet] = append(dictionary[alphabet], arabic)
 			length = len(alphabet)
 			if length > maxWidth {
 				maxWidth = length
 			}
 		}
 	}
+	return dictionary
 }
 
 func loadQuran(filePath string, quran *Alquran) {
@@ -137,4 +129,13 @@ func buildTree(harfs []rune, location Location, node *Node) {
 			node.Locations = append(node.Locations, location)
 		}
 	}
+}
+
+func getChild(children []Child, key rune) *Node {
+	for _, child := range children {
+		if child.Key == key {
+			return child.Value
+		}
+	}
+	return nil
 }
