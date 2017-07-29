@@ -96,7 +96,7 @@ func TestEncodeAlfatihah3(t *testing.T) {
 }
 
 func TestEncodeAlfatihah4(t *testing.T) {
-	input := "maliki yau middin"
+	input := "maaliki yau middin"
 	output := []string{"مالك يوم الدين"}
 	if !properlyEncoded(input, output) {
 		t.Error(Encode(input))
@@ -129,7 +129,15 @@ func TestEncodeAlfatihah7(t *testing.T) {
 
 func TestShummunBukmun(t *testing.T) {
 	input := "shummun bukmun"
-	output := []string{"صم وبكم", "صم بكم"}
+	output := []string{"صم وبكم", "الصم البكم", "صم بكم"}
+	if !properlyEncoded(input, output) {
+		t.Error(Encode(input))
+	}
+}
+
+func TestKahfi(t *testing.T) {
+	input := "kahfi"
+	output := []string{"الكهف"}
 	if !properlyEncoded(input, output) {
 		t.Error(Encode(input))
 	}

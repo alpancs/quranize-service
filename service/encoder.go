@@ -4,6 +4,8 @@ import (
 	"strings"
 )
 
+var BASE = []string{""}
+
 func Encode(text string) []string {
 	var memo = make(map[string][]string)
 	text = strings.Replace(text, " ", "", -1)
@@ -19,7 +21,7 @@ func Encode(text string) []string {
 
 func quranize(text string, memo map[string][]string) []string {
 	if text == "" {
-		return []string{""}
+		return BASE
 	}
 
 	if cache, ok := memo[text]; ok {
@@ -47,7 +49,9 @@ func combine(heads, tails []string) []string {
 	combinations := []string{}
 	for _, head := range heads {
 		for _, tail := range tails {
-			if head != "" {
+			if head == "" {
+				combinations = append(combinations, "ال"+tail)
+			} else {
 				combinations = append(combinations, head+" "+tail)
 				combinations = append(combinations, head+" ال"+tail)
 			}
