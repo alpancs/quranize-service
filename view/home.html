@@ -69,7 +69,7 @@
               <div class="mdl-cell mdl-cell--12-col">
 
                 <div class="text-center" v-show="loading"><div class="mdl-spinner mdl-js-spinner is-active"></div></div>
-                <div class="text-center" v-show="noResults">no results for <strong>{{ trimmedKeyword }}</strong></div>
+                <div class="text-center" v-show="noResults">no results for <strong>{{"{{ trimmedKeyword }}"}}</strong></div>
 
                 <div v-for="encoded in encodeds">
                   <div class="text-center">
