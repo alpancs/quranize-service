@@ -57,7 +57,7 @@ let app = new Vue({
               componentHandler.upgradeElements(this.$refs.encodeds)
           })
           .catch(() => {this.encodeds = []; this.notify('connection problem')})
-          .then(() => {--this.loading; this.willRequest = this.loading === 0})
+          .then(() => {--this.loading; this.willRequest = this.loading > 0})
       }
     }, 500),
 
