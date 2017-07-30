@@ -4,7 +4,7 @@ let app = new Vue({
   data: {
     keyword: '',
     encodeds: [],
-    loading: false,
+    loading: 0,
     trendingKeywords: [],
     shareLink: '',
 
@@ -37,28 +37,28 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      if (!this.trimmedKeyword) {
+      if (this.trimmedKeyword === '') {
         this.encodeds = []
         this.willRequest = false
-        return
+      } else {
+        this.logged = false
+        ++this.loading
+        let currentRequestTime = Date.now()
+        axios.get('/api/encode/' + this.trimmedKeyword)
+          .then((response) => {
+            if (this.lastRequestTime < currentRequestTime) {
+              this.lastRequestTime = currentRequestTime
+              this.encodeds = response.data.map((text) => ({text}))
+              this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
+            }
+          })
+          .then(() => {
+            if (this.$refs.encodeds)
+              componentHandler.upgradeElements(this.$refs.encodeds)
+          })
+          .catch(() => {this.encodeds = []; this.notify('connection problem')})
+          .then(() => {--this.loading; this.willRequest = this.loading === 0})
       }
-      this.logged = false
-      this.loading = true
-      let currentRequestTime = Date.now()
-      axios.get('/api/encode/' + this.trimmedKeyword)
-      .then((response) => {
-        if (this.lastRequestTime < currentRequestTime) {
-          this.lastRequestTime = currentRequestTime
-          this.encodeds = response.data.map((text) => ({text}))
-          this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
-        }
-      })
-      .then(() => {
-        if (this.$refs.encodeds)
-          componentHandler.upgradeElements(this.$refs.encodeds)
-      })
-      .catch(() => {this.encodeds = []; this.notify('connection problem')})
-      .then(() => {this.loading = false; this.willRequest = false})
     }, 500),
 
     locate(encoded) {
