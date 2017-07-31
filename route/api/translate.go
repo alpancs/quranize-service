@@ -10,9 +10,9 @@ import (
 )
 
 func Translate(w http.ResponseWriter, r *http.Request) {
-	sura, errSura := strconv.Atoi(chi.URLParam(r, "sura"))
-	aya, errAya := strconv.Atoi(chi.URLParam(r, "aya"))
-	if errSura == nil && errAya == nil && validIndex(sura, aya) {
+	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
+	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
+	if validIndex(sura, aya) {
 		json.NewEncoder(w).Encode(service.QuranTranslationID.Suras[sura-1].Ayas[aya-1].Text)
 	} else {
 		w.WriteHeader(400)
@@ -20,9 +20,9 @@ func Translate(w http.ResponseWriter, r *http.Request) {
 }
 
 func Tafsir(w http.ResponseWriter, r *http.Request) {
-	sura, errSura := strconv.Atoi(chi.URLParam(r, "sura"))
-	aya, errAya := strconv.Atoi(chi.URLParam(r, "aya"))
-	if errSura == nil && errAya == nil && validIndex(sura, aya) {
+	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
+	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
+	if validIndex(sura, aya) {
 		json.NewEncoder(w).Encode(service.QuranTafsirJalalayn.Suras[sura-1].Ayas[aya-1].Text)
 	} else {
 		w.WriteHeader(400)

@@ -37,28 +37,23 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      if (this.trimmedKeyword === '') {
-        this.encodeds = []
-        this.willRequest = false
-      } else {
-        this.logged = false
-        ++this.loading
-        let currentRequestTime = Date.now()
-        axios.get('/api/encode/' + this.trimmedKeyword)
-          .then((response) => {
-            if (this.lastRequestTime < currentRequestTime) {
-              this.lastRequestTime = currentRequestTime
-              this.encodeds = response.data.map((text) => ({text}))
-              this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
-            }
-          })
-          .then(() => {
-            if (this.$refs.encodeds)
-              componentHandler.upgradeElements(this.$refs.encodeds)
-          })
-          .catch(() => {this.encodeds = []; this.notify('connection problem')})
-          .then(() => {--this.loading; this.willRequest = this.loading > 0})
-      }
+      this.logged = false
+      ++this.loading
+      let currentRequestTime = Date.now()
+      axios.get('/api/encode', {params: {keyword: this.trimmedKeyword}})
+        .then((response) => {
+          if (this.lastRequestTime < currentRequestTime) {
+            this.lastRequestTime = currentRequestTime
+            this.encodeds = response.data.map((text) => ({text}))
+            this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
+          }
+        })
+        .then(() => {
+          if (this.$refs.encodeds)
+            componentHandler.upgradeElements(this.$refs.encodeds)
+        })
+        .catch(() => {this.encodeds = []; this.notify('connection problem')})
+        .then(() => {--this.loading; this.willRequest = this.loading > 0})
     }, 500),
 
     locate(encoded) {
@@ -66,7 +61,7 @@ let app = new Vue({
       this.$set(encoded, 'expanded', !encoded.expanded)
       if (encoded.locations) return
       this.$set(encoded, 'loading', true)
-      axios.get('/api/locate/' + encoded.text)
+      axios.get('/api/locate', {params: {keyword: encoded.text}})
       .then((response) => {
         let locations = response.data
         locations.forEach((loc) => {
@@ -85,7 +80,7 @@ let app = new Vue({
       this.$set(location, 'showTranslation', !location.showTranslation)
       if (location.Translation) return
       this.$set(location, 'loadingTranslation', true)
-      axios.get(`/api/translate/${location.Sura+1}-${location.Aya+1}`)
+      axios.get(`/api/translate/${location.Sura+1}/${location.Aya+1}`)
       .then((response) => this.$set(location, 'Translation', response.data))
       .catch(() => {this.$set(location, 'showTranslation', false); this.notify('connection problem')})
       .then(() => this.$set(location, 'loadingTranslation', false))
@@ -95,7 +90,7 @@ let app = new Vue({
       this.$set(location, 'showTafsir', !location.showTafsir)
       if (location.Tafsir) return
       this.$set(location, 'loadingTafsir', true)
-      axios.get(`/api/tafsir/${location.Sura+1}-${location.Aya+1}`)
+      axios.get(`/api/tafsir/${location.Sura+1}/${location.Aya+1}`)
       .then((response) => this.$set(location, 'Tafsir', response.data))
       .catch(() => {this.$set(location, 'showTafsir', false); this.notify('connection problem')})
       .then(() => this.$set(location, 'loadingTafsir', false))
@@ -104,7 +99,7 @@ let app = new Vue({
     log() {
       if (!this.logged) {
         this.logged = true
-        axios.post('/api/log/' + this.trimmedKeyword)
+        axios.get('/api/log', {params: {keyword: this.trimmedKeyword}})
         .catch(() => this.logged = false)
       }
     },
@@ -115,7 +110,7 @@ let app = new Vue({
   },
 })
 
-axios.get('/api/trending-keywords')
+axios.get('/api/trending_keywords')
 .then((response) => app.trendingKeywords = response.data)
 .catch(() => {})
 

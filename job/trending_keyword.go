@@ -27,6 +27,7 @@ var (
 	TrendingKeywords []string
 
 	lastId            string
+	last7Days         = bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
 	historyCollection *mgo.Collection
 )
 
@@ -53,7 +54,6 @@ func WatchTrendingKeywords() {
 
 func UpdateTrendingKeywords() {
 	startTime := time.Now()
-	last7Days := bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
 	iter := historyCollection.Find(last7Days).Sort("timestamp").Iter()
 	defer iter.Close()
 	TrendingKeywords = getTrendingKeywords(iter)
@@ -87,7 +87,8 @@ func getTrendingKeywords(iter *mgo.Iter) []string {
 
 func needToUpdate() bool {
 	var lastDoc Document
-	historyCollection.Find(nil).Sort("-timestamp").Limit(1).One(&lastDoc)
+	last7Days = bson.M{"timestamp": bson.M{"$gt": time.Now().AddDate(0, 0, -7)}}
+	historyCollection.Find(last7Days).Sort("-timestamp").Limit(1).One(&lastDoc)
 	return lastId != lastDoc.Id
 }
 

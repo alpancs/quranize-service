@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/alpancs/quranize/service"
-	"github.com/go-chi/chi"
 )
 
 type Location struct {
@@ -15,7 +14,7 @@ type Location struct {
 }
 
 func Locate(w http.ResponseWriter, r *http.Request) {
-	keyword := chi.URLParam(r, "keyword")
+	keyword := r.URL.Query().Get("keyword")
 	locations := []Location{}
 	for _, loc := range service.Locate(keyword) {
 		suraName := service.QuranEnhanced.Suras[loc.Sura].Name

@@ -33,12 +33,12 @@ func newRouter() http.Handler {
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
-		apiRouter.Get("/encode/{keyword}", api.Encode)
-		apiRouter.Get("/locate/{keyword}", api.Locate)
-		apiRouter.Get("/translate/{sura}-{aya}", api.Translate)
-		apiRouter.Get("/tafsir/{sura}-{aya}", api.Tafsir)
-		apiRouter.Get("/trending-keywords", api.TrendingKeywords)
-		apiRouter.Post("/log/{keyword}", api.Log)
+		apiRouter.Get("/encode", api.Encode)
+		apiRouter.Get("/locate", api.Locate)
+		apiRouter.Get("/translate/{sura}/{aya}", api.Translate)
+		apiRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
+		apiRouter.Get("/trending_keywords", api.TrendingKeywords)
+		apiRouter.Get("/log", api.Log)
 	})
 
 	return router
