@@ -1,6 +1,7 @@
 package api
 
 import (
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -13,8 +14,8 @@ type History struct {
 }
 
 func Log(w http.ResponseWriter, r *http.Request) {
-	keyword := r.URL.Query().Get("keyword")
-	keyword = strings.ToLower(strings.TrimSpace(keyword))
+	data, _ := ioutil.ReadAll(r.Body)
+	keyword := strings.ToLower(strings.TrimSpace(string(data)))
 	if keyword != "" {
 		err := HistoryCollection.Insert(History{time.Now(), keyword})
 		if err != nil {

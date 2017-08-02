@@ -38,7 +38,7 @@ func newRouter() http.Handler {
 		apiRouter.Get("/translate/{sura}/{aya}", api.Translate)
 		apiRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
 		apiRouter.Get("/trending_keywords", api.TrendingKeywords)
-		apiRouter.Get("/log", api.Log)
+		apiRouter.Post("/log", api.Log)
 	})
 
 	return router
