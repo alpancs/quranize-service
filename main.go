@@ -8,6 +8,7 @@ import (
 	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/route"
 	"github.com/alpancs/quranize/route/api"
+	"github.com/alpancs/quranize/route/webhook"
 	"github.com/go-chi/chi"
 )
 
@@ -39,6 +40,10 @@ func newRouter() http.Handler {
 		apiRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
 		apiRouter.Get("/trending_keywords", api.TrendingKeywords)
 		apiRouter.Post("/log", api.Log)
+	})
+
+	router.Route("/webhook", func(webhookRouter chi.Router) {
+		webhookRouter.Post("/"+os.Getenv("QURANIZE_TELEGRAM_TOKEN"), webhook.Telegram)
 	})
 
 	return router
