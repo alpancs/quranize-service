@@ -28,9 +28,12 @@ func getPort() string {
 func newRouter() http.Handler {
 	router := chi.NewRouter()
 
-	router.Get("/", route.Home)
-	router.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
-	fileServer(router, "/", http.Dir("public"))
+	router.Route("/", func(homeRouter chi.Router) {
+		homeRouter.Use(vary)
+		homeRouter.Get("/", route.Home)
+		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
+		fileServer(homeRouter, "/", http.Dir("public"))
+	})
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(jsonify)
@@ -66,6 +69,13 @@ func fileServer(router chi.Router, path string, root http.FileSystem) {
 func jsonify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func vary(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Vary", "Accept-Encoding")
 		next.ServeHTTP(w, r)
 	})
 }
