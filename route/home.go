@@ -15,6 +15,14 @@ type Data struct {
 	Keyword         string
 	Transliteration string
 	QuranText       string
+	JsVersion       int64
+}
+
+var jsVersion int64
+
+func init() {
+	fileInfo, _ := os.Stat("public/home.js")
+	jsVersion = fileInfo.ModTime().Unix()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +36,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		quranText = encodeds[0]
 	}
 
-	data := Data{os.Getenv("GO_ENV") == "production", keyword, transliteration, quranText}
+	data := Data{os.Getenv("GO_ENV") == "production", keyword, transliteration, quranText, jsVersion}
 	t, err := template.ParseFiles("view/home.html")
 	if err != nil {
 		if !data.Production {
