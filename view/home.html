@@ -81,13 +81,13 @@
 
                   <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active" ref="encodeds"></div></div>
 
-                  <div v-show="encoded.expanded" v-for="(location, index) in encoded.locations">
-                    <div class="text-left">{{"{{ index+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.SuraName }}"}}</span> ({{"{{ location.Sura+1 }}"}}) ayah {{"{{ location.Aya+1 }}"}}:</div>
+                  <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
+                    <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
 
                     <p class="text-right quran-text">
-                      {{"{{ location.AyaBeforeHL }}"}}
-                      <mark>{{"{{ location.AyaHL }}"}}</mark>
-                      {{"{{ location.AyaAfterHL }}"}}
+                      {{"{{ location.beforeHighlightedAya }}"}}
+                      <mark>{{"{{ location.highlightedAya }}"}}</mark>
+                      {{"{{ location.afterHighlightedAya }}"}}
                     </p>
 
                     <div class="text-center">
@@ -101,13 +101,13 @@
                       <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
 
-                    <div v-show="location.showTranslation && location.Translation">
+                    <div v-show="location.showTranslation && location.translation">
                       <strong>Translation</strong>
-                      <p class="text-left">{{"{{ location.Translation }}"}}</p>
+                      <p class="text-left">{{"{{ location.translation }}"}}</p>
                     </div>
-                    <div v-show="location.showTafsir && location.Tafsir">
+                    <div v-show="location.showTafsir && location.tafsir">
                       <strong>Tafsir</strong>
-                      <p class="text-left">{{"{{ location.Tafsir }}"}}</p>
+                      <p class="text-left">{{"{{ location.tafsir }}"}}</p>
                     </div>
                     <hr>
                   </div>

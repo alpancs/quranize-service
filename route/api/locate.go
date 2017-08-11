@@ -9,20 +9,24 @@ import (
 )
 
 type Location struct {
-	Sura, Aya, Begin, End int
-	SuraName, AyaText     string
+	SuraNumber     int    `json:"suraNumber"`
+	SuraName       string `json:"suraName"`
+	AyaNumber      int    `json:"ayaNumber"`
+	AyaText        string `json:"ayaText"`
+	BeginHighlight int    `json:"beginHighlight"`
+	EndHighlight   int    `json:"endHighlight"`
 }
 
 func Locate(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	locations := []Location{}
-	for _, loc := range service.Locate(keyword) {
-		suraName := service.QuranEnhanced.Suras[loc.Sura].Name
-		ayaText := service.QuranEnhanced.Suras[loc.Sura].Ayas[loc.Aya].Text
+	for _, location := range service.Locate(keyword) {
+		suraName := service.QuranEnhanced.Suras[location.Sura].Name
+		ayaText := service.QuranEnhanced.Suras[location.Sura].Ayas[location.Aya].Text
 		ayaTextRune := []rune(ayaText)
-		begin := indexAfterSpaces(ayaTextRune, loc.SliceIndex)
+		begin := indexAfterSpaces(ayaTextRune, location.SliceIndex)
 		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(keyword, " ")+1) - 1
-		locations = append(locations, Location{loc.Sura, loc.Aya, begin, end, suraName, ayaText})
+		locations = append(locations, Location{location.Sura + 1, suraName, location.Aya + 1, ayaText, begin, end})
 	}
 	json.NewEncoder(w).Encode(locations)
 }
