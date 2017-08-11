@@ -61,7 +61,7 @@ func fileServer(router chi.Router, path string, root http.FileSystem) {
 	}
 	path += "*"
 
-	router.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.With(oneYearCache).Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
 }
@@ -76,6 +76,13 @@ func jsonify(next http.Handler) http.Handler {
 func vary(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Vary", "Accept-Encoding")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func oneYearCache(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "max-age=31536000")
 		next.ServeHTTP(w, r)
 	})
 }
