@@ -33,7 +33,7 @@ func newRouter() http.Handler {
 	router.Route("/", func(homeRouter chi.Router) {
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
-		cachedRouter := homeRouter.With(middleware.WithValue("Cache-Control", "max-age=31536000"))
+		cachedRouter := homeRouter.With(middleware.WithValue("Cache-Control", "public, max-age=31536000"))
 		fileServer(cachedRouter, "/", http.Dir("public"))
 	})
 
