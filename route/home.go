@@ -30,8 +30,8 @@ var (
 
 func init() {
 	isProduction = os.Getenv("ENV") == "production"
-	cssVersion = getVersion("public/home.css")
-	jsVersion = getVersion("public/home.js")
+	cssVersion = getVersion("/home.css")
+	jsVersion = getVersion("/home.js")
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +57,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func getVersion(filePath string) string {
-	raw, err := ioutil.ReadFile(filePath)
+	raw, err := ioutil.ReadFile("public" + filePath)
 	if err != nil {
 		panic(err)
 	}
