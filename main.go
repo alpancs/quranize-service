@@ -30,6 +30,9 @@ func getPort() string {
 func newRouter() http.Handler {
 	router := chi.NewRouter()
 
+	if os.Getenv("ENV") != "production" {
+		router.Use(middleware.Logger)
+	}
 	router.Use(middleware.DefaultCompress)
 
 	router.Route("/", func(homeRouter chi.Router) {
