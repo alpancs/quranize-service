@@ -14,16 +14,23 @@ import (
 )
 
 type Data struct {
-	Production      bool
+	IsProduction    bool
 	Keyword         string
 	Transliteration string
 	QuranText       string
+	CssVersion      string
 	JsVersion       string
 }
 
-var jsVersion string
+var (
+	isProduction bool
+	cssVersion   string
+	jsVersion    string
+)
 
 func init() {
+	isProduction = os.Getenv("ENV") == "production"
+	cssVersion = getVersion("public/home.css")
 	jsVersion = getVersion("public/home.js")
 }
 
@@ -38,10 +45,10 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		quranText = encodeds[0]
 	}
 
-	data := Data{os.Getenv("GO_ENV") == "production", keyword, transliteration, quranText, jsVersion}
+	data := Data{isProduction, keyword, transliteration, quranText, cssVersion, jsVersion}
 	t, err := template.ParseFiles("view/home.html")
 	if err != nil {
-		if !data.Production {
+		if !data.IsProduction {
 			w.Write([]byte(err.Error()))
 		}
 		panic(err)
