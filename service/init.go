@@ -2,8 +2,10 @@ package service
 
 import (
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"strings"
+	"time"
 )
 
 type Alquran struct {
@@ -42,6 +44,7 @@ var (
 )
 
 func init() {
+	startTime := time.Now()
 	loadChannel := make(chan struct{})
 	go loadTransliterationAsync("corpus/arabic-to-alphabet", loadChannel)
 	go loadQuranAndIndexAsync("corpus/quran-simple-clean.xml", &QuranClean, loadChannel)
@@ -54,6 +57,7 @@ func init() {
 	<-loadChannel
 	<-loadChannel
 	close(loadChannel)
+	fmt.Println("service initialized in ", time.Since(startTime))
 }
 
 func loadTransliterationAsync(filePath string, loadChannel chan struct{}) {

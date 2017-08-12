@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/route"
@@ -12,10 +13,13 @@ import (
 	"github.com/go-chi/chi"
 )
 
+const ONE_YEAR = 356 * 24 * 60 * 60
+
 func main() {
-	job.RunInBackground()
-	log.Println("Quranize is running in port " + getPort())
-	http.ListenAndServe(":"+getPort(), newRouter())
+	job.Start()
+	port := getPort()
+	fmt.Println("Quranize is running in port " + port)
+	http.ListenAndServe(":"+port, newRouter())
 }
 
 func getPort() string {
@@ -29,7 +33,6 @@ func newRouter() http.Handler {
 	router := chi.NewRouter()
 
 	router.Route("/", func(homeRouter chi.Router) {
-		homeRouter.Use(vary)
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
 		fileServer(homeRouter, "/", http.Dir("public"))
@@ -73,16 +76,9 @@ func jsonify(next http.Handler) http.Handler {
 	})
 }
 
-func vary(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Vary", "Accept-Encoding")
-		next.ServeHTTP(w, r)
-	})
-}
-
 func oneYearCache(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Cache-Control", "max-age=31536000")
+		w.Header().Set("Cache-Control", "max-age="+strconv.Itoa(ONE_YEAR))
 		next.ServeHTTP(w, r)
 	})
 }

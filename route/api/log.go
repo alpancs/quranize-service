@@ -1,8 +1,8 @@
 package api
 
 import (
+	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -20,7 +20,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 		err := HistoryCollection.Insert(History{time.Now(), keyword})
 		if err != nil {
 			w.WriteHeader(500)
-			log.Println(err.Error())
+			fmt.Println(err.Error())
 		}
 	}
 }

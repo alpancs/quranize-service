@@ -1,7 +1,7 @@
 package job
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"sort"
 	"strings"
@@ -31,10 +31,10 @@ var (
 	historyCollection *mgo.Collection
 )
 
-func RunInBackground() {
+func Start() {
 	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
 	if err != nil {
-		log.Println(err.Error())
+		fmt.Println(err.Error())
 		return
 	}
 	historyCollection = session.DB(os.Getenv("MONGODB_DATABASE")).C("history")
@@ -57,7 +57,7 @@ func UpdateTrendingKeywords() {
 	iter := historyCollection.Find(last7Days).Sort("timestamp").Iter()
 	defer iter.Close()
 	TrendingKeywords = getTrendingKeywords(iter)
-	log.Println("update trending keywords elapsed time:", time.Since(startTime))
+	fmt.Println("trending keywords updated in ", time.Since(startTime))
 }
 
 func getTrendingKeywords(iter *mgo.Iter) []string {
