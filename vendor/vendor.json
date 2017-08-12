@@ -9,12 +9,6 @@
 			"revisionTime": "2017-07-12T12:12:00Z"
 		},
 		{
-			"checksumSHA1": "NsqEK1C4CG1dRb4IWpqS9RcnVIQ=",
-			"path": "github.com/go-chi/chi/middleware",
-			"revision": "4c5a584b324b74af3e9cfeaf6265d14ae2fdfc99",
-			"revisionTime": "2017-07-12T12:12:00Z"
-		},
-		{
 			"checksumSHA1": "1D8GzeoFGUs5FZOoyC2DpQg8c5Y=",
 			"path": "gopkg.in/mgo.v2",
 			"revision": "3f83fa5005286a7fe593b055f0d7771a7dce4655",

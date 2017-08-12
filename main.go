@@ -10,7 +10,6 @@ import (
 	"github.com/alpancs/quranize/route/api"
 	"github.com/alpancs/quranize/route/webhook"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 )
 
 func main() {
@@ -30,19 +29,15 @@ func getPort() string {
 func newRouter() http.Handler {
 	router := chi.NewRouter()
 
-	if os.Getenv("ENV") != "production" {
-		router.Use(middleware.Logger)
-	}
-
 	router.Route("/", func(homeRouter chi.Router) {
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
-		cachedRouter := homeRouter.With(middleware.WithValue("Cache-Control", "public, max-age=31536000"))
+		cachedRouter := homeRouter.With(header("Cache-Control", "public, max-age=31536000"))
 		fileServer(cachedRouter, "/", http.Dir("public"))
 	})
 
 	router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Use(middleware.WithValue("Content-Type", "application/json; charset=utf-8"))
+		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
 		apiRouter.Get("/encode", api.Encode)
 		apiRouter.Get("/locate", api.Locate)
 		apiRouter.Get("/translate/{sura}/{aya}", api.Translate)
@@ -70,4 +65,13 @@ func fileServer(router chi.Router, path string, root http.FileSystem) {
 	router.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
+}
+
+func header(key, value string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set(key, value)
+			next.ServeHTTP(w, r)
+		})
+	}
 }
