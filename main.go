@@ -36,11 +36,11 @@ func newRouter() http.Handler {
 
 	router.Route("/", func(compressedRoute chi.Router) {
 		compressedRoute.Use(middleware.DefaultCompress)
-		compressedRoute.Route("/", func(homeRouter chi.Router) {
-			homeRouter.Use(header("Content-Type", "text/html; charset=utf-8"))
-			homeRouter.Get("/", route.Home)
-			homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
-		})
+
+		homeRouter := compressedRoute.With(header("Content-Type", "text/html; charset=utf-8"))
+		homeRouter.Get("/", route.Home)
+		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
+
 		cachedRouter := compressedRoute.With(header("Cache-Control", "public, max-age=31536000"))
 		fileServer(cachedRouter, "/", http.Dir("public"))
 	})
