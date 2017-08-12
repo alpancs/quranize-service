@@ -30,6 +30,10 @@ func getPort() string {
 func newRouter() http.Handler {
 	router := chi.NewRouter()
 
+	if os.Getenv("ENV") != "production" {
+		router.Use(middleware.Logger)
+	}
+
 	router.Route("/", func(homeRouter chi.Router) {
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
