@@ -36,6 +36,7 @@ func newRouter() http.Handler {
 
 	router.Route("/", func(compressedRoute chi.Router) {
 		compressedRoute.Use(middleware.DefaultCompress)
+		compressedRoute.Use(header("Vary", "Accept-Encoding"))
 
 		homeRouter := compressedRoute.With(header("Content-Type", "text/html; charset=utf-8"))
 		homeRouter.Get("/", route.Home)
