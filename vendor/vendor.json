@@ -1,9 +1,16 @@
 {
+	"comment": "",
 	"ignore": "test",
 	"package": [
 		{
 			"checksumSHA1": "2zpNx6PRSUGzrYLrwIryYb4k0wI=",
 			"path": "github.com/go-chi/chi",
+			"revision": "4c5a584b324b74af3e9cfeaf6265d14ae2fdfc99",
+			"revisionTime": "2017-07-12T12:12:00Z"
+		},
+		{
+			"checksumSHA1": "NsqEK1C4CG1dRb4IWpqS9RcnVIQ=",
+			"path": "github.com/go-chi/chi/middleware",
 			"revision": "4c5a584b324b74af3e9cfeaf6265d14ae2fdfc99",
 			"revisionTime": "2017-07-12T12:12:00Z"
 		},

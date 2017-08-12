@@ -10,6 +10,7 @@ import (
 	"github.com/alpancs/quranize/route/api"
 	"github.com/alpancs/quranize/route/webhook"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
 
 func main() {
@@ -28,6 +29,8 @@ func getPort() string {
 
 func newRouter() http.Handler {
 	router := chi.NewRouter()
+
+	router.Use(middleware.DefaultCompress)
 
 	router.Route("/", func(homeRouter chi.Router) {
 		homeRouter.Get("/", route.Home)
