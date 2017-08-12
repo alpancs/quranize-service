@@ -1,7 +1,10 @@
 package route
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -15,14 +18,13 @@ type Data struct {
 	Keyword         string
 	Transliteration string
 	QuranText       string
-	JsVersion       int64
+	JsVersion       string
 }
 
-var jsVersion int64
+var jsVersion string
 
 func init() {
-	fileInfo, _ := os.Stat("public/home.js")
-	jsVersion = fileInfo.ModTime().Unix()
+	jsVersion = getVersion("public/home.js")
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -45,4 +47,14 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	t.Execute(w, data)
+}
+
+func getVersion(filePath string) string {
+	raw, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+	hash := md5.New()
+	hash.Write(raw)
+	return hex.EncodeToString(hash.Sum(nil))
 }
