@@ -33,12 +33,15 @@ func newRouter() http.Handler {
 	if os.Getenv("ENV") != "production" {
 		router.Use(middleware.Logger)
 	}
-	router.Use(middleware.DefaultCompress)
 
-	router.Route("/", func(homeRouter chi.Router) {
-		homeRouter.Get("/", route.Home)
-		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
-		cachedRouter := homeRouter.With(header("Cache-Control", "public, max-age=31536000"))
+	router.Route("/", func(compressedRoute chi.Router) {
+		compressedRoute.Use(middleware.DefaultCompress)
+		compressedRoute.Route("/", func(homeRouter chi.Router) {
+			compressedRoute.Use(header("Content-Type", "text/html; charset=utf-8"))
+			compressedRoute.Get("/", route.Home)
+			compressedRoute.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
+		})
+		cachedRouter := compressedRoute.With(header("Cache-Control", "public, max-age=31536000"))
 		fileServer(cachedRouter, "/", http.Dir("public"))
 	})
 
