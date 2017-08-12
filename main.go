@@ -4,16 +4,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/alpancs/quranize/job"
 	"github.com/alpancs/quranize/route"
 	"github.com/alpancs/quranize/route/api"
 	"github.com/alpancs/quranize/route/webhook"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
-
-const ONE_YEAR = 356 * 24 * 60 * 60
 
 func main() {
 	job.Start()
@@ -35,11 +33,12 @@ func newRouter() http.Handler {
 	router.Route("/", func(homeRouter chi.Router) {
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
-		fileServer(homeRouter, "/", http.Dir("public"))
+		cachedRouter := homeRouter.With(middleware.WithValue("Cache-Control", "max-age=31536000"))
+		fileServer(cachedRouter, "/", http.Dir("public"))
 	})
 
 	router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Use(jsonify)
+		apiRouter.Use(middleware.WithValue("Content-Type", "application/json; charset=utf-8"))
 		apiRouter.Get("/encode", api.Encode)
 		apiRouter.Get("/locate", api.Locate)
 		apiRouter.Get("/translate/{sura}/{aya}", api.Translate)
@@ -64,21 +63,7 @@ func fileServer(router chi.Router, path string, root http.FileSystem) {
 	}
 	path += "*"
 
-	router.With(oneYearCache).Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
-}
-
-func jsonify(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		next.ServeHTTP(w, r)
-	})
-}
-
-func oneYearCache(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Cache-Control", "max-age="+strconv.Itoa(ONE_YEAR))
-		next.ServeHTTP(w, r)
-	})
 }
