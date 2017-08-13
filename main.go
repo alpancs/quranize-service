@@ -30,7 +30,8 @@ func getPort() string {
 func newRouter() http.Handler {
 	router := chi.NewRouter()
 
-	if os.Getenv("ENV") != "production" {
+	isProduction := os.Getenv("ENV") == "production"
+	if !isProduction {
 		router.Use(middleware.Logger)
 	}
 
@@ -48,10 +49,14 @@ func newRouter() http.Handler {
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
-		apiRouter.Get("/encode", api.Encode)
-		apiRouter.Get("/locate", api.Locate)
-		apiRouter.Get("/translate/{sura}/{aya}", api.Translate)
-		apiRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
+		cachedRouter := apiRouter.With(header("Cache-Control", "public, max-age=3600"))
+		if !isProduction {
+			cachedRouter = apiRouter
+		}
+		cachedRouter.Get("/encode", api.Encode)
+		cachedRouter.Get("/locate", api.Locate)
+		cachedRouter.Get("/translate/{sura}/{aya}", api.Translate)
+		cachedRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
 		apiRouter.Get("/trending_keywords", api.TrendingKeywords)
 		apiRouter.Post("/log", api.Log)
 	})
