@@ -94,20 +94,20 @@
                       <button @click="translate(location)" v-show="!location.loadingTranslation" :class="{'mdl-button--raised': location.showTranslation}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
                         <i class="material-icons">translate</i>
                       </button>
-                      <div v-show="location.loadingTranslation" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                       <button @click="tafsir(location)" v-show="!location.loadingTafsir" :class="{'mdl-button--raised': location.showTafsir}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
-                      <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
 
-                    <div v-show="location.showTranslation && location.translation">
+                    <div v-show="location.showTranslation">
                       <strong>Translation</strong>
-                      <p class="text-left">{{"{{ location.translation }}"}}</p>
+                      <div v-show="location.loadingTranslation" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                      <p v-show="location.translation" class="text-left">{{"{{ location.translation }}"}}</p>
                     </div>
-                    <div v-show="location.showTafsir && location.tafsir">
+                    <div v-show="location.showTafsir">
                       <strong>Tafsir</strong>
-                      <p class="text-left">{{"{{ location.tafsir }}"}}</p>
+                      <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                      <p v-show="location.tafsir" class="text-left">{{"{{ location.tafsir }}"}}</p>
                     </div>
                     <hr>
                   </div>
