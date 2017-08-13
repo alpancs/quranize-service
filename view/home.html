@@ -100,12 +100,12 @@
                     </div>
 
                     <div v-show="location.showTranslation">
-                      <strong>Translation</strong>
+                      <div><strong>Translation</strong></div>
                       <div v-show="location.loadingTranslation" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                       <p v-show="location.translation" class="text-left">{{"{{ location.translation }}"}}</p>
                     </div>
                     <div v-show="location.showTafsir">
-                      <strong>Tafsir</strong>
+                      <div><strong>Tafsir</strong></div>
                       <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                       <p v-show="location.tafsir" class="text-left">{{"{{ location.tafsir }}"}}</p>
                     </div>
