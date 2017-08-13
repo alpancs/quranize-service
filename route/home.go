@@ -23,16 +23,10 @@ type Data struct {
 }
 
 var (
-	isProduction bool
-	cssVersion   string
-	jsVersion    string
-)
-
-func init() {
 	isProduction = os.Getenv("ENV") == "production"
-	cssVersion = getVersion("/home.css")
-	jsVersion = getVersion("/home.js")
-}
+	cssVersion   = getVersion("/home.css")
+	jsVersion    = getVersion("/home.js")
+)
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
