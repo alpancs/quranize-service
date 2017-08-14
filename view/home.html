@@ -91,10 +91,10 @@
                     </p>
 
                     <div class="text-center">
-                      <button @click="translate(location)" v-show="!location.loadingTranslation" :class="{'mdl-button--raised': location.showTranslation}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
+                      <button @click="translate(location)" :class="{'mdl-button--raised': location.showTranslation}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
                         <i class="material-icons">translate</i>
                       </button>
-                      <button @click="tafsir(location)" v-show="!location.loadingTafsir" :class="{'mdl-button--raised': location.showTafsir}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
+                      <button @click="tafsir(location)" :class="{'mdl-button--raised': location.showTafsir}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
                     </div>
