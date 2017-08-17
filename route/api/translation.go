@@ -10,36 +10,25 @@ import (
 )
 
 func Translate(w http.ResponseWriter, r *http.Request) {
-	sura, aya := getSuraAya(r)
-	if isValid(sura, aya) {
-		json.NewEncoder(w).Encode(core.QuranTranslationID.Suras[sura-1].Ayas[aya-1].Text)
-	} else {
-		w.WriteHeader(400)
-	}
+	serve(w, r, &core.QuranTranslationID)
 }
 
 func Tafsir(w http.ResponseWriter, r *http.Request) {
-	sura, aya := getSuraAya(r)
-	if isValid(sura, aya) {
-		json.NewEncoder(w).Encode(core.QuranTafsirQuraishShihab.Suras[sura-1].Ayas[aya-1].Text)
-	} else {
-		w.WriteHeader(400)
-	}
+	serve(w, r, &core.QuranTafsirQuraishShihab)
 }
 
 func Aya(w http.ResponseWriter, r *http.Request) {
-	sura, aya := getSuraAya(r)
+	serve(w, r, &core.QuranEnhanced)
+}
+
+func serve(w http.ResponseWriter, r *http.Request, quran *core.Alquran) {
+	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
+	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
 	if isValid(sura, aya) {
-		json.NewEncoder(w).Encode(core.QuranEnhanced.Suras[sura-1].Ayas[aya-1].Text)
+		json.NewEncoder(w).Encode(quran.Suras[sura-1].Ayas[aya-1].Text)
 	} else {
 		w.WriteHeader(400)
 	}
-}
-
-func getSuraAya(r *http.Request) (int, int) {
-	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
-	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
-	return sura, aya
 }
 
 func isValid(sura, aya int) bool {
