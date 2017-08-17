@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/alpancs/quranize/service"
+	"github.com/alpancs/quranize/core"
 )
 
 type Location struct {
@@ -20,9 +20,9 @@ type Location struct {
 func Locate(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	locations := []Location{}
-	for _, location := range service.Locate(keyword) {
-		suraName := service.QuranEnhanced.Suras[location.Sura].Name
-		ayaText := service.QuranEnhanced.Suras[location.Sura].Ayas[location.Aya].Text
+	for _, location := range core.Locate(keyword) {
+		suraName := core.QuranEnhanced.Suras[location.Sura].Name
+		ayaText := core.QuranEnhanced.Suras[location.Sura].Ayas[location.Aya].Text
 		ayaTextRune := []rune(ayaText)
 		begin := indexAfterSpaces(ayaTextRune, location.SliceIndex)
 		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(keyword, " ")+1) - 1
