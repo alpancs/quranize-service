@@ -33,10 +33,10 @@ type Node struct {
 }
 
 var (
-	QuranClean          Alquran
-	QuranEnhanced       Alquran
-	QuranTranslationID  Alquran
-	QuranTafsirJalalayn Alquran
+	QuranClean               Alquran
+	QuranEnhanced            Alquran
+	QuranTranslationID       Alquran
+	QuranTafsirQuraishShihab Alquran
 
 	hijaiyas map[string][]string
 	maxWidth int
@@ -50,7 +50,7 @@ func init() {
 	go loadQuranAndIndexAsync("corpus/quran-simple-clean.xml", &QuranClean, loadChannel)
 	go loadQuranAsync("corpus/quran-simple-enhanced.xml", &QuranEnhanced, loadChannel)
 	go loadQuranAsync("corpus/id.indonesian.xml", &QuranTranslationID, loadChannel)
-	go loadQuranAsync("corpus/id.jalalayn.xml", &QuranTafsirJalalayn, loadChannel)
+	go loadQuranAsync("corpus/id.muntakhab.xml", &QuranTafsirQuraishShihab, loadChannel)
 	<-loadChannel
 	<-loadChannel
 	<-loadChannel

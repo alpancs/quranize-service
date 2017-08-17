@@ -23,7 +23,7 @@ func Tafsir(w http.ResponseWriter, r *http.Request) {
 	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
 	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
 	if validIndex(sura, aya) {
-		json.NewEncoder(w).Encode(service.QuranTafsirJalalayn.Suras[sura-1].Ayas[aya-1].Text)
+		json.NewEncoder(w).Encode(service.QuranTafsirQuraishShihab.Suras[sura-1].Ayas[aya-1].Text)
 	} else {
 		w.WriteHeader(400)
 	}
