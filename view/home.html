@@ -84,8 +84,10 @@
                   <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
                     <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
 
-                    <div v-show="location.loadingShift" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
-                    <p class="text-right quran-text">
+                    <div class="text-right">
+                      <div v-show="location.loadingShift" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                    </div>
+                    <p v-show="!location.loadingShift" class="text-right quran-text">
                       {{"{{ location.beforeHighlightedAya }}"}}
                       <mark>{{"{{ location.highlightedAya }}"}}</mark>
                       {{"{{ location.afterHighlightedAya }}"}}
