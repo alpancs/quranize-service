@@ -3,9 +3,9 @@ package route
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"html/template"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -46,7 +46,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		if !isProduction {
 			w.Write([]byte(err.Error()))
 		}
-		log.Println(err.Error())
+		fmt.Println(err.Error())
 		return
 	}
 	t.Execute(w, data)
