@@ -104,18 +104,17 @@ let app = new Vue({
 
     shift(location, n) {
       this.$set(location, 'loadingShift', true)
-      axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
-      .then((response) => {
+      let dataPromise = location.ayaNumber+n === location.original.ayaNumber ?
+        Promise.resolve(location.original) :
+        axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
+        .then((response)=> ({beforeHighlightedAya: response.data}))
+      
+      dataPromise.then((data) => {
         this.$set(location, 'ayaNumber', location.ayaNumber+n)
-        if (location.ayaNumber === location.original.ayaNumber) {
-          this.$set(location, 'beforeHighlightedAya', location.original.beforeHighlightedAya)
-          this.$set(location, 'highlightedAya', location.original.highlightedAya)
-          this.$set(location, 'afterHighlightedAya', location.original.afterHighlightedAya)
-        } else {
-          this.$set(location, 'beforeHighlightedAya', response.data)
-          this.$set(location, 'highlightedAya', '')
-          this.$set(location, 'afterHighlightedAya', '')
-        }
+        this.$set(location, 'beforeHighlightedAya', data.beforeHighlightedAya)
+        this.$set(location, 'highlightedAya', data.highlightedAya)
+        this.$set(location, 'afterHighlightedAya', data.afterHighlightedAya)
+
         this.$set(location, 'translation', undefined)
         this.$set(location, 'tafsir', undefined)
         this.$set(location, 'showTranslation', false)
