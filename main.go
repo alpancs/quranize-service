@@ -57,6 +57,7 @@ func newRouter() http.Handler {
 		cachedRouter.Get("/locate", api.Locate)
 		cachedRouter.Get("/translate/{sura}/{aya}", api.Translate)
 		cachedRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
+		cachedRouter.Get("/aya/{sura}/{aya}", api.Aya)
 		apiRouter.Get("/trending_keywords", api.TrendingKeywords)
 		apiRouter.Post("/log", api.Log)
 	})
@@ -70,13 +71,11 @@ func newRouter() http.Handler {
 
 func fileServer(router chi.Router, path string, root http.FileSystem) {
 	fs := http.StripPrefix(path, http.FileServer(root))
-
 	if path != "/" && path[len(path)-1] != '/' {
 		router.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
 		path += "/"
 	}
 	path += "*"
-
 	router.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
