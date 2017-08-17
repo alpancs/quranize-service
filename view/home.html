@@ -94,7 +94,7 @@
                     </p>
 
                     <div class="text-center">
-                      <button @click="shift(location, -1)" :disabled="location.shiftButtonDisabled" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Previous" type="button">
+                      <button @click="shift(location, -1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === 1" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Previous" type="button">
                         <i class="material-icons">skip_previous</i>
                       </button>
                       <button @click="translate(location)" :class="{'mdl-button--raised': location.showTranslation}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
@@ -103,7 +103,7 @@
                       <button @click="tafsir(location)" :class="{'mdl-button--raised': location.showTafsir}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
-                      <button @click="shift(location, 1)" :disabled="location.shiftButtonDisabled" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
+                      <button @click="shift(location, 1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === ayaCount[location.suraNumber-1]" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
                         <i class="material-icons">skip_next</i>
                       </button>
                     </div>
