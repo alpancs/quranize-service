@@ -103,6 +103,7 @@ let app = new Vue({
     },
 
     shift(location, n) {
+      this.$set(location, 'shiftButtonDisabled', true)
       this.$set(location, 'loadingAya', true)
       let ayaPromise = location.ayaNumber+n === location.original.ayaNumber ?
         Promise.resolve(location.original) :
@@ -133,11 +134,12 @@ let app = new Vue({
       .then(() => this.$set(location, 'loadingTafsir', false))
 
       Promise.all([ayaPromise, translationPromise, tafsirPromise])
-      .catch(() => this.notify('connection problem'))
+      .catch((e) => e.response && e.response.status === 400 ? undefined : this.notify('connection problem'))
       .then(() => {
         this.$set(location, 'loadingAya', false)
         this.$set(location, 'loadingTranslation', false)
         this.$set(location, 'loadingTafsir', false)
+        this.$set(location, 'shiftButtonDisabled', false)
       })
     },
 
