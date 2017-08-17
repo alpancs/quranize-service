@@ -104,21 +104,29 @@ let app = new Vue({
 
     shift(location, n) {
       this.$set(location, 'loadingShift', true)
-      let dataPromise = location.ayaNumber+n === location.original.ayaNumber ?
+      let ayaPromise = location.ayaNumber+n === location.original.ayaNumber ?
         Promise.resolve(location.original) :
         axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
         .then((response)=> ({beforeHighlightedAya: response.data}))
-      
-      dataPromise.then((data) => {
-        this.$set(location, 'ayaNumber', location.ayaNumber+n)
-        this.$set(location, 'beforeHighlightedAya', data.beforeHighlightedAya)
-        this.$set(location, 'highlightedAya', data.highlightedAya)
-        this.$set(location, 'afterHighlightedAya', data.afterHighlightedAya)
 
-        this.$set(location, 'translation', undefined)
-        this.$set(location, 'tafsir', undefined)
-        this.$set(location, 'showTranslation', false)
-        this.$set(location, 'showTafsir', false)
+      let translationPromise = location.showTranslation ?
+        axios.get(`/api/translate/${location.suraNumber}/${location.ayaNumber+n}`)
+        .then((response)=> response.data) :
+        Promise.resolve()
+
+      let tafsirPromise = location.showTafsir ?
+        axios.get(`/api/tafsir/${location.suraNumber}/${location.ayaNumber+n}`)
+        .then((response)=> response.data) :
+        Promise.resolve()
+
+      Promise.all([ayaPromise, translationPromise, tafsirPromise])
+      .then(([aya, translation, tafsir]) => {
+        this.$set(location, 'ayaNumber', location.ayaNumber+n)
+        this.$set(location, 'beforeHighlightedAya', aya.beforeHighlightedAya)
+        this.$set(location, 'highlightedAya', aya.highlightedAya)
+        this.$set(location, 'afterHighlightedAya', aya.afterHighlightedAya)
+        this.$set(location, 'translation', translation)
+        this.$set(location, 'tafsir', tafsir)
       })
       .catch((error) => error.response.status !== 400 ? this.notify('connection problem') : undefined)
       .then(() => this.$set(location, 'loadingShift', false))
