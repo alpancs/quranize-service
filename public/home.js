@@ -96,6 +96,23 @@ let app = new Vue({
       .then(() => this.$set(location, 'loadingTafsir', false))
     },
 
+    shift(location, n) {
+      this.$set(location, 'loadingShift', true)
+      axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
+      .then((response) => {
+        this.$set(location, 'ayaNumber', location.ayaNumber+n)
+        this.$set(location, 'beforeHighlightedAya', response.data)
+        this.$set(location, 'highlightedAya', '')
+        this.$set(location, 'afterHighlightedAya', '')
+        this.$set(location, 'translation', undefined)
+        this.$set(location, 'tafsir', undefined)
+        this.$set(location, 'showTranslation', false)
+        this.$set(location, 'showTafsir', false)
+      })
+      .catch((error) => error.response.status !== 400 ? this.notify('connection problem') : undefined)
+      .then(() => this.$set(location, 'loadingShift', false))
+    },
+
     log() {
       if (!this.logged) {
         this.logged = true

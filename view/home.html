@@ -73,8 +73,8 @@
 
                 <div v-for="encoded in encodeds">
                   <div class="text-center">
-                    <button @click="locate(encoded)" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" type="button">
-                      <i class="material-icons">{{"{{ encoded.expanded ? 'arrow_drop_up' : 'arrow_drop_down' }}"}}</i>
+                    <button @click="locate(encoded)" :title="encoded.expanded ? 'Hide' : 'Locate'" :class="{'mdl-button--raised': encoded.expanded}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" type="button">
+                      <i class="material-icons">{{"{{ encoded.expanded ? 'expand_less' : 'expand_more' }}"}}</i>
                     </button>
                     <span class="quran-text">{{"{{ encoded.text }}"}}</span>
                   </div>
@@ -84,6 +84,7 @@
                   <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
                     <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
 
+                    <div v-show="location.loadingShift" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     <p class="text-right quran-text">
                       {{"{{ location.beforeHighlightedAya }}"}}
                       <mark>{{"{{ location.highlightedAya }}"}}</mark>
@@ -91,11 +92,17 @@
                     </p>
 
                     <div class="text-center">
+                      <button @click="shift(location, -1)" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Previous" type="button">
+                        <i class="material-icons">chevron_left</i>
+                      </button>
                       <button @click="translate(location)" :class="{'mdl-button--raised': location.showTranslation}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
                         <i class="material-icons">translate</i>
                       </button>
                       <button @click="tafsir(location)" :class="{'mdl-button--raised': location.showTafsir}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
+                      </button>
+                      <button @click="shift(location, 1)" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
+                        <i class="material-icons">chevron_right</i>
                       </button>
                     </div>
 
