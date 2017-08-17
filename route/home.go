@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -42,10 +43,11 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	data := Data{isProduction, keyword, transliteration, quranText, cssVersion, jsVersion}
 	t, err := template.ParseFiles("view/home.html")
 	if err != nil {
-		if !data.IsProduction {
+		if !isProduction {
 			w.Write([]byte(err.Error()))
 		}
-		panic(err)
+		log.Println(err.Error())
+		return
 	}
 	t.Execute(w, data)
 }

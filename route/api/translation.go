@@ -10,18 +10,18 @@ import (
 )
 
 func Translate(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, &core.QuranTranslationID)
+	serve(w, r, core.QuranTranslationID)
 }
 
 func Tafsir(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, &core.QuranTafsirQuraishShihab)
+	serve(w, r, core.QuranTafsirQuraishShihab)
 }
 
 func Aya(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, &core.QuranEnhanced)
+	serve(w, r, core.QuranEnhanced)
 }
 
-func serve(w http.ResponseWriter, r *http.Request, quran *core.Alquran) {
+func serve(w http.ResponseWriter, r *http.Request, quran core.Alquran) {
 	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
 	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
 	if isValid(sura, aya) {
