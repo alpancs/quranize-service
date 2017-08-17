@@ -68,6 +68,12 @@ let app = new Vue({
           location.beforeHighlightedAya = location.ayaText.substring(0, location.beginHighlight)
           location.highlightedAya = location.ayaText.substring(location.beginHighlight, location.endHighlight)
           location.afterHighlightedAya = location.ayaText.substring(location.endHighlight)
+          location.original = {
+            ayaNumber: location.ayaNumber,
+            beforeHighlightedAya: location.beforeHighlightedAya,
+            highlightedAya: location.highlightedAya,
+            afterHighlightedAya: location.afterHighlightedAya,
+          }
         })
         this.$set(encoded, 'locations', locations)
       })
@@ -101,9 +107,15 @@ let app = new Vue({
       axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
       .then((response) => {
         this.$set(location, 'ayaNumber', location.ayaNumber+n)
-        this.$set(location, 'beforeHighlightedAya', response.data)
-        this.$set(location, 'highlightedAya', '')
-        this.$set(location, 'afterHighlightedAya', '')
+        if (location.ayaNumber === location.original.ayaNumber) {
+          this.$set(location, 'beforeHighlightedAya', location.original.beforeHighlightedAya)
+          this.$set(location, 'highlightedAya', location.original.highlightedAya)
+          this.$set(location, 'afterHighlightedAya', location.original.afterHighlightedAya)
+        } else {
+          this.$set(location, 'beforeHighlightedAya', response.data)
+          this.$set(location, 'highlightedAya', '')
+          this.$set(location, 'afterHighlightedAya', '')
+        }
         this.$set(location, 'translation', undefined)
         this.$set(location, 'tafsir', undefined)
         this.$set(location, 'showTranslation', false)
