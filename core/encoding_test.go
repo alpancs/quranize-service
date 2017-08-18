@@ -21,6 +21,18 @@ func isStringListEqual(list1, list2 []string) bool {
 	return true
 }
 
+func TestEncodeEmptyString(t *testing.T) {
+	input := ""
+	output := []string{}
+	testEncode(t, input, output)
+}
+
+func TestEncodeNonAlquran(t *testing.T) {
+	input := "alfan nur fauzan"
+	output := []string{}
+	testEncode(t, input, output)
+}
+
 func TestEncodeTajri(t *testing.T) {
 	input := "tajri"
 	output := []string{"تجري"}
