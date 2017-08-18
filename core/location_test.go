@@ -2,13 +2,19 @@ package core
 
 import "testing"
 
-func properlyLocated(input string, output []Location) bool {
-	locations := Locate(input)
-	if len(locations) != len(output) {
+func testLocate(t *testing.T, input string, expected []Location) {
+	result := Locate(input)
+	if !isLocationListEqual(result, expected) {
+		t.Errorf("expected: %v, result: %v", expected, result)
+	}
+}
+
+func isLocationListEqual(list1, list2 []Location) bool {
+	if len(list1) != len(list2) {
 		return false
 	}
-	for i, location := range locations {
-		if output[i] != location {
+	for i := range list1 {
+		if list1[i] != list2[i] {
 			return false
 		}
 	}
@@ -18,7 +24,5 @@ func properlyLocated(input string, output []Location) bool {
 func TestLocateBismillahFull(t *testing.T) {
 	input := "بسم الله الرحمن الرحيم"
 	output := []Location{Location{0, 0, 0}, Location{26, 29, 4}}
-	if !properlyLocated(input, output) {
-		t.Error(Locate(input))
-	}
+	testLocate(t, input, output)
 }
