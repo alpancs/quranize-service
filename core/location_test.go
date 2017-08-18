@@ -27,13 +27,13 @@ func TestLocateEmptyString(t *testing.T) {
 	testLocate(t, input, output)
 }
 
-func TestLocateAlphabet(t *testing.T) {
+func TestLocateNonAlquran(t *testing.T) {
 	input := "alfan"
 	output := []Location{}
 	testLocate(t, input, output)
 }
 
-func TestLocateBismillahFull(t *testing.T) {
+func TestLocateAlquran(t *testing.T) {
 	input := "بسم الله الرحمن الرحيم"
 	output := []Location{Location{0, 0, 0}, Location{26, 29, 4}}
 	testLocate(t, input, output)
