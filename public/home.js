@@ -38,6 +38,7 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
+      sessionStorage.setItem('keyword', this.trimmedKeyword)
       this.logged = false
       ++this.loading
       let currentRequestTime = Date.now()
