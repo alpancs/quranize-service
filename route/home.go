@@ -3,7 +3,6 @@ package route
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -14,7 +13,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type Data struct {
+type HomeData struct {
 	IsProduction    bool
 	Keyword         string
 	Transliteration string
@@ -24,9 +23,10 @@ type Data struct {
 }
 
 var (
-	isProduction = os.Getenv("ENV") == "production"
-	cssVersion   = getVersion("/home.css")
-	jsVersion    = getVersion("/home.js")
+	homeTemplate, _ = template.ParseFiles("view/home.html")
+	isProduction    = os.Getenv("ENV") == "production"
+	cssVersion      = getVersion("/home.css")
+	jsVersion       = getVersion("/home.js")
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -40,16 +40,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		quranText = encodeds[0]
 	}
 
-	data := Data{isProduction, keyword, transliteration, quranText, cssVersion, jsVersion}
-	t, err := template.ParseFiles("view/home.html")
-	if err != nil {
-		if !isProduction {
-			w.Write([]byte(err.Error()))
-		}
-		fmt.Println(err.Error())
-		return
-	}
-	t.Execute(w, data)
+	homeData := HomeData{isProduction, keyword, transliteration, quranText, cssVersion, jsVersion}
+	homeTemplate.Execute(w, homeData)
 }
 
 func getVersion(filePath string) string {
