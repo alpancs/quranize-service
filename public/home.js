@@ -102,16 +102,8 @@ let app = new Vue({
         Promise.resolve(location.original) :
         axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
         .then((response)=> ({beforeHighlightedAya: response.data}))
-
-      let translationPromise = location.translationShown ?
-        axios.get(`/api/translation/${location.suraNumber}/${location.ayaNumber+n}`)
-        .then((response)=> response.data) :
-        Promise.resolve()
-
-      let tafsirPromise = location.tafsirShown ?
-        axios.get(`/api/tafsir/${location.suraNumber}/${location.ayaNumber+n}`)
-        .then((response)=> response.data) :
-        Promise.resolve()
+      let translationPromise = nextTranslation(location, n, 'translation')
+      let tafsirPromise = nextTranslation(location, n, 'tafsir')
 
       Promise.all([ayaPromise, translationPromise, tafsirPromise])
       .then(([aya, translation, tafsir]) => {
@@ -139,6 +131,12 @@ let app = new Vue({
     },
   },
 })
+
+let nextTranslation = (location, n, command) =>
+  location[command+'Shown'] ?
+  axios.get(`/api/${command}/${location.suraNumber}/${location.ayaNumber+n}`)
+  .then((response)=> response.data) :
+  Promise.resolve()
 
 axios.get('/api/trending_keywords')
 .then((response) => app.trendingKeywords = response.data)
