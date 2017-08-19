@@ -85,9 +85,9 @@
                     <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
 
                     <div class="text-right">
-                      <div v-show="location.loadingAya" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                      <div v-show="location.ayaLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
-                    <p v-show="!location.loadingAya" class="text-right quran-text">
+                    <p v-show="!location.ayaLoading" class="text-right quran-text">
                       {{"{{ location.beforeHighlightedAya }}"}}
                       <mark>{{"{{ location.highlightedAya }}"}}</mark>
                       {{"{{ location.afterHighlightedAya }}"}}
@@ -97,10 +97,10 @@
                       <button @click="shift(location, -1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === 1" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Previous" type="button">
                         <i class="material-icons">skip_previous</i>
                       </button>
-                      <button @click="translate(location)" :class="{'mdl-button--raised': location.showTranslation}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translate" type="button">
+                      <button @click="setLocation(location, 'translation')" :class="{'mdl-button--raised': location.translationShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translation" type="button">
                         <i class="material-icons">translate</i>
                       </button>
-                      <button @click="tafsir(location)" :class="{'mdl-button--raised': location.showTafsir}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
+                      <button @click="setLocation(location, 'tafsir')" :class="{'mdl-button--raised': location.tafsirShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
                       <button @click="shift(location, 1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === ayaCount[location.suraNumber-1]" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
@@ -108,15 +108,15 @@
                       </button>
                     </div>
 
-                    <div v-show="location.showTranslation">
+                    <div v-show="location.translationShown">
                       <div><strong>Translation</strong></div>
-                      <div v-show="location.loadingTranslation" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
-                      <p v-show="!location.loadingTranslation" class="text-left">{{"{{ location.translation }}"}}</p>
+                      <div v-show="location.translationLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                      <p v-show="!location.translationLoading" class="text-left">{{"{{ location.translation }}"}}</p>
                     </div>
-                    <div v-show="location.showTafsir">
+                    <div v-show="location.tafsirShown">
                       <div><strong>Tafsir</strong></div>
-                      <div v-show="location.loadingTafsir" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
-                      <p v-show="!location.loadingTafsir" class="text-left">{{"{{ location.tafsir }}"}}</p>
+                      <div v-show="location.tafsirLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
+                      <p v-show="!location.tafsirLoading" class="text-left">{{"{{ location.tafsir }}"}}</p>
                     </div>
                     <hr>
                   </div>

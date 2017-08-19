@@ -84,65 +84,46 @@ let app = new Vue({
       .then(() => this.$set(encoded, 'loading', false))
     },
 
-    translate(location) {
-      this.$set(location, 'showTranslation', !location.showTranslation)
-      if (location.translation) return
-      this.$set(location, 'loadingTranslation', true)
-      axios.get(`/api/translate/${location.suraNumber}/${location.ayaNumber}`)
-      .then((response) => this.$set(location, 'translation', response.data))
-      .catch(() => {this.$set(location, 'showTranslation', false); this.notify('connection problem')})
-      .then(() => this.$set(location, 'loadingTranslation', false))
-    },
-
-    tafsir(location) {
-      this.$set(location, 'showTafsir', !location.showTafsir)
-      if (location.tafsir) return
-      this.$set(location, 'loadingTafsir', true)
-      axios.get(`/api/tafsir/${location.suraNumber}/${location.ayaNumber}`)
-      .then((response) => this.$set(location, 'tafsir', response.data))
-      .catch(() => {this.$set(location, 'showTafsir', false); this.notify('connection problem')})
-      .then(() => this.$set(location, 'loadingTafsir', false))
+    setLocation(location, command) {
+      this.$set(location, command+'Shown', !location[command+'Shown'])
+      if (location[command]) return
+      this.$set(location, command+'Loading', true)
+      axios.get(`/api/${command}/${location.suraNumber}/${location.ayaNumber}`)
+      .then((response) => this.$set(location, command, response.data))
+      .catch(() => {this.$set(location, command+'Shown', false); this.notify('connection problem')})
+      .then(() => this.$set(location, command+'Loading', false))
     },
 
     shift(location, n) {
-      this.$set(location, 'shiftButtonDisabled', true)
-      this.$set(location, 'loadingAya', true)
+      let keys = ['shiftButtonDisabled', 'ayaLoading', 'translationLoading', 'tafsirLoading']
+      keys.forEach((key) => this.$set(location, key, true))
+
       let ayaPromise = location.ayaNumber+n === location.original.ayaNumber ?
         Promise.resolve(location.original) :
         axios.get(`/api/aya/${location.suraNumber}/${location.ayaNumber+n}`)
         .then((response)=> ({beforeHighlightedAya: response.data}))
-      ayaPromise = ayaPromise.then((aya) => {
-        this.$set(location, 'beforeHighlightedAya', aya.beforeHighlightedAya)
-        this.$set(location, 'highlightedAya', aya.highlightedAya)
-        this.$set(location, 'afterHighlightedAya', aya.afterHighlightedAya)
-        this.$set(location, 'ayaNumber', location.ayaNumber+n)
-      })
-      .then(() => this.$set(location, 'loadingAya', false))
 
-      this.$set(location, 'loadingTranslation', true)
-      let translationPromise = location.showTranslation ?
-        axios.get(`/api/translate/${location.suraNumber}/${location.ayaNumber+n}`)
+      let translationPromise = location.translationShown ?
+        axios.get(`/api/translation/${location.suraNumber}/${location.ayaNumber+n}`)
         .then((response)=> response.data) :
         Promise.resolve()
-      translationPromise = translationPromise.then((translation) => this.$set(location, 'translation', translation))
-      .then(() => this.$set(location, 'loadingTranslation', false))
 
-      this.$set(location, 'loadingTafsir', true)
-      let tafsirPromise = location.showTafsir ?
+      let tafsirPromise = location.tafsirShown ?
         axios.get(`/api/tafsir/${location.suraNumber}/${location.ayaNumber+n}`)
         .then((response)=> response.data) :
         Promise.resolve()
-      tafsirPromise = tafsirPromise.then((tafsir) => this.$set(location, 'tafsir', tafsir))
-      .then(() => this.$set(location, 'loadingTafsir', false))
 
       Promise.all([ayaPromise, translationPromise, tafsirPromise])
-      .catch(() => this.notify('connection problem'))
-      .then(() => {
-        this.$set(location, 'loadingAya', false)
-        this.$set(location, 'loadingTranslation', false)
-        this.$set(location, 'loadingTafsir', false)
-        this.$set(location, 'shiftButtonDisabled', false)
+      .then(([aya, translation, tafsir]) => {
+        this.$set(location, 'ayaNumber', location.ayaNumber+n)
+        this.$set(location, 'beforeHighlightedAya', aya.beforeHighlightedAya)
+        this.$set(location, 'highlightedAya', aya.highlightedAya)
+        this.$set(location, 'afterHighlightedAya', aya.afterHighlightedAya)
+        this.$set(location, 'translation', translation)
+        this.$set(location, 'tafsir', tafsir)
       })
+      .catch(() => this.notify('connection problem'))
+      .then(() => keys.forEach((key) => this.$set(location, key, false)))
     },
 
     log() {

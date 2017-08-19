@@ -55,7 +55,7 @@ func newRouter() http.Handler {
 		}
 		cachedRouter.Get("/encode", api.Encode)
 		cachedRouter.Get("/locate", api.Locate)
-		cachedRouter.Get("/translate/{sura}/{aya}", api.Translate)
+		cachedRouter.Get("/translation/{sura}/{aya}", api.Translation)
 		cachedRouter.Get("/tafsir/{sura}/{aya}", api.Tafsir)
 		cachedRouter.Get("/aya/{sura}/{aya}", api.Aya)
 		apiRouter.Get("/trending_keywords", api.TrendingKeywords)

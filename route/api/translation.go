@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func Translate(w http.ResponseWriter, r *http.Request) {
+func Translation(w http.ResponseWriter, r *http.Request) {
 	serve(w, r, core.QuranTranslationID)
 }
 
