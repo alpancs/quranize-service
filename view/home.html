@@ -76,20 +76,20 @@
                     <button @click="locate(encoded)" :title="encoded.expanded ? 'Hide' : 'Locate'" :class="{'mdl-button--raised': encoded.expanded}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" type="button">
                       <i class="material-icons">{{"{{ encoded.expanded ? 'expand_less' : 'expand_more' }}"}}</i>
                     </button>
-                    <span class="quran-text">{{"{{ encoded.text }}"}}</span>
+                    <span :data-clipboard-text="encoded.text" dir="rtl" class="quran-text">{{"{{ encoded.text }}"}}</span>
                   </div>
 
                   <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active" ref="encodeds"></div></div>
 
                   <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
-                    <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
+                    <div class="text-left">{{"{{ i+1 }}"}}. Surah <span :data-clipboard-text="location.suraName" dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
 
                     <div class="text-right">
                       <div v-show="location.ayaLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
-                    <p v-show="!location.ayaLoading" class="text-right quran-text">
+                    <p v-show="!location.ayaLoading" :data-clipboard-text="location.ayaText" dir="rtl" class="text-right quran-text">
                       {{"{{ location.beforeHighlightedAya }}"}}
-                      <mark>{{"{{ location.highlightedAya }}"}}</mark>
+                      <mark :data-clipboard-text="location.highlightedAya" dir="rtl" class="quran-text">{{"{{ location.highlightedAya }}"}}</mark>
                       {{"{{ location.afterHighlightedAya }}"}}
                     </p>
 
@@ -129,7 +129,7 @@
             <!-- sharing -->
             <div v-show="encodeds.length" class="mdl-grid">
               <div class="mdl-cell mdl-cell--12-col text-center">
-              <button id="share-link" :data-clipboard-text="shareLink" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
+              <button id="share-link" :data-clipboard-text="shareLink" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect">
                 <i class="material-icons">share</i>
               </button>
               </div>

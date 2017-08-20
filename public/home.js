@@ -50,10 +50,7 @@ let app = new Vue({
             this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
           }
         })
-        .then(() => {
-          if (this.$refs.encodeds)
-            componentHandler.upgradeElements(this.$refs.encodeds)
-        })
+        .then(() => this.$refs.encodeds ? componentHandler.upgradeElements(this.$refs.encodeds) : undefined)
         .catch(() => {this.encodeds = []; this.notify('connection problem')})
         .then(() => {--this.loading; this.willRequest = this.loading > 0})
     }, 500),
@@ -139,8 +136,10 @@ let nextTranslation = (location, n, command) =>
   Promise.resolve()
 
 axios.get('/api/trending_keywords')
-.then((response) => app.trendingKeywords = response.data)
-.catch(() => {})
+.then((response) => app.trendingKeywords = response.data, undefined)
 
-let clipboard = new Clipboard('#share-link')
-clipboard.on('success', () => app.notify('share link copied to clipboard'))
+let shareLinkClipboard = new Clipboard('#share-link')
+shareLinkClipboard.on('success', () => app.notify('share link copied to clipboard'))
+
+let quranTextClipboard = new Clipboard('.quran-text')
+quranTextClipboard.on('success', (e) => app.notify(e.text + ' copied to clipboard'))
