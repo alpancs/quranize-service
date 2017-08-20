@@ -138,10 +138,10 @@ let nextTranslation = (location, n, command) =>
 axios.get('/api/trending_keywords')
 .then((response) => app.trendingKeywords = response.data, undefined)
 
-let shareLinkClipboard = new Clipboard('#share-link')
+let shareLinkClipboard = new Clipboard('#share-link', {text: () => app.shareLink})
 shareLinkClipboard.on('success', () => app.notify('share link copied to clipboard'))
 
-let quranTextClipboard = new Clipboard('.quran-text')
+let quranTextClipboard = new Clipboard('.quran-text', {text: (trigger) => trigger.innerText})
 quranTextClipboard.on('success', (e) => {
   select(e.trigger)
   app.notify(e.text + ' copied to clipboard')
