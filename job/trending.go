@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -45,7 +44,7 @@ func Start() {
 
 func WatchTrendingKeywords() {
 	for {
-		time.Sleep(1 * time.Minute)
+		time.Sleep(30 * time.Second)
 		if needToUpdate() {
 			UpdateTrendingKeywords()
 		}
@@ -64,7 +63,7 @@ func getTrendingKeywords(iter *mgo.Iter) []string {
 	frequency := make(map[string]int)
 	var doc Document
 	for iter.Next(&doc) {
-		frequency[strings.Replace(doc.Keyword, " ", "", -1)]++
+		frequency[doc.Keyword]++
 		lastId = doc.Id
 	}
 
