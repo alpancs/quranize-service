@@ -142,4 +142,15 @@ let shareLinkClipboard = new Clipboard('#share-link')
 shareLinkClipboard.on('success', () => app.notify('share link copied to clipboard'))
 
 let quranTextClipboard = new Clipboard('.quran-text')
-quranTextClipboard.on('success', (e) => app.notify(e.text + ' copied to clipboard'))
+quranTextClipboard.on('success', (e) => {
+  select(e.trigger)
+  app.notify(e.text + ' copied to clipboard')
+})
+
+let rangeObj = document.createRange()
+function select(element) {
+  rangeObj.selectNodeContents(element)
+  let selection = window.getSelection()
+  selection.removeAllRanges()
+  selection.addRange(rangeObj)
+}
