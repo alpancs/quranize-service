@@ -5,7 +5,7 @@ import "testing"
 func testLocate(t *testing.T, input string, expected []Location) {
 	result := Locate(input)
 	if !isLocationListEqual(result, expected) {
-		t.Errorf("expected: %v, result: %v", expected, result)
+		t.Errorf("input: %v, expected: %v, result: %v", input, expected, result)
 	}
 }
 

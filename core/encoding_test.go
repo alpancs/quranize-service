@@ -10,7 +10,7 @@ type TestCase struct {
 func testEncode(t *testing.T, input string, expected []string) {
 	result := Encode(input)
 	if !isStringListEqual(result, expected) {
-		t.Errorf("expected: %v, result: %v", expected, result)
+		t.Errorf("input: %v, expected: %v, result: %v", input, expected, result)
 	}
 }
 
@@ -47,6 +47,7 @@ func TestEncodeAlquran(t *testing.T) {
 		TestCase{"wa'tasimu bihablillah", []string{"واعتصموا بحبل الله"}},
 		TestCase{"shummun bukmun", []string{"صم وبكم", "الصم البكم", "صم بكم"}},
 		TestCase{"kahfi", []string{"الكهف"}},
+		TestCase{"wabasyiris sobirin", []string{"وبشر الصابرين"}},
 
 		TestCase{"bismillah hirrohman nirrohim", []string{"بسم الله الرحمن الرحيم"}},
 		TestCase{"alhamdu lillahi robbil 'alamin", []string{"الحمد لله رب العالمين"}},
