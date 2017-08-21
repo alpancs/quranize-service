@@ -141,7 +141,7 @@ axios.get('/api/trending_keywords')
 let shareLinkClipboard = new Clipboard('#share-link', {text: () => app.shareLink})
 shareLinkClipboard.on('success', () => app.notify('share link copied to clipboard'))
 
-let quranTextClipboard = new Clipboard('.quran-text', {text: (trigger) => trigger.innerText})
+let quranTextClipboard = new Clipboard('.clipboard', {text: (trigger) => trigger.innerText})
 quranTextClipboard.on('success', (e) => {
   select(e.trigger)
   app.notify(e.text + ' copied to clipboard')

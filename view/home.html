@@ -76,20 +76,20 @@
                     <button @click="locate(encoded)" :title="encoded.expanded ? 'Hide' : 'Locate'" :class="{'mdl-button--raised': encoded.expanded}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" type="button">
                       <i class="material-icons">{{"{{ encoded.expanded ? 'expand_less' : 'expand_more' }}"}}</i>
                     </button>
-                    <span dir="rtl" class="quran-text">{{"{{ encoded.text }}"}}</span>
+                    <span dir="rtl" class="quran-text clipboard">{{"{{ encoded.text }}"}}</span>
                   </div>
 
                   <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active" ref="encodeds"></div></div>
 
                   <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
-                    <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
+                    <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text clipboard">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
 
                     <div class="text-right">
                       <div v-show="location.ayaLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
-                    <p v-show="!location.ayaLoading" dir="rtl" class="text-right quran-text">
+                    <p v-show="!location.ayaLoading" dir="rtl" class="text-right quran-text clipboard">
                       {{"{{ location.beforeHighlightedAya }}"}}
-                      <mark dir="rtl" class="quran-text">{{"{{ location.highlightedAya }}"}}</mark>
+                      <mark dir="rtl" class="clipboard">{{"{{ location.highlightedAya }}"}}</mark>
                       {{"{{ location.afterHighlightedAya }}"}}
                     </p>
 
@@ -143,7 +143,7 @@
     <div ref="notification" aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
       <div class="mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
-          <div class="mdl-snackbar__text"></div>
+          <div class="mdl-snackbar__text text-center"></div>
           <button hidden class="mdl-snackbar__action" type="button"></button>
         </div>
       </div>
