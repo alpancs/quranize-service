@@ -45,9 +45,10 @@ func TestEncodeAlquran(t *testing.T) {
 		TestCase{"bismillah", []string{"بسم الله", "بشماله"}},
 		TestCase{"wa'tasimu", []string{"واعتصموا"}},
 		TestCase{"wa'tasimu bihablillah", []string{"واعتصموا بحبل الله"}},
-		TestCase{"shummun bukmun", []string{"صم وبكم", "الصم البكم", "صم بكم"}},
+		TestCase{"shummun bukmun", []string{"صم وبكم", "صم بكم", "الصم البكم"}},
 		TestCase{"kahfi", []string{"الكهف"}},
 		TestCase{"wabasyiris sobirin", []string{"وبشر الصابرين"}},
+		TestCase{"bissobri wassolah", []string{"بالصبر والصلاة"}},
 
 		TestCase{"bismillah hirrohman nirrohim", []string{"بسم الله الرحمن الرحيم"}},
 		TestCase{"alhamdu lillahi robbil 'alamin", []string{"الحمد لله رب العالمين"}},
