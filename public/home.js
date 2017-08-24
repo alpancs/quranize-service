@@ -143,7 +143,9 @@ shareLinkClipboard.on('success', () => app.notify('share link copied to clipboar
 let quranTextClipboard = new Clipboard('.clipboard', {text: (trigger) => trigger.innerText})
 quranTextClipboard.on('success', (e) => {
   select(e.trigger)
-  app.notify(e.text + ' copied to clipboard')
+  let splittedText = e.text.split(' ')
+  let text = splittedText.length <= 5 ? e.text : '...' + splittedText.slice(0, 5).join(' ')
+  app.notify(text + ' copied to clipboard')
 })
 
 let rangeObj = document.createRange()
