@@ -25,7 +25,7 @@
   <div id="app" hidden :hidden="false" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
-        <span class="mdl-layout-title" style="cursor: pointer;" onclick="sessionStorage.removeItem('keyword');location='/'"><strong>Quranize</strong></span>
+        <span class="mdl-layout-title" style="cursor:pointer" onclick="location='/'"><strong>Quranize</strong></span>
         <div class="mdl-layout-spacer"></div>
         <nav class="mdl-navigation mdl-layout--large-screen-only">
           <a class="mdl-navigation__link" href="//github.com/alpancs/quranize"><i class="material-icons">link</i> Github</a>
@@ -160,5 +160,5 @@
 <script src="//cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
 <script src="//unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
 <script src="/home.js?v={{.JsVersion}}"></script>
-<script type="text/javascript">app.keyword = {{.Keyword}} || sessionStorage.getItem('keyword') || ''</script>
+<script type="text/javascript">app.keyword = {{.Keyword}}</script>
 </html>
