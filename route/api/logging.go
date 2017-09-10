@@ -19,7 +19,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 	if keyword != "" {
 		err := HistoryCollection.Insert(History{time.Now(), keyword})
 		if err != nil {
-			w.WriteHeader(500)
+			http.Error(w, http.StatusText(500), 500)
 			fmt.Println(err.Error())
 		}
 	}

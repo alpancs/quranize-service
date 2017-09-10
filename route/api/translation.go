@@ -27,7 +27,7 @@ func serve(w http.ResponseWriter, r *http.Request, quran core.Alquran) {
 	if isValid(sura, aya) {
 		json.NewEncoder(w).Encode(quran.Suras[sura-1].Ayas[aya-1].Text)
 	} else {
-		w.WriteHeader(404)
+		http.NotFound(w, r)
 	}
 }
 
