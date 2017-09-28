@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Quranize</title>
-
   <meta name="description" content="Quranize transforms {{.Transliteration}} into {{.QuranText}}.">
   <meta content="/android-chrome-192x192.png" property="og:image">
   <meta name=viewport content="width=device-width, initial-scale=1">
@@ -16,10 +15,9 @@
   <meta name="application-name" content="Quranize">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="preload" href="//fonts.googleapis.com/icon?family=Material+Icons" onload="this.rel='stylesheet'">
-  <link rel="preload" href="//code.getmdl.io/1.3.0/material.blue-pink.min.css" onload="this.rel='stylesheet'">
-
-  <link rel="preload" href="/home.css?v={{.CssVersion}}" onload="this.rel='stylesheet'"/>
+  <link rel="preload" as="style" href="//fonts.googleapis.com/icon?family=Material+Icons" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="//code.getmdl.io/1.3.0/material.blue-pink.min.css" onload="this.rel='stylesheet'">
+  <link rel="preload" as="style" href="/home.css?v={{.CssVersion}}" onload="this.rel='stylesheet'"/>
 </head>
 <body>
   <div id="app" hidden :hidden="false" class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -153,9 +151,9 @@
 <script async src="/material-v1.3.0.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
 {{if .IsProduction}}
-<script src="//unpkg.com/vue@2.3.4/dist/vue.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/vue@2.4.4/dist/vue.min.js"></script>
 {{else}}
-<script src="//unpkg.com/vue@2.3.4/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/npm/vue@2.4.4/dist/vue.js"></script>
 {{end}}
 <script src="//cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
 <script src="//unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
