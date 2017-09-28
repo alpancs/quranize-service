@@ -24,7 +24,7 @@ type HomeData struct {
 
 var (
 	isProduction = os.Getenv("ENV") == "production"
-	homeTemplate = loadTemplate("view/home.html")
+	homeTemplate = parseTemplate("view/home.html")
 	cssVersion   = getVersion("/home.css")
 	jsVersion    = getVersion("/home.js")
 )
@@ -44,12 +44,12 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	homeTemplate.Execute(w, homeData)
 }
 
-func loadTemplate(filePath string) *template.Template {
-	parsed, err := template.ParseFiles(filePath)
+func parseTemplate(filePath string) *template.Template {
+	parsedTemplate, err := template.ParseFiles(filePath)
 	if err != nil {
 		panic(err)
 	}
-	return parsed
+	return parsedTemplate
 }
 
 func getVersion(filePath string) string {

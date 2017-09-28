@@ -42,7 +42,7 @@
       <div class="page-content">
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--12-col">
-            <div class="mdl-typography--title text-center">Quranize transforms <strong>{{"{{ transliteration }}"}}</strong> into <strong>{{"{{ quran }}"}}</strong>.</div>
+            <div class="mdl-typography--title text-center">Quranize transforms <strong>${transliteration}</strong> into <strong>${quran}</strong>.</div>
           </div>
         </div>
 
@@ -60,7 +60,7 @@
             <div v-show="!willRequest && !trimmedKeyword" class="mdl-grid">
               <div v-show="trendingKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Trending Now</div>
               <a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell">
-                <span class="mdl-chip__text">{{"{{ trendingKeyword }}"}}</span>
+                <span class="mdl-chip__text">${trendingKeyword}</span>
               </a>
             </div>
             <!-- end of trending keywords -->
@@ -69,28 +69,28 @@
               <div class="mdl-cell mdl-cell--12-col">
 
                 <div class="text-center" v-show="loading"><div class="mdl-spinner mdl-js-spinner is-active"></div></div>
-                <div class="text-center" v-show="noResults">no results for <strong>{{"{{ trimmedKeyword }}"}}</strong></div>
+                <div class="text-center" v-show="noResults">no results for <strong>${trimmedKeyword}</strong></div>
 
                 <div v-for="encoded in encodeds">
                   <div class="text-center">
                     <button @click="locate(encoded)" :title="encoded.expanded ? 'Hide' : 'Locate'" :class="{'mdl-button--raised': encoded.expanded}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" type="button">
-                      <i class="material-icons">{{"{{ encoded.expanded ? 'expand_less' : 'expand_more' }}"}}</i>
+                      <i class="material-icons">${encoded.expanded ? 'expand_less' : 'expand_more'}</i>
                     </button>
-                    <span dir="rtl" class="quran-text clipboard">{{"{{ encoded.text }}"}}</span>
+                    <span dir="rtl" class="quran-text clipboard">${encoded.text}</span>
                   </div>
 
                   <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-js-spinner is-active" ref="encodeds"></div></div>
 
                   <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
-                    <div class="text-left">{{"{{ i+1 }}"}}. Surah <span dir="rtl" class="quran-text clipboard">{{"{{ location.suraName }}"}}</span> ({{"{{ location.suraNumber }}"}}) ayah {{"{{ location.ayaNumber }}"}}:</div>
+                    <div class="text-left">${i+1}. Surah <span dir="rtl" class="quran-text clipboard">${location.suraName}</span> (${location.suraNumber}) ayah ${location.ayaNumber}:</div>
 
                     <div class="text-right">
                       <div v-show="location.ayaLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
                     </div>
                     <p v-show="!location.ayaLoading" dir="rtl" class="text-right quran-text clipboard">
-                      {{"{{ location.beforeHighlightedAya }}"}}
-                      <mark dir="rtl" class="clipboard">{{"{{ location.highlightedAya }}"}}</mark>
-                      {{"{{ location.afterHighlightedAya }}"}}
+                      ${location.beforeHighlightedAya}
+                      <mark dir="rtl" class="clipboard">${location.highlightedAya}</mark>
+                      ${location.afterHighlightedAya}
                     </p>
 
                     <div class="text-center">
@@ -111,12 +111,12 @@
                     <div v-show="location.translationShown">
                       <div><strong>Translation</strong></div>
                       <div v-show="location.translationLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
-                      <p v-show="!location.translationLoading" class="text-left">{{"{{ location.translation }}"}}</p>
+                      <p v-show="!location.translationLoading" class="text-left">${location.translation}</p>
                     </div>
                     <div v-show="location.tafsirShown">
                       <div><strong>Tafsir</strong></div>
                       <div v-show="location.tafsirLoading" class="mdl-spinner mdl-js-spinner is-active" :ref="encoded.text"></div>
-                      <p v-show="!location.tafsirLoading" class="text-left">{{"{{ location.tafsir }}"}}</p>
+                      <p v-show="!location.tafsirLoading" class="text-left">${location.tafsir}</p>
                     </div>
                     <hr>
                   </div>
