@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -45,24 +46,20 @@ var (
 
 func init() {
 	startTime := time.Now()
-	loadChannel := make(chan struct{})
-	go loadTransliterationAsync("corpus/arabic-to-alphabet", loadChannel)
-	go loadQuranAndIndexAsync("corpus/quran-simple-clean.xml", &QuranClean, loadChannel)
-	go loadQuranAsync("corpus/quran-simple-enhanced.xml", &QuranEnhanced, loadChannel)
-	go loadQuranAsync("corpus/id.indonesian.xml", &QuranTranslationID, loadChannel)
-	go loadQuranAsync("corpus/id.muntakhab.xml", &QuranTafsirQuraishShihab, loadChannel)
-	<-loadChannel
-	<-loadChannel
-	<-loadChannel
-	<-loadChannel
-	<-loadChannel
-	close(loadChannel)
+	var wg sync.WaitGroup
+	wg.Add(5)
+	go loadTransliterationAsync(&wg, "corpus/arabic-to-alphabet")
+	go loadQuranAndIndexAsync(&wg, "corpus/quran-simple-clean.xml", &QuranClean)
+	go loadQuranAsync(&wg, "corpus/quran-simple-enhanced.xml", &QuranEnhanced)
+	go loadQuranAsync(&wg, "corpus/id.indonesian.xml", &QuranTranslationID)
+	go loadQuranAsync(&wg, "corpus/id.muntakhab.xml", &QuranTafsirQuraishShihab)
+	wg.Wait()
 	fmt.Println("service initialized in ", time.Since(startTime))
 }
 
-func loadTransliterationAsync(filePath string, loadChannel chan struct{}) {
+func loadTransliterationAsync(wg *sync.WaitGroup, filePath string) {
 	hijaiyas = loadTransliteration("corpus/arabic-to-alphabet")
-	loadChannel <- struct{}{}
+	wg.Done()
 }
 
 func loadTransliteration(filePath string) map[string][]string {
@@ -98,15 +95,15 @@ func loadTransliteration(filePath string) map[string][]string {
 	return dictionary
 }
 
-func loadQuranAsync(filePath string, quran *Alquran, loadChannel chan struct{}) {
+func loadQuranAsync(wg *sync.WaitGroup, filePath string, quran *Alquran) {
 	loadQuran(filePath, quran)
-	loadChannel <- struct{}{}
+	wg.Done()
 }
 
-func loadQuranAndIndexAsync(filePath string, quran *Alquran, loadChannel chan struct{}) {
+func loadQuranAndIndexAsync(wg *sync.WaitGroup, filePath string, quran *Alquran) {
 	loadQuran("corpus/quran-simple-clean.xml", quran)
 	root = buildIndex(quran)
-	loadChannel <- struct{}{}
+	wg.Done()
 }
 
 func loadQuran(filePath string, quran *Alquran) {
