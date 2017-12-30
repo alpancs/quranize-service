@@ -74,6 +74,7 @@ let app = new Vue({
             highlightedAya: location.highlightedAya,
             afterHighlightedAya: location.afterHighlightedAya,
           }
+          location.audioSource = '//verses.quran.com/AbdulBaset/Mujawwad/mp3/' + this.zeroLead(location.suraNumber, 3) + this.zeroLead(location.ayaNumber, 3) + '.mp3'
         })
         this.$set(encoded, 'locations', locations)
       })
@@ -90,6 +91,16 @@ let app = new Vue({
       .then((response) => this.$set(location, command, response.data))
       .catch(() => {this.$set(location, command+'Shown', false); this.notify('connection problem')})
       .then(() => this.$set(location, command+'Loading', false))
+    },
+
+    toggle(obj, attr) {
+      this.$set(obj, attr, !obj[attr])
+    },
+
+    zeroLead(x, n) {
+      let result = x.toString()
+      while (result.length < n) result = '0' + result
+      return result
     },
 
     shift(location, n) {

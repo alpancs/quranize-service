@@ -98,12 +98,19 @@
                       <button @click="setLocation(location, 'translation')" :class="{'mdl-button--raised': location.translationShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translation" type="button">
                         <i class="material-icons">translate</i>
                       </button>
+                      <button @click="toggle(location, 'played')" :class="{'mdl-button--raised': location.played}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Iqro'" type="button">
+                        <i class="material-icons">play_arrow</i>
+                      </button>
                       <button @click="setLocation(location, 'tafsir')" :class="{'mdl-button--raised': location.tafsirShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
                       <button @click="shift(location, 1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === ayaCount[location.suraNumber-1]" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
                         <i class="material-icons">skip_next</i>
                       </button>
+                    </div>
+
+                    <div class="text-center" v-show="location.played">
+                      <audio controls :src="location.audioSource"></audio>
                     </div>
 
                     <div v-show="location.translationShown">
