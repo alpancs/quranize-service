@@ -74,13 +74,23 @@ let app = new Vue({
             highlightedAya: location.highlightedAya,
             afterHighlightedAya: location.afterHighlightedAya,
           }
-          location.audioSource = '//verses.quran.com/AbdulBaset/Mujawwad/mp3/' + this.zeroLead(location.suraNumber, 3) + this.zeroLead(location.ayaNumber, 3) + '.mp3'
+          location.audioSource = this.getAudioSource(location)
         })
         this.$set(encoded, 'locations', locations)
       })
       .then(() => componentHandler.upgradeElements(this.$refs[encoded.text]))
       .catch(() => {this.$set(encoded, 'expanded', false); this.notify('connection problem')})
       .then(() => this.$set(encoded, 'loading', false))
+    },
+
+    getAudioSource(location) {
+      return '//verses.quran.com/AbdulBaset/Mujawwad/mp3/' + this.zeroLead(location.suraNumber, 3) + this.zeroLead(location.ayaNumber, 3) + '.mp3'
+    },
+
+    zeroLead(x, n) {
+      let result = x.toString()
+      while (result.length < n) result = '0' + result
+      return result
     },
 
     setLocation(location, command) {
@@ -97,12 +107,6 @@ let app = new Vue({
       this.$set(obj, attr, !obj[attr])
     },
 
-    zeroLead(x, n) {
-      let result = x.toString()
-      while (result.length < n) result = '0' + result
-      return result
-    },
-
     shift(location, n) {
       let keys = ['shiftButtonDisabled', 'ayaLoading', 'translationLoading', 'tafsirLoading']
       keys.forEach((key) => this.$set(location, key, true))
@@ -117,6 +121,7 @@ let app = new Vue({
       Promise.all([ayaPromise, translationPromise, tafsirPromise])
       .then(([aya, translation, tafsir]) => {
         this.$set(location, 'ayaNumber', location.ayaNumber+n)
+        this.$set(location, 'audioSource', this.getAudioSource(location))
         this.$set(location, 'beforeHighlightedAya', aya.beforeHighlightedAya)
         this.$set(location, 'highlightedAya', aya.highlightedAya)
         this.$set(location, 'afterHighlightedAya', aya.afterHighlightedAya)
