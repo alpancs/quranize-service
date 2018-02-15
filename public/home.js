@@ -24,10 +24,10 @@ let app = new Vue({
       return !this.willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
     },
     transliteration() {
-      return this.encodeds.length ? this.trimmedKeyword : 'transliteration'
+      return this.encodeds.length ? this.trimmedKeyword : 'alquran'
     },
     quran() {
-      return this.encodeds.length ? this.encodeds[0].text : "Alquran"
+      return this.encodeds.length ? this.encodeds[0].text : 'القرآن'
     },
   },
 

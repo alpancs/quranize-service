@@ -1,8 +1,6 @@
 # Quranize
 
-Quranize transforms transliteration into Alquran.
-
-Quranize doesn't search. Quranize does indexing.
+Quranize transforms alquran into القرآن.
 
 https://quranize.herokuapp.com
 

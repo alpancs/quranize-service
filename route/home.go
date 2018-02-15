@@ -32,8 +32,8 @@ var (
 func Home(w http.ResponseWriter, r *http.Request) {
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
 
-	transliteration := "transliteration"
-	quranText := "Alquran"
+	transliteration := "alquran"
+	quranText := "القرآن"
 	encodeds := core.Encode(keyword)
 	if len(encodeds) > 0 {
 		transliteration = keyword
