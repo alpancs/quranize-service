@@ -98,8 +98,8 @@
                       <button @click="setLocation(location, 'translation')" :class="{'mdl-button--raised': location.translationShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Translation" type="button">
                         <i class="material-icons">translate</i>
                       </button>
-                      <button @click="toggle(location, 'played')" :class="{'mdl-button--raised': location.played}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Mujawwad" type="button">
-                        <i class="material-icons">play_arrow</i>
+                      <button @click="toggle(location, 'playing')" :class="{'mdl-button--raised': location.playing}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" :title="location.playing ? 'Stop Mujawwad': 'Mujawwad'" type="button">
+                        <i class="material-icons">${location.playing ? 'stop_arrow' : 'play_arrow'}</i>
                       </button>
                       <button @click="setLocation(location, 'tafsir')" :class="{'mdl-button--raised': location.tafsirShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
@@ -109,8 +109,8 @@
                       </button>
                     </div>
 
-                    <div class="text-center" v-show="location.played">
-                      <audio controls :src="location.audioSource"></audio>
+                    <div class="text-center" v-if="location.playing">
+                      <audio autoplay :src="location.audioSource"></audio>
                     </div>
 
                     <div v-show="location.translationShown">
