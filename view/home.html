@@ -110,7 +110,7 @@
                     </div>
 
                     <div class="text-center" v-if="location.playing">
-                      <audio autoplay :src="location.audioSource"></audio>
+                      <audio autoplay :src="location.audioSource" @ended="location.ayaNumber === ayaCount[location.suraNumber-1] ? undefined : shift(location, 1)"></audio>
                     </div>
 
                     <div v-show="location.translationShown">
