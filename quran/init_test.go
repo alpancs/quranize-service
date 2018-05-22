@@ -8,7 +8,7 @@ import (
 )
 
 func TestLoadTransliterationFileNotFound(t *testing.T) {
-	assert.Panics(t, func() { loadTransliteration("") })
+	assert.Panics(t, func() { loadTransliteration("", nil) })
 }
 
 func TestLoadQuranFileNotFound(t *testing.T) {

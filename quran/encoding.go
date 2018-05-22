@@ -28,6 +28,8 @@ func quranize(text string, memo map[string][]string) []string {
 		return cache
 	}
 
+	hijaiyas := transliteration.Hijaiyas
+	maxWidth := transliteration.MaxWidth
 	kalimas := []string{}
 	l := len(text)
 	for width := 1; width <= maxWidth && width <= l; width++ {

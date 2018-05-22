@@ -5,7 +5,7 @@ func queryTree(harfs []rune) []Location {
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {
-			return EmptyLocations
+			return emptyLocations
 		}
 	}
 	return node.Locations

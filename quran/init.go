@@ -22,6 +22,11 @@ type Alquran struct {
 	} `xml:"sura"`
 }
 
+type Node struct {
+	Locations []Location
+	Children  []Child
+}
+
 type Location struct{ Sura, Aya, SliceIndex int }
 
 type Child struct {
@@ -29,9 +34,9 @@ type Child struct {
 	Value *Node
 }
 
-type Node struct {
-	Locations []Location
-	Children  []Child
+type Transliteration struct {
+	Hijaiyas map[string][]string
+	MaxWidth int
 }
 
 var (
@@ -39,19 +44,18 @@ var (
 	QuranEnhanced            Alquran
 	QuranTranslationID       Alquran
 	QuranTafsirQuraishShihab Alquran
-	EmptyLocations           = make([]Location, 0, 0)
 
-	hijaiyas   map[string][]string
-	maxWidth   int
-	root       *Node
-	corpusPath = getCorpusPath()
+	transliteration Transliteration
+	emptyLocations  = make([]Location, 0, 0)
+	corpusPath      = getCorpusPath()
+	root            *Node
 )
 
 func init() {
 	startTime := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go loadTransliterationAsync(&wg, "arabic-to-alphabet")
+	go loadTransliterationAsync(&wg, "arabic-to-alphabet", &transliteration)
 	go loadQuranAndIndexAsync(&wg, "quran-simple-clean.xml", &QuranClean)
 	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
 	go loadQuranAsync(&wg, "id.indonesian.xml", &QuranTranslationID)
@@ -67,13 +71,14 @@ func getCorpusPath() string {
 	return "corpus/"
 }
 
-func loadTransliterationAsync(wg *sync.WaitGroup, fileName string) {
-	hijaiyas = loadTransliteration(fileName)
+func loadTransliterationAsync(wg *sync.WaitGroup, fileName string, t *Transliteration) {
+	loadTransliteration(fileName, t)
 	wg.Done()
 }
 
-func loadTransliteration(fileName string) map[string][]string {
-	dictionary := make(map[string][]string)
+func loadTransliteration(fileName string, t *Transliteration) {
+	m := make(map[string][]string)
+	maxWidth := 0
 	raw, err := ioutil.ReadFile(corpusPath + fileName)
 	if err != nil {
 		panic(err)
@@ -83,7 +88,7 @@ func loadTransliteration(fileName string) map[string][]string {
 		components := strings.Split(line, " ")
 		arabic := components[0]
 		for _, alphabet := range components[1:] {
-			dictionary[alphabet] = append(dictionary[alphabet], arabic)
+			m[alphabet] = append(m[alphabet], arabic)
 
 			length := len(alphabet)
 			ending := alphabet[length-1]
@@ -92,14 +97,15 @@ func loadTransliteration(fileName string) map[string][]string {
 			} else {
 				alphabet += alphabet
 			}
-			dictionary[alphabet] = append(dictionary[alphabet], arabic)
+			m[alphabet] = append(m[alphabet], arabic)
 			length = len(alphabet)
 			if length > maxWidth {
 				maxWidth = length
 			}
 		}
 	}
-	return dictionary
+	t.Hijaiyas = m
+	t.MaxWidth = maxWidth
 }
 
 func loadQuranAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
@@ -125,7 +131,7 @@ func loadQuran(fileName string, quran *Alquran) {
 }
 
 func buildIndex(quran *Alquran) *Node {
-	node := &Node{Locations: EmptyLocations}
+	node := &Node{Locations: emptyLocations}
 	for s, sura := range QuranClean.Suras {
 		for a, aya := range sura.Ayas {
 			indexAya([]rune(aya.Text), s, a, node)
