@@ -5,23 +5,23 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/alpancs/quranize/core"
+	"github.com/alpancs/quranize/quran"
 	"github.com/go-chi/chi"
 )
 
 func Translation(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, core.QuranTranslationID)
+	serve(w, r, quran.QuranTranslationID)
 }
 
 func Tafsir(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, core.QuranTafsirQuraishShihab)
+	serve(w, r, quran.QuranTafsirQuraishShihab)
 }
 
 func Aya(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, core.QuranEnhanced)
+	serve(w, r, quran.QuranEnhanced)
 }
 
-func serve(w http.ResponseWriter, r *http.Request, quran core.Alquran) {
+func serve(w http.ResponseWriter, r *http.Request, quran quran.Alquran) {
 	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
 	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
 	if isValid(sura, aya) {
@@ -32,10 +32,10 @@ func serve(w http.ResponseWriter, r *http.Request, quran core.Alquran) {
 }
 
 func isValid(sura, aya int) bool {
-	if sura < 1 || sura > len(core.QuranClean.Suras) {
+	if sura < 1 || sura > len(quran.QuranClean.Suras) {
 		return false
 	}
-	if aya < 1 || aya > len(core.QuranClean.Suras[sura-1].Ayas) {
+	if aya < 1 || aya > len(quran.QuranClean.Suras[sura-1].Ayas) {
 		return false
 	}
 	return true

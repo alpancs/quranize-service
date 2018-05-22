@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/alpancs/quranize/core"
+	"github.com/alpancs/quranize/quran"
 )
 
 type Update struct {
@@ -38,7 +38,7 @@ func Telegram(w http.ResponseWriter, r *http.Request) {
 func reply(inlineQuery InlineQuery) {
 	telegramURL := "https://api.telegram.org/bot" + os.Getenv("QURANIZE_TELEGRAM_TOKEN") + "/answerInlineQuery"
 	results := []InlineQueryResult{}
-	for i, encoded := range core.Encode(inlineQuery.Query) {
+	for i, encoded := range quran.Encode(inlineQuery.Query) {
 		id := strconv.Itoa(i)
 		results = append(results, InlineQueryResult{"article", id, encoded, InputMessageContent{encoded}})
 	}

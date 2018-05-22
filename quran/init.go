@@ -1,4 +1,4 @@
-package core
+package quran
 
 import (
 	"encoding/xml"
