@@ -24,16 +24,8 @@
 #   go-tests = true
 #   unused-packages = true
 
-
-[[constraint]]
-  name = "github.com/go-chi/chi"
-  version = "3.3.2"
-
-[[constraint]]
-  branch = "v2"
-  name = "gopkg.in/mgo.v2"
-
 [prune]
+  non-go = true
   go-tests = true
   unused-packages = true
 
