@@ -2,6 +2,7 @@ package quran
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,7 +11,7 @@ import (
 	"time"
 )
 
-type Alquran struct {
+type Quran struct {
 	Suras []struct {
 		Index int    `xml:"index,attr"`
 		Name  string `xml:"name,attr"`
@@ -21,6 +22,17 @@ type Alquran struct {
 		} `xml:"aya"`
 	} `xml:"sura"`
 	root *Node
+}
+
+func (q Quran) GetAya(sura, aya int) (string, error) {
+	if !(1 <= sura && sura <= len(q.Suras)) {
+		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
+	}
+	ayas := q.Suras[sura-1].Ayas
+	if !(1 <= aya && aya <= len(ayas)) {
+		return "", errors.New(fmt.Sprintf("invalid sura number %d and aya number %d", sura, aya))
+	}
+	return ayas[aya-1].Text, nil
 }
 
 type Node struct {
@@ -41,15 +53,22 @@ type Transliteration struct {
 }
 
 var (
-	QuranClean               Alquran
-	QuranEnhanced            Alquran
-	QuranTranslationID       Alquran
-	QuranTafsirQuraishShihab Alquran
+	QuranClean               Quran
+	QuranEnhanced            Quran
+	QuranTranslationID       Quran
+	QuranTafsirQuraishShihab Quran
 
 	transliteration Transliteration
 	emptyLocations  = make([]Location, 0, 0)
 	corpusPath      = getCorpusPath()
 )
+
+func getCorpusPath() string {
+	if path := os.Getenv("CORPUS_PATH"); path != "" {
+		return path
+	}
+	return "corpus/"
+}
 
 func init() {
 	startTime := time.Now()
@@ -62,13 +81,6 @@ func init() {
 	go loadQuranAsync(&wg, "id.muntakhab.xml", &QuranTafsirQuraishShihab)
 	wg.Wait()
 	fmt.Println("service initialized in", time.Since(startTime))
-}
-
-func getCorpusPath() string {
-	if path := os.Getenv("CORPUS_PATH"); path != "" {
-		return path
-	}
-	return "corpus/"
 }
 
 func loadTransliterationAsync(wg *sync.WaitGroup, fileName string, t *Transliteration) {
@@ -108,18 +120,18 @@ func loadTransliteration(fileName string, t *Transliteration) {
 	t.MaxWidth = maxWidth
 }
 
-func loadQuranAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
+func loadQuranAsync(wg *sync.WaitGroup, fileName string, quran *Quran) {
 	loadQuran(fileName, quran)
 	wg.Done()
 }
 
-func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
+func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, quran *Quran) {
 	loadQuran(fileName, quran)
 	quran.root = buildIndex(quran)
 	wg.Done()
 }
 
-func loadQuran(fileName string, quran *Alquran) {
+func loadQuran(fileName string, quran *Quran) {
 	raw, err := ioutil.ReadFile(corpusPath + fileName)
 	if err != nil {
 		panic(err)
@@ -130,7 +142,7 @@ func loadQuran(fileName string, quran *Alquran) {
 	}
 }
 
-func buildIndex(quran *Alquran) *Node {
+func buildIndex(quran *Quran) *Node {
 	node := &Node{Locations: emptyLocations}
 	for s, sura := range QuranClean.Suras {
 		for a, aya := range sura.Ayas {
