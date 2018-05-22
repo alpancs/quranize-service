@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -48,28 +49,32 @@ func init() {
 	startTime := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go loadTransliterationAsync(&wg, "corpus/arabic-to-alphabet")
-	go loadQuranAndIndexAsync(&wg, "corpus/quran-simple-clean.xml", &QuranClean)
-	go loadQuranAsync(&wg, "corpus/quran-simple-enhanced.xml", &QuranEnhanced)
-	go loadQuranAsync(&wg, "corpus/id.indonesian.xml", &QuranTranslationID)
-	go loadQuranAsync(&wg, "corpus/id.muntakhab.xml", &QuranTafsirQuraishShihab)
+	go loadTransliterationAsync(&wg, "arabic-to-alphabet")
+	go loadQuranAndIndexAsync(&wg, "quran-simple-clean.xml", &QuranClean)
+	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
+	go loadQuranAsync(&wg, "id.indonesian.xml", &QuranTranslationID)
+	go loadQuranAsync(&wg, "id.muntakhab.xml", &QuranTafsirQuraishShihab)
 	wg.Wait()
-	fmt.Println("service initialized in ", time.Since(startTime))
+	fmt.Println("service initialized in", time.Since(startTime))
 }
 
-func loadTransliterationAsync(wg *sync.WaitGroup, filePath string) {
-	hijaiyas = loadTransliteration("corpus/arabic-to-alphabet")
+func getCorpusPath() string {
+	if corpusPath := os.Getenv("CORPUS_PATH"); corpusPath != "" {
+		return corpusPath
+	}
+	return "corpus/"
+}
+
+func loadTransliterationAsync(wg *sync.WaitGroup, fileName string) {
+	hijaiyas = loadTransliteration(fileName)
 	wg.Done()
 }
 
-func loadTransliteration(filePath string) map[string][]string {
+func loadTransliteration(fileName string) map[string][]string {
 	dictionary := make(map[string][]string)
-	raw, err := ioutil.ReadFile(filePath)
+	raw, err := ioutil.ReadFile(getCorpusPath() + fileName)
 	if err != nil {
-		raw, err = ioutil.ReadFile("../" + filePath)
-		if err != nil {
-			panic(err)
-		}
+		panic(err)
 	}
 	trimmed := strings.TrimSpace(string(raw))
 	for _, line := range strings.Split(trimmed, "\n") {
@@ -95,24 +100,21 @@ func loadTransliteration(filePath string) map[string][]string {
 	return dictionary
 }
 
-func loadQuranAsync(wg *sync.WaitGroup, filePath string, quran *Alquran) {
-	loadQuran(filePath, quran)
+func loadQuranAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
+	loadQuran(fileName, quran)
 	wg.Done()
 }
 
-func loadQuranAndIndexAsync(wg *sync.WaitGroup, filePath string, quran *Alquran) {
-	loadQuran("corpus/quran-simple-clean.xml", quran)
+func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
+	loadQuran(fileName, quran)
 	root = buildIndex(quran)
 	wg.Done()
 }
 
-func loadQuran(filePath string, quran *Alquran) {
-	raw, err := ioutil.ReadFile(filePath)
+func loadQuran(fileName string, quran *Alquran) {
+	raw, err := ioutil.ReadFile(getCorpusPath() + fileName)
 	if err != nil {
-		raw, err = ioutil.ReadFile("../" + filePath)
-		if err != nil {
-			panic(err)
-		}
+		panic(err)
 	}
 	err = xml.Unmarshal(raw, quran)
 	if err != nil {
