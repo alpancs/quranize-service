@@ -65,7 +65,7 @@ func combine(heads, tails []string) []string {
 }
 
 func inTree(harfs []rune) bool {
-	node := root
+	node := QuranClean.root
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {

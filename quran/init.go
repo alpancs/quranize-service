@@ -20,6 +20,7 @@ type Alquran struct {
 			Bismillah string `xml:"bismillah,attr"`
 		} `xml:"aya"`
 	} `xml:"sura"`
+	root *Node
 }
 
 type Node struct {
@@ -48,7 +49,6 @@ var (
 	transliteration Transliteration
 	emptyLocations  = make([]Location, 0, 0)
 	corpusPath      = getCorpusPath()
-	root            *Node
 )
 
 func init() {
@@ -115,7 +115,7 @@ func loadQuranAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
 
 func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, quran *Alquran) {
 	loadQuran(fileName, quran)
-	root = buildIndex(quran)
+	quran.root = buildIndex(quran)
 	wg.Done()
 }
 
