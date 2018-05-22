@@ -39,6 +39,7 @@ var (
 	QuranEnhanced            Alquran
 	QuranTranslationID       Alquran
 	QuranTafsirQuraishShihab Alquran
+	EmptyLocations           = make([]Location, 0, 0)
 
 	hijaiyas   map[string][]string
 	maxWidth   int
@@ -124,7 +125,7 @@ func loadQuran(fileName string, quran *Alquran) {
 }
 
 func buildIndex(quran *Alquran) *Node {
-	node := &Node{}
+	node := &Node{Locations: EmptyLocations}
 	for s, sura := range QuranClean.Suras {
 		for a, aya := range sura.Ayas {
 			indexAya([]rune(aya.Text), s, a, node)

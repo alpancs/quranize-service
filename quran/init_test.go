@@ -3,43 +3,24 @@ package quran
 import (
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoadTransliterationFileNotFound(t *testing.T) {
-	defer func() {
-		r := recover()
-		if r == nil {
-			t.Error("loadTransliteration should panic")
-		}
-	}()
-	loadTransliteration("")
+	assert.Panics(t, func() { loadTransliteration("") })
 }
 
 func TestLoadQuranFileNotFound(t *testing.T) {
-	defer func() {
-		r := recover()
-		if r == nil {
-			t.Error("loadQuran should panic")
-		}
-	}()
-	loadQuran("", nil)
+	assert.Panics(t, func() { loadQuran("", nil) })
 }
 
 func TestLoadQuranBadXMLFormat(t *testing.T) {
-	defer func() {
-		r := recover()
-		if r == nil {
-			t.Error("loadQuran should panic")
-		}
-	}()
-	loadQuran("arabic-to-alphabet", nil)
+	assert.Panics(t, func() { loadQuran("arabic-to-alphabet", nil) })
 }
 
 func TestGetDefaultCorpusPath(t *testing.T) {
-	corpusPath := os.Getenv("CORPUS_PATH")
-	defer os.Setenv("CORPUS_PATH", corpusPath)
+	defer os.Setenv("CORPUS_PATH", os.Getenv("CORPUS_PATH"))
 	os.Setenv("CORPUS_PATH", "")
-	if getCorpusPath() != "corpus/" {
-		t.Error(`default corpus path should be "corpus/"`)
-	}
+	assert.Equal(t, "corpus/", getCorpusPath(), `default corpus path should be "corpus/"`)
 }
