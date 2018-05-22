@@ -40,9 +40,10 @@ var (
 	QuranTranslationID       Alquran
 	QuranTafsirQuraishShihab Alquran
 
-	hijaiyas map[string][]string
-	maxWidth int
-	root     *Node
+	hijaiyas   map[string][]string
+	maxWidth   int
+	root       *Node
+	corpusPath = getCorpusPath()
 )
 
 func init() {
@@ -59,8 +60,8 @@ func init() {
 }
 
 func getCorpusPath() string {
-	if corpusPath := os.Getenv("CORPUS_PATH"); corpusPath != "" {
-		return corpusPath
+	if path := os.Getenv("CORPUS_PATH"); path != "" {
+		return path
 	}
 	return "corpus/"
 }
@@ -72,7 +73,7 @@ func loadTransliterationAsync(wg *sync.WaitGroup, fileName string) {
 
 func loadTransliteration(fileName string) map[string][]string {
 	dictionary := make(map[string][]string)
-	raw, err := ioutil.ReadFile(getCorpusPath() + fileName)
+	raw, err := ioutil.ReadFile(corpusPath + fileName)
 	if err != nil {
 		panic(err)
 	}
@@ -112,7 +113,7 @@ func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, quran *Alquran)
 }
 
 func loadQuran(fileName string, quran *Alquran) {
-	raw, err := ioutil.ReadFile(getCorpusPath() + fileName)
+	raw, err := ioutil.ReadFile(corpusPath + fileName)
 	if err != nil {
 		panic(err)
 	}
