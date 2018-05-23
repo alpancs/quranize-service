@@ -30,6 +30,14 @@ type Child struct {
 	Value *Node
 }
 
+// Get sura name from sura number (number starting from 1)
+func (q Quran) GetSuraName(sura int) (string, error) {
+	if !(1 <= sura && sura <= len(q.Suras)) {
+		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
+	}
+	return q.Suras[sura-1].Name, nil
+}
+
 // Get aya text from sura number and aya number (number starting from 1)
 func (q Quran) GetAya(sura, aya int) (string, error) {
 	if !(1 <= sura && sura <= len(q.Suras)) {

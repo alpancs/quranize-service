@@ -21,7 +21,7 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	locations := []Location{}
 	for _, location := range quran.Locate(keyword) {
-		suraName := quran.QuranEnhanced.Suras[location.Sura].Name
+		suraName, _ := quran.QuranEnhanced.GetSuraName(location.Sura)
 		ayaText := quran.QuranEnhanced.Suras[location.Sura].Ayas[location.Aya].Text
 		ayaTextRune := []rune(ayaText)
 		begin := indexAfterSpaces(ayaTextRune, location.SliceIndex)
