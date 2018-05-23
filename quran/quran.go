@@ -97,7 +97,7 @@ func getChild(children []Child, key rune) *Node {
 	return nil
 }
 
-// return locations of kalima in Quran q, matching whole word
+// Get locations of kalima in Quran q, matching whole word
 func (q Quran) Locate(kalima string) []Location {
 	harfs := []rune(kalima)
 	node := q.root
@@ -110,7 +110,7 @@ func (q Quran) Locate(kalima string) []Location {
 	return node.Locations
 }
 
-// check wether string s in Quran q or not
+// Check wether string s in Quran q or not
 func (q Quran) Exists(s string) bool {
 	harfs := []rune(s)
 	node := q.root
