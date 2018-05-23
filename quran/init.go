@@ -16,7 +16,7 @@ type Transliteration struct {
 }
 
 var (
-	QuranClean          Quran
+	QuranSimpleClean    Quran
 	QuranEnhanced       Quran
 	TranslationID       Quran
 	TafsirQuraishShihab Quran
@@ -29,8 +29,8 @@ func init() {
 	startTime := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go loadTransliterationAsync(&wg, "arabic-to-alphabet", &transliteration)
-	go loadAndIndexQuranAsync(&wg, "quran-simple-clean.xml", &QuranClean)
+	go parseTransliterationAsync(&wg, RawTransliteration, &transliteration)
+	go parseAndBuildIndexAsync(&wg, RawQuranSimpleClean, &QuranSimpleClean)
 	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
 	go loadQuranAsync(&wg, "id.indonesian.xml", &TranslationID)
 	go loadQuranAsync(&wg, "id.muntakhab.xml", &TafsirQuraishShihab)
@@ -45,17 +45,13 @@ func getCorpusPath() string {
 	return "corpus/"
 }
 
-func loadTransliterationAsync(wg *sync.WaitGroup, fileName string, t *Transliteration) {
-	loadTransliteration(fileName, t)
+func parseTransliterationAsync(wg *sync.WaitGroup, raw string, t *Transliteration) {
+	loadTransliteration(raw, t)
 	wg.Done()
 }
 
-func loadTransliteration(fileName string, t *Transliteration) {
-	raw, err := ioutil.ReadFile(corpusPath + fileName)
-	if err != nil {
-		panic(err)
-	}
-	trimmed := strings.TrimSpace(string(raw))
+func loadTransliteration(raw string, t *Transliteration) {
+	trimmed := strings.TrimSpace(raw)
 	for _, line := range strings.Split(trimmed, "\n") {
 		components := strings.Split(line, " ")
 		arabic := components[0]
@@ -83,8 +79,11 @@ func loadQuranAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
 	wg.Done()
 }
 
-func loadAndIndexQuranAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
-	loadQuran(fileName, q)
+func parseAndBuildIndexAsync(wg *sync.WaitGroup, raw string, q *Quran) {
+	err := xml.Unmarshal([]byte(raw), q)
+	if err != nil {
+		panic(err)
+	}
 	q.BuildIndex()
 	wg.Done()
 }

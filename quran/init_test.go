@@ -7,10 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoadTransliterationFileNotFound(t *testing.T) {
-	assert.Panics(t, func() { loadTransliteration("", nil) })
-}
-
 func TestLoadQuranFileNotFound(t *testing.T) {
 	assert.Panics(t, func() { loadQuran("", nil) })
 }
