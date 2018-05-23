@@ -10,11 +10,11 @@ import (
 )
 
 func Translation(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, quran.QuranTranslationID)
+	serve(w, r, quran.TranslationID)
 }
 
 func Tafsir(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, quran.QuranTafsirQuraishShihab)
+	serve(w, r, quran.TafsirQuraishShihab)
 }
 
 func Aya(w http.ResponseWriter, r *http.Request) {

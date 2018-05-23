@@ -53,10 +53,10 @@ type Transliteration struct {
 }
 
 var (
-	QuranClean               Quran
-	QuranEnhanced            Quran
-	QuranTranslationID       Quran
-	QuranTafsirQuraishShihab Quran
+	QuranClean          Quran
+	QuranEnhanced       Quran
+	TranslationID       Quran
+	TafsirQuraishShihab Quran
 
 	transliteration Transliteration
 	emptyLocations  = make([]Location, 0, 0)
@@ -77,8 +77,8 @@ func init() {
 	go loadTransliterationAsync(&wg, "arabic-to-alphabet", &transliteration)
 	go loadQuranAndIndexAsync(&wg, "quran-simple-clean.xml", &QuranClean)
 	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
-	go loadQuranAsync(&wg, "id.indonesian.xml", &QuranTranslationID)
-	go loadQuranAsync(&wg, "id.muntakhab.xml", &QuranTafsirQuraishShihab)
+	go loadQuranAsync(&wg, "id.indonesian.xml", &TranslationID)
+	go loadQuranAsync(&wg, "id.muntakhab.xml", &TafsirQuraishShihab)
 	wg.Wait()
 	fmt.Println("service initialized in", time.Since(startTime))
 }
