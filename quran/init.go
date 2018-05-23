@@ -16,7 +16,6 @@ type Transliteration struct {
 }
 
 var (
-	QuranClean          Quran
 	QuranEnhanced       Quran
 	TranslationID       Quran
 	TafsirQuraishShihab Quran
@@ -30,7 +29,7 @@ func init() {
 	var wg sync.WaitGroup
 	wg.Add(5)
 	go loadTransliterationAsync(&wg, "arabic-to-alphabet", &transliteration)
-	go loadAndIndexQuranAsync(&wg, "quran-simple-clean.xml", &QuranClean)
+	go buildIndexAsync(&wg, &QuranSimpleClean)
 	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
 	go loadQuranAsync(&wg, "id.indonesian.xml", &TranslationID)
 	go loadQuranAsync(&wg, "id.muntakhab.xml", &TafsirQuraishShihab)
@@ -83,8 +82,7 @@ func loadQuranAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
 	wg.Done()
 }
 
-func loadAndIndexQuranAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
-	loadQuran(fileName, q)
+func buildIndexAsync(wg *sync.WaitGroup, q *Quran) {
 	q.BuildIndex()
 	wg.Done()
 }

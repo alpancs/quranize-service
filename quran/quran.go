@@ -6,16 +6,20 @@ import (
 )
 
 type Quran struct {
-	Suras []struct {
-		Index int    `xml:"index,attr"`
-		Name  string `xml:"name,attr"`
-		Ayas  []struct {
-			Index     int    `xml:"index,attr"`
-			Text      string `xml:"text,attr"`
-			Bismillah string `xml:"bismillah,attr"`
-		} `xml:"aya"`
-	} `xml:"sura"`
-	root *Node
+	Suras []Sura `xml:"sura"`
+	root  *Node
+}
+
+type Sura struct {
+	Index int    `xml:"index,attr"`
+	Name  string `xml:"name,attr"`
+	Ayas  []Aya  `xml:"aya"`
+}
+
+type Aya struct {
+	Index     int    `xml:"index,attr"`
+	Text      string `xml:"text,attr"`
+	Bismillah string `xml:"bismillah,attr"`
 }
 
 type Node struct {
