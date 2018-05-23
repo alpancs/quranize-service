@@ -16,6 +16,7 @@ type Transliteration struct {
 }
 
 var (
+	QuranSimpleClean    Quran
 	QuranEnhanced       Quran
 	TranslationID       Quran
 	TafsirQuraishShihab Quran
@@ -28,8 +29,8 @@ func init() {
 	startTime := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go loadTransliterationAsync(&wg, RawTransliteration, &transliteration)
-	go buildIndexAsync(&wg, &QuranSimpleClean)
+	go parseTransliterationAsync(&wg, RawTransliteration, &transliteration)
+	go parseAndBuildIndexAsync(&wg, RawQuranSimpleClean, &QuranSimpleClean)
 	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
 	go loadQuranAsync(&wg, "id.indonesian.xml", &TranslationID)
 	go loadQuranAsync(&wg, "id.muntakhab.xml", &TafsirQuraishShihab)
@@ -44,7 +45,7 @@ func getCorpusPath() string {
 	return "corpus/"
 }
 
-func loadTransliterationAsync(wg *sync.WaitGroup, raw string, t *Transliteration) {
+func parseTransliterationAsync(wg *sync.WaitGroup, raw string, t *Transliteration) {
 	loadTransliteration(raw, t)
 	wg.Done()
 }
@@ -78,7 +79,11 @@ func loadQuranAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
 	wg.Done()
 }
 
-func buildIndexAsync(wg *sync.WaitGroup, q *Quran) {
+func parseAndBuildIndexAsync(wg *sync.WaitGroup, raw string, q *Quran) {
+	err := xml.Unmarshal([]byte(raw), q)
+	if err != nil {
+		panic(err)
+	}
 	q.BuildIndex()
 	wg.Done()
 }
