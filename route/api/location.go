@@ -21,12 +21,12 @@ func Locate(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	locations := []Location{}
 	for _, location := range quran.QuranClean.Locate(keyword) {
-		suraName, _ := quran.QuranEnhanced.GetSuraName(location.Sura + 1)
-		ayaText, _ := quran.QuranEnhanced.GetAya(location.Sura+1, location.Aya+1)
+		suraName, _ := quran.QuranEnhanced.GetSuraName(location.Sura)
+		ayaText, _ := quran.QuranEnhanced.GetAya(location.Sura, location.Aya)
 		ayaTextRune := []rune(ayaText)
 		begin := indexAfterSpaces(ayaTextRune, location.SliceIndex)
 		end := begin + indexAfterSpaces(ayaTextRune[begin:], strings.Count(keyword, " ")+1) - 1
-		locations = append(locations, Location{location.Sura + 1, suraName, location.Aya + 1, ayaText, begin, end})
+		locations = append(locations, Location{location.Sura, suraName, location.Aya, ayaText, begin, end})
 	}
 	json.NewEncoder(w).Encode(locations)
 }

@@ -57,9 +57,9 @@ func (q Quran) GetAya(sura, aya int) (string, error) {
 // Build index of Quran q
 func (q *Quran) BuildIndex() {
 	q.root = &Node{Locations: emptyLocations}
-	for s, sura := range q.Suras {
-		for a, aya := range sura.Ayas {
-			indexAya([]rune(aya.Text), s, a, q.root)
+	for _, sura := range q.Suras {
+		for _, aya := range sura.Ayas {
+			indexAya([]rune(aya.Text), sura.Index, aya.Index, q.root)
 		}
 	}
 }

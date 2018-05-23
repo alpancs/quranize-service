@@ -49,7 +49,7 @@ func TestLocateNonAlquran(t *testing.T) {
 
 func TestLocateAlquran(t *testing.T) {
 	input := "بسم الله الرحمن الرحيم"
-	expected := []Location{Location{0, 0, 0}, Location{26, 29, 4}}
+	expected := []Location{Location{1, 1, 0}, Location{27, 30, 4}}
 	actual := QuranClean.Locate(input)
 	assert.Equal(t, expected, actual)
 }
