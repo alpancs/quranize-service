@@ -1,3 +1,6 @@
+package corpus
+
+var IDIndonesianXML = `
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
 
@@ -12,7 +15,7 @@
 #  Source: Tanzil.net
 #
 #=====================================================================
-	
+
 -->
 <quran>
 	<sura index="1" name="الفاتحة">
@@ -6480,3 +6483,4 @@
 		<aya index="6" text="dari (golongan) jin dan manusia."/>
 	</sura>
 </quran>
+`

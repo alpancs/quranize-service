@@ -1,3 +1,6 @@
+package corpus
+
+var IDMuntakhabXML = `
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
 
@@ -12,7 +15,7 @@
 #  Source: Tanzil.net
 #
 #=====================================================================
-	
+
 -->
 <quran>
 	<sura index="1" name="الفاتحة">
@@ -1639,7 +1642,7 @@
 		<aya index="3" text="Kami menyampaikan kepadamu, Muhammad, kisah yang paling baik dengan cara mewahyukan kitab suci al-Qur'ân ini kepadamu. Sebelum menerima wahyu itu kamu termasuk orang-orang yang belum mengetahui isinya dan yang mengandung nasihat-nasihat dan ayat-ayat yang jelas."/>
 		<aya index="4" text="Di antara kisah-kisah itu adalah kisah Yûsuf(1) ketika ia berkata kepada ayahnya, &quot;Wahai ayahku, aku bermimpi melihat sebelas bintang, matahari dan bulan, tunduk dan bersujud di hadapanku.&quot; (1) Lihat catatan kaki tafsir ayat 84 dan 85 surat ini."/>
 		<aya index="5" text="Ayahnya berkata, &quot;Hai anakku, jangan kamu ceritakan mimpi itu kepada saudara-saudaramu, sebab akan menimbulkan kedengkian di hati mereka sehingga mereka tergoda oleh setan untuk mengatur siasat mencelakakanmu. Mereka akan membuat tipu daya dan berbuat makar terhadapmu. Sesungguhnya setan adalah musuh manusia yang sangat nyata."/>
-		<aya index="6" text="Seperti halnya kamu lihat dirimu dalam mimpi sebagai tuan yang ditaati, memiliki kehormatan dan kedudukan, Tuhanmu memilih kamu dan mengajarkanmu takwil mimpi yang membuat kamu dihormati. Allah juga menyempurnakan nikmat-Nya kepadamu dan keluarga Ya`qub dengan kenabian dan kerasulan, sama halnya ketika Dia menyempurnakan rahmat-Nya kepada dua orang tua sebelum bapakmu yaitu Ibrâhîm dan Ishâq. Sesungguhnya Tuhanmu Mahabijaksna sehingga tidak pernah salah, Maha Mengetahui sehingga Dia memilih hamba-Nya yang diketahui pantas untuk dipilih."/>
+		<aya index="6" text="Seperti halnya kamu lihat dirimu dalam mimpi sebagai tuan yang ditaati, memiliki kehormatan dan kedudukan, Tuhanmu memilih kamu dan mengajarkanmu takwil mimpi yang membuat kamu dihormati. Allah juga menyempurnakan nikmat-Nya kepadamu dan keluarga Ya` + "`" + `qub dengan kenabian dan kerasulan, sama halnya ketika Dia menyempurnakan rahmat-Nya kepada dua orang tua sebelum bapakmu yaitu Ibrâhîm dan Ishâq. Sesungguhnya Tuhanmu Mahabijaksna sehingga tidak pernah salah, Maha Mengetahui sehingga Dia memilih hamba-Nya yang diketahui pantas untuk dipilih."/>
 		<aya index="7" text="Di dalam kisah Yûsuf dan saudara-saudaranya terdapat pelajaran dan bukti-bukti kekuasaan Allah bagi orang-orang yang menanyakan dan ingin mengetahuinya."/>
 		<aya index="8" text="Yaitu, ketika saudara-saudara Yûsuf berkata kepada sesama mereka, &quot;Sesungguhnya Yûsuf dan saudara kandungnya lebih dicintai oleh ayah kita daripada kita sendiri, padahal kita adalah satu kelompok yang kuat dan lebih bermanfaat bagi ayah daripada mereka berdua. Dengan lebih menganakemaskan Yûsuf dan saudara kandungnya daripada kita, sesungguhnya ayah kita telah keliru dan jauh dari kebenaran. Padahal kebenaran itu amat jelas.&quot;"/>
 		<aya index="9" text="Bunuh saja Yûsuf atau buang ia ke suatu daerah yang jauh dari ayahnya dan tidak bisa dijamah oleh ayah supaya kecintaan dan perhatian ayah hanya tertuju pada kalian. Sesudah kalian menjauhkan Yûsuf darinya dengan membunuh atau membuangnya kalian, akan menjadi orang-orang yang baik, sebab Allah menerima tobat kalian dan ayah pun akan memaafkan perbuatan kalian."/>
@@ -6480,3 +6483,4 @@
 		<aya index="6" text="Yaitu jin dan manusia."/>
 	</sura>
 </quran>
+`

@@ -1,6 +1,6 @@
-package quran
+package corpus
 
-var RawTransliteration = `
+var ArabicToAlphabet = `
 ء ' k a
 آ a aa
 أ a u ' k
