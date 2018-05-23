@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/alpancs/quranize/core"
+	"github.com/alpancs/quranize/quran"
 	"github.com/go-chi/chi"
 )
 
@@ -34,7 +34,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	transliteration := "alquran"
 	quranText := "القرآن"
-	encodeds := core.Encode(keyword)
+	encodeds := quran.Encode(keyword)
 	if len(encodeds) > 0 {
 		transliteration = keyword
 		quranText = encodeds[0]

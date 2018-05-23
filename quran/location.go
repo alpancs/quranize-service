@@ -1,13 +1,11 @@
-package core
-
-var emptyLocation = []Location{}
+package quran
 
 func queryTree(harfs []rune) []Location {
-	node := root
+	node := QuranClean.root
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {
-			return emptyLocation
+			return emptyLocations
 		}
 	}
 	return node.Locations

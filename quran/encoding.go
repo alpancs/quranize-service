@@ -1,4 +1,4 @@
-package core
+package quran
 
 import (
 	"strings"
@@ -28,6 +28,8 @@ func quranize(text string, memo map[string][]string) []string {
 		return cache
 	}
 
+	hijaiyas := transliteration.Hijaiyas
+	maxWidth := transliteration.MaxWidth
 	kalimas := []string{}
 	l := len(text)
 	for width := 1; width <= maxWidth && width <= l; width++ {
@@ -63,7 +65,7 @@ func combine(heads, tails []string) []string {
 }
 
 func inTree(harfs []rune) bool {
-	node := root
+	node := QuranClean.root
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {

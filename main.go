@@ -16,15 +16,15 @@ import (
 func main() {
 	job.Start()
 	port := getPort()
-	fmt.Println("Quranize is running in port " + port)
+	fmt.Println("Quranize is listening port", port)
 	http.ListenAndServe(":"+port, newRouter())
 }
 
 func getPort() string {
-	if os.Getenv("PORT") == "" {
-		return "7000"
+	if port := os.Getenv("PORT"); port != "" {
+		return port
 	}
-	return os.Getenv("PORT")
+	return "7000"
 }
 
 func newRouter() http.Handler {
