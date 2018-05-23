@@ -18,7 +18,7 @@ func Tafsir(w http.ResponseWriter, r *http.Request) {
 }
 
 func Aya(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, quran.QuranEnhanced)
+	serve(w, r, quran.QuranSimpleEnhanced)
 }
 
 func serve(w http.ResponseWriter, r *http.Request, q quran.Quran) {

@@ -17,7 +17,7 @@ type Transliteration struct {
 
 var (
 	QuranSimpleClean    Quran
-	QuranEnhanced       Quran
+	QuranSimpleEnhanced Quran
 	TranslationID       Quran
 	TafsirQuraishShihab Quran
 
@@ -30,7 +30,7 @@ func init() {
 	wg.Add(5)
 	go parseTransliterationAsync(&wg, corpus.ArabicToAlphabet, &transliteration)
 	go parseAndBuildIndexAsync(&wg, corpus.QuranSimpleCleanXML, &QuranSimpleClean)
-	go parseQuranAsync(&wg, corpus.QuranSimpleEnhancedXML, &QuranEnhanced)
+	go parseQuranAsync(&wg, corpus.QuranSimpleEnhancedXML, &QuranSimpleEnhanced)
 	go parseQuranAsync(&wg, corpus.IDIndonesianXML, &TranslationID)
 	go parseQuranAsync(&wg, corpus.IDMuntakhabXML, &TafsirQuraishShihab)
 	wg.Wait()
