@@ -120,29 +120,29 @@ func loadTransliteration(fileName string, t *Transliteration) {
 	t.MaxWidth = maxWidth
 }
 
-func loadQuranAsync(wg *sync.WaitGroup, fileName string, quran *Quran) {
-	loadQuran(fileName, quran)
+func loadQuranAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
+	loadQuran(fileName, q)
 	wg.Done()
 }
 
-func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, quran *Quran) {
-	loadQuran(fileName, quran)
-	quran.root = buildIndex(quran)
+func loadQuranAndIndexAsync(wg *sync.WaitGroup, fileName string, q *Quran) {
+	loadQuran(fileName, q)
+	q.root = buildIndex(q)
 	wg.Done()
 }
 
-func loadQuran(fileName string, quran *Quran) {
+func loadQuran(fileName string, q *Quran) {
 	raw, err := ioutil.ReadFile(corpusPath + fileName)
 	if err != nil {
 		panic(err)
 	}
-	err = xml.Unmarshal(raw, quran)
+	err = xml.Unmarshal(raw, q)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func buildIndex(quran *Quran) *Node {
+func buildIndex(q *Quran) *Node {
 	node := &Node{Locations: emptyLocations}
 	for s, sura := range QuranClean.Suras {
 		for a, aya := range sura.Ayas {
