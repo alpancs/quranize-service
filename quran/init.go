@@ -28,7 +28,7 @@ func init() {
 	startTime := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go loadTransliterationAsync(&wg, "arabic-to-alphabet", &transliteration)
+	go loadTransliterationAsync(&wg, RawTransliteration, &transliteration)
 	go buildIndexAsync(&wg, &QuranSimpleClean)
 	go loadQuranAsync(&wg, "quran-simple-enhanced.xml", &QuranEnhanced)
 	go loadQuranAsync(&wg, "id.indonesian.xml", &TranslationID)
@@ -44,17 +44,13 @@ func getCorpusPath() string {
 	return "corpus/"
 }
 
-func loadTransliterationAsync(wg *sync.WaitGroup, fileName string, t *Transliteration) {
-	loadTransliteration(fileName, t)
+func loadTransliterationAsync(wg *sync.WaitGroup, raw string, t *Transliteration) {
+	loadTransliteration(raw, t)
 	wg.Done()
 }
 
-func loadTransliteration(fileName string, t *Transliteration) {
-	raw, err := ioutil.ReadFile(corpusPath + fileName)
-	if err != nil {
-		panic(err)
-	}
-	trimmed := strings.TrimSpace(string(raw))
+func loadTransliteration(raw string, t *Transliteration) {
+	trimmed := strings.TrimSpace(raw)
 	for _, line := range strings.Split(trimmed, "\n") {
 		components := strings.Split(line, " ")
 		arabic := components[0]
