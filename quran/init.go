@@ -22,7 +22,6 @@ var (
 	TafsirQuraishShihab Quran
 
 	transliteration = Transliteration{make(map[string][]string), 0}
-	emptyLocations  = make([]Location, 0, 0)
 	corpusPath      = getCorpusPath()
 )
 

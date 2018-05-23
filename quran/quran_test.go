@@ -32,3 +32,24 @@ func TestGetSuraNameNotFound(t *testing.T) {
 	_, err := QuranClean.GetSuraName(0)
 	assert.Error(t, err)
 }
+
+func TestLocateEmptyString(t *testing.T) {
+	input := ""
+	expected := []Location{}
+	actual := QuranClean.Locate(input)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLocateNonAlquran(t *testing.T) {
+	input := "alfan"
+	expected := []Location{}
+	actual := QuranClean.Locate(input)
+	assert.Equal(t, expected, actual)
+}
+
+func TestLocateAlquran(t *testing.T) {
+	input := "بسم الله الرحمن الرحيم"
+	expected := []Location{Location{0, 0, 0}, Location{26, 29, 4}}
+	actual := QuranClean.Locate(input)
+	assert.Equal(t, expected, actual)
+}

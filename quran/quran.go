@@ -30,6 +30,10 @@ type Child struct {
 	Value *Node
 }
 
+var (
+	emptyLocations = make([]Location, 0, 0)
+)
+
 // Get sura name from sura number (number starting from 1)
 func (q Quran) GetSuraName(sura int) (string, error) {
 	if !(1 <= sura && sura <= len(q.Suras)) {
@@ -91,4 +95,30 @@ func getChild(children []Child, key rune) *Node {
 		}
 	}
 	return nil
+}
+
+// return locations of kalima in Quran q, matching whole word
+func (q Quran) Locate(kalima string) []Location {
+	harfs := []rune(kalima)
+	node := q.root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return emptyLocations
+		}
+	}
+	return node.Locations
+}
+
+// check wether string s in Quran q or not
+func (q Quran) Exists(s string) bool {
+	harfs := []rune(s)
+	node := q.root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return true
 }

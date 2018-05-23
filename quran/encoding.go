@@ -4,7 +4,9 @@ import (
 	"strings"
 )
 
-var BASE = []string{""}
+var (
+	base = []string{""}
+)
 
 func Encode(text string) []string {
 	var memo = make(map[string][]string)
@@ -12,7 +14,7 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		if len(Locate(result)) > 0 {
+		if len(QuranClean.Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
 	}
@@ -21,7 +23,7 @@ func Encode(text string) []string {
 
 func quranize(text string, memo map[string][]string) []string {
 	if text == "" {
-		return BASE
+		return base
 	}
 
 	if cache, ok := memo[text]; ok {
@@ -36,7 +38,7 @@ func quranize(text string, memo map[string][]string) []string {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
-				if inTree([]rune(combination)) {
+				if QuranClean.Exists(combination) {
 					kalimas = appendUniq(kalimas, combination)
 				}
 			}
@@ -62,17 +64,6 @@ func combine(heads, tails []string) []string {
 		}
 	}
 	return combinations
-}
-
-func inTree(harfs []rune) bool {
-	node := QuranClean.root
-	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
-		if node == nil {
-			return false
-		}
-	}
-	return true
 }
 
 func appendUniq(results []string, newResult string) []string {

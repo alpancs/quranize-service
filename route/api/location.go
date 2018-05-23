@@ -20,7 +20,7 @@ type Location struct {
 func Locate(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	locations := []Location{}
-	for _, location := range quran.Locate(keyword) {
+	for _, location := range quran.QuranClean.Locate(keyword) {
 		suraName, _ := quran.QuranEnhanced.GetSuraName(location.Sura)
 		ayaText, _ := quran.QuranEnhanced.GetAya(location.Sura, location.Aya)
 		ayaTextRune := []rune(ayaText)
