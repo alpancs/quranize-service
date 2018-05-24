@@ -36,52 +36,6 @@ var (
 	zeroLocs = make([]Location, 0, 0)
 )
 
-// Get sura name from sura number (number starting from 1)
-func (q Quran) GetSuraName(sura int) (string, error) {
-	if !(1 <= sura && sura <= len(q.Suras)) {
-		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
-	}
-	return q.Suras[sura-1].Name, nil
-}
-
-// Get aya text from sura number and aya number (number starting from 1)
-func (q Quran) GetAya(sura, aya int) (string, error) {
-	if !(1 <= sura && sura <= len(q.Suras)) {
-		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
-	}
-	ayas := q.Suras[sura-1].Ayas
-	if !(1 <= aya && aya <= len(ayas)) {
-		return "", errors.New(fmt.Sprintf("invalid sura number %d and aya number %d", sura, aya))
-	}
-	return ayas[aya-1].Text, nil
-}
-
-// Get locations of s, matching whole word
-func Locate(s string) []Location {
-	harfs := []rune(s)
-	node := root
-	for _, harf := range harfs {
-		node = getChild(node.children, harf)
-		if node == nil {
-			return zeroLocs
-		}
-	}
-	return node.locations
-}
-
-// Check wether string s in Quran q or not
-func (q Quran) exists(s string) bool {
-	harfs := []rune(s)
-	node := root
-	for _, harf := range harfs {
-		node = getChild(node.children, harf)
-		if node == nil {
-			return false
-		}
-	}
-	return true
-}
-
 func buildIndex() {
 	root = &Node{locations: zeroLocs}
 	for _, sura := range quran.Suras {
@@ -122,4 +76,24 @@ func getChild(children []Child, key rune) *Node {
 		}
 	}
 	return nil
+}
+
+// Get sura name from sura number (number starting from 1)
+func (q Quran) GetSuraName(sura int) (string, error) {
+	if !(1 <= sura && sura <= len(q.Suras)) {
+		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
+	}
+	return q.Suras[sura-1].Name, nil
+}
+
+// Get aya text from sura number and aya number (number starting from 1)
+func (q Quran) GetAya(sura, aya int) (string, error) {
+	if !(1 <= sura && sura <= len(q.Suras)) {
+		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
+	}
+	ayas := q.Suras[sura-1].Ayas
+	if !(1 <= aya && aya <= len(ayas)) {
+		return "", errors.New(fmt.Sprintf("invalid sura number %d and aya number %d", sura, aya))
+	}
+	return ayas[aya-1].Text, nil
 }

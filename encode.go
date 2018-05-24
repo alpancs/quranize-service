@@ -39,7 +39,7 @@ func quranize(text string, memo map[string][]string) []string {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
-				if quran.exists(combination) {
+				if exists(combination) {
 					kalimas = appendUniq(kalimas, combination)
 				}
 			}
@@ -67,6 +67,19 @@ func combine(heads, tails []string) []string {
 	return combinations
 }
 
+// Check wether string s in quran or not
+func exists(s string) bool {
+	harfs := []rune(s)
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return true
+}
+
 func appendUniq(results []string, newResult string) []string {
 	for _, result := range results {
 		if result == newResult {
@@ -74,4 +87,17 @@ func appendUniq(results []string, newResult string) []string {
 		}
 	}
 	return append(results, newResult)
+}
+
+// Get locations of s, matching the whole word
+func Locate(s string) []Location {
+	harfs := []rune(s)
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.children, harf)
+		if node == nil {
+			return zeroLocs
+		}
+	}
+	return node.locations
 }
