@@ -1,4 +1,4 @@
-package quran
+package quranize
 
 import (
 	"errors"
@@ -54,8 +54,34 @@ func (q Quran) GetAya(sura, aya int) (string, error) {
 	return ayas[aya-1].Text, nil
 }
 
+// Get locations of kalima in Quran q, matching whole word
+func (q Quran) Locate(kalima string) []Location {
+	harfs := []rune(kalima)
+	node := q.root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return emptyLocations
+		}
+	}
+	return node.Locations
+}
+
+// Check wether string s in Quran q or not
+func (q Quran) exists(s string) bool {
+	harfs := []rune(s)
+	node := q.root
+	for _, harf := range harfs {
+		node = getChild(node.Children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return true
+}
+
 // Build index of Quran q
-func (q *Quran) BuildIndex() {
+func (q *Quran) buildIndex() {
 	q.root = &Node{Locations: emptyLocations}
 	for _, sura := range q.Suras {
 		for _, aya := range sura.Ayas {
@@ -95,30 +121,4 @@ func getChild(children []Child, key rune) *Node {
 		}
 	}
 	return nil
-}
-
-// Get locations of kalima in Quran q, matching whole word
-func (q Quran) Locate(kalima string) []Location {
-	harfs := []rune(kalima)
-	node := q.root
-	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
-		if node == nil {
-			return emptyLocations
-		}
-	}
-	return node.Locations
-}
-
-// Check wether string s in Quran q or not
-func (q Quran) Exists(s string) bool {
-	harfs := []rune(s)
-	node := q.root
-	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
-		if node == nil {
-			return false
-		}
-	}
-	return true
 }

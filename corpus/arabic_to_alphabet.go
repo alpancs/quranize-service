@@ -1,3 +1,6 @@
+package corpus
+
+var ArabicToAlphabet = `
 ء ' k a
 آ a aa
 أ a u ' k
@@ -36,3 +39,4 @@
 ي y ya yi yu i
 ال a l la
  n
+`

@@ -1,4 +1,4 @@
-package quran
+package quranize
 
 import (
 	"strings"
@@ -14,7 +14,7 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		if len(QuranClean.Locate(result)) > 0 {
+		if len(QuranSimpleClean.Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
 	}
@@ -30,15 +30,13 @@ func quranize(text string, memo map[string][]string) []string {
 		return cache
 	}
 
-	hijaiyas := transliteration.Hijaiyas
-	maxWidth := transliteration.MaxWidth
 	kalimas := []string{}
 	l := len(text)
-	for width := 1; width <= maxWidth && width <= l; width++ {
+	for width := 1; width <= alphabetMaxLen && width <= l; width++ {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
-				if QuranClean.Exists(combination) {
+				if QuranSimpleClean.exists(combination) {
 					kalimas = appendUniq(kalimas, combination)
 				}
 			}

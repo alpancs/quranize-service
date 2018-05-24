@@ -17,5 +17,5 @@ quranize
 # Vim swp
 *.swp
 
-# vendor
+# Vendor
 vendor/
