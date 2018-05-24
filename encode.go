@@ -25,6 +25,19 @@ func Encode(s string) []string {
 	return results
 }
 
+// Get locations of s (quran kalima), matching the whole word.
+func Locate(s string) []Location {
+	harfs := []rune(s)
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.children, harf)
+		if node == nil {
+			return zeroLocs
+		}
+	}
+	return node.locations
+}
+
 func quranize(s string, memo map[string][]string) []string {
 	if s == "" {
 		return base
@@ -87,17 +100,4 @@ func appendUniq(results []string, newResult string) []string {
 		}
 	}
 	return append(results, newResult)
-}
-
-// Get locations of s (quran kalima), matching the whole word.
-func Locate(s string) []Location {
-	harfs := []rune(s)
-	node := root
-	for _, harf := range harfs {
-		node = getChild(node.children, harf)
-		if node == nil {
-			return zeroLocs
-		}
-	}
-	return node.locations
 }
