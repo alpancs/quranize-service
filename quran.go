@@ -84,7 +84,7 @@ func getChild(children []Child, key rune) *Node {
 	return nil
 }
 
-// Load Quran from given file path.
+// Returns Quran from given file path.
 func LoadQuran(filePath string) (q Quran, err error) {
 	raw, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -93,13 +93,13 @@ func LoadQuran(filePath string) (q Quran, err error) {
 	return ParseQuran(raw)
 }
 
-// Parse Quran from given raw.
+// Returns Quran from given raw.
 func ParseQuran(raw []byte) (q Quran, err error) {
 	err = xml.Unmarshal(raw, &q)
 	return
 }
 
-// Get sura name from sura number (number starting from 1).
+// Returns sura name from sura number in Quran q (number starting from 1).
 func (q Quran) GetSuraName(sura int) (string, error) {
 	if !(1 <= sura && sura <= len(q.Suras)) {
 		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))
@@ -107,7 +107,7 @@ func (q Quran) GetSuraName(sura int) (string, error) {
 	return q.Suras[sura-1].Name, nil
 }
 
-// Get aya text from sura number and aya number (number starting from 1).
+// Returns aya text from sura number and aya number in Quran q (number starting from 1).
 func (q Quran) GetAya(sura, aya int) (string, error) {
 	if !(1 <= sura && sura <= len(q.Suras)) {
 		return "", errors.New(fmt.Sprintf("invalid sura number %d", sura))

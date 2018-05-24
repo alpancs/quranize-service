@@ -11,7 +11,7 @@ var (
 	base = []string{""}
 )
 
-// Encode given string to arabics.
+// Returns arabic encodings of given string.
 func Encode(s string) []string {
 	var memo = make(map[string][]string)
 	s = strings.Replace(s, " ", "", -1)
@@ -25,7 +25,7 @@ func Encode(s string) []string {
 	return results
 }
 
-// Get locations of s (quran kalima), matching the whole word.
+// Returns locations of s (quran kalima), matching the whole word.
 func Locate(s string) []Location {
 	harfs := []rune(s)
 	node := root
