@@ -15,7 +15,6 @@ type Quran struct {
 			Bismillah string `xml:"bismillah,attr"`
 		} `xml:"aya"`
 	} `xml:"sura"`
-	root *Node
 }
 
 type Node struct {
@@ -31,7 +30,10 @@ type Child struct {
 }
 
 var (
-	emptyLocations = make([]Location, 0, 0)
+	quran Quran
+	root  *Node
+
+	zeroLocs = make([]Location, 0, 0)
 )
 
 // Get sura name from sura number (number starting from 1)
@@ -57,11 +59,11 @@ func (q Quran) GetAya(sura, aya int) (string, error) {
 // Get locations of kalima in Quran q, matching whole word
 func (q Quran) Locate(kalima string) []Location {
 	harfs := []rune(kalima)
-	node := q.root
+	node := root
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {
-			return emptyLocations
+			return zeroLocs
 		}
 	}
 	return node.Locations
@@ -70,7 +72,7 @@ func (q Quran) Locate(kalima string) []Location {
 // Check wether string s in Quran q or not
 func (q Quran) exists(s string) bool {
 	harfs := []rune(s)
-	node := q.root
+	node := root
 	for _, harf := range harfs {
 		node = getChild(node.Children, harf)
 		if node == nil {
@@ -80,12 +82,11 @@ func (q Quran) exists(s string) bool {
 	return true
 }
 
-// Build index of Quran q
-func (q *Quran) buildIndex() {
-	q.root = &Node{Locations: emptyLocations}
-	for _, sura := range q.Suras {
+func buildIndex() {
+	root = &Node{Locations: zeroLocs}
+	for _, sura := range quran.Suras {
 		for _, aya := range sura.Ayas {
-			indexAya([]rune(aya.Text), sura.Index, aya.Index, q.root)
+			indexAya([]rune(aya.Text), sura.Index, aya.Index, root)
 		}
 	}
 }

@@ -2,38 +2,28 @@ package quranize
 
 import (
 	"encoding/xml"
-	"fmt"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/alpancs/quranize/corpus"
 )
 
-var (
-	QuranSimpleClean Quran
-	hijaiyas         map[string][]string
-	alphabetMaxLen   int
-)
-
 func init() {
-	startTime := time.Now()
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go parseQuranAsync(&wg)
 	go parseDictAsync(&wg)
 	wg.Wait()
-	fmt.Println("package quranize initialized in", time.Since(startTime))
 }
 
 func parseQuranAsync(wg *sync.WaitGroup) {
 	parseQuran()
-	QuranSimpleClean.buildIndex()
+	buildIndex()
 	wg.Done()
 }
 
 func parseQuran() {
-	err := xml.Unmarshal([]byte(corpus.QuranSimpleCleanXML), &QuranSimpleClean)
+	err := xml.Unmarshal([]byte(corpus.QuranSimpleCleanXML), &quran)
 	if err != nil {
 		panic(err)
 	}

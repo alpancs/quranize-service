@@ -5,6 +5,9 @@ import (
 )
 
 var (
+	hijaiyas       map[string][]string
+	alphabetMaxLen int
+
 	base = []string{""}
 )
 
@@ -14,7 +17,7 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		if len(QuranSimpleClean.Locate(result)) > 0 {
+		if len(quran.Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
 	}
@@ -36,7 +39,7 @@ func quranize(text string, memo map[string][]string) []string {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
-				if QuranSimpleClean.exists(combination) {
+				if quran.exists(combination) {
 					kalimas = appendUniq(kalimas, combination)
 				}
 			}
