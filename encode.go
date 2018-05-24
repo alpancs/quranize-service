@@ -11,12 +11,13 @@ var (
 	base = []string{""}
 )
 
-func Encode(text string) []string {
+// Encode given string to arabics.
+func Encode(s string) []string {
 	var memo = make(map[string][]string)
-	text = strings.Replace(text, " ", "", -1)
-	text = strings.ToLower(text)
+	s = strings.Replace(s, " ", "", -1)
+	s = strings.ToLower(s)
 	results := []string{}
-	for _, result := range quranize(text, memo) {
+	for _, result := range quranize(s, memo) {
 		if len(Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
@@ -24,20 +25,20 @@ func Encode(text string) []string {
 	return results
 }
 
-func quranize(text string, memo map[string][]string) []string {
-	if text == "" {
+func quranize(s string, memo map[string][]string) []string {
+	if s == "" {
 		return base
 	}
 
-	if cache, ok := memo[text]; ok {
+	if cache, ok := memo[s]; ok {
 		return cache
 	}
 
 	kalimas := []string{}
-	l := len(text)
+	l := len(s)
 	for width := 1; width <= alphabetMaxLen && width <= l; width++ {
-		if tails, ok := hijaiyas[text[l-width:]]; ok {
-			heads := quranize(text[:l-width], memo)
+		if tails, ok := hijaiyas[s[l-width:]]; ok {
+			heads := quranize(s[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
 				if exists(combination) {
 					kalimas = appendUniq(kalimas, combination)
@@ -46,7 +47,7 @@ func quranize(text string, memo map[string][]string) []string {
 		}
 	}
 
-	memo[text] = kalimas
+	memo[s] = kalimas
 	return kalimas
 }
 
@@ -67,7 +68,6 @@ func combine(heads, tails []string) []string {
 	return combinations
 }
 
-// Check wether string s in quran or not
 func exists(s string) bool {
 	harfs := []rune(s)
 	node := root
@@ -89,7 +89,7 @@ func appendUniq(results []string, newResult string) []string {
 	return append(results, newResult)
 }
 
-// Get locations of s, matching the whole word
+// Get locations of s (quran kalima), matching the whole word.
 func Locate(s string) []Location {
 	harfs := []rune(s)
 	node := root

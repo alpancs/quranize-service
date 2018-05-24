@@ -1,6 +1,6 @@
-// original file name: quran-simple-clean.xml
 package corpus
 
+// original file name: quran-simple-clean.xml
 var QuranSimpleCleanXML = `
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
