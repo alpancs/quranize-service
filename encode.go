@@ -1,10 +1,13 @@
-package quran
+package quranize
 
 import (
 	"strings"
 )
 
 var (
+	hijaiyas       map[string][]string
+	alphabetMaxLen int
+
 	base = []string{""}
 )
 
@@ -14,7 +17,7 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		if len(QuranClean.Locate(result)) > 0 {
+		if len(Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
 	}
@@ -30,15 +33,13 @@ func quranize(text string, memo map[string][]string) []string {
 		return cache
 	}
 
-	hijaiyas := transliteration.Hijaiyas
-	maxWidth := transliteration.MaxWidth
 	kalimas := []string{}
 	l := len(text)
-	for width := 1; width <= maxWidth && width <= l; width++ {
+	for width := 1; width <= alphabetMaxLen && width <= l; width++ {
 		if tails, ok := hijaiyas[text[l-width:]]; ok {
 			heads := quranize(text[:l-width], memo)
 			for _, combination := range combine(heads, tails) {
-				if QuranClean.Exists(combination) {
+				if exists(combination) {
 					kalimas = appendUniq(kalimas, combination)
 				}
 			}
@@ -66,6 +67,19 @@ func combine(heads, tails []string) []string {
 	return combinations
 }
 
+// Check wether string s in quran or not
+func exists(s string) bool {
+	harfs := []rune(s)
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.children, harf)
+		if node == nil {
+			return false
+		}
+	}
+	return true
+}
+
 func appendUniq(results []string, newResult string) []string {
 	for _, result := range results {
 		if result == newResult {
@@ -73,4 +87,17 @@ func appendUniq(results []string, newResult string) []string {
 		}
 	}
 	return append(results, newResult)
+}
+
+// Get locations of s, matching the whole word
+func Locate(s string) []Location {
+	harfs := []rune(s)
+	node := root
+	for _, harf := range harfs {
+		node = getChild(node.children, harf)
+		if node == nil {
+			return zeroLocs
+		}
+	}
+	return node.locations
 }

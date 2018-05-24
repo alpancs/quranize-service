@@ -1,4 +1,4 @@
-package quran
+package quranize
 
 import (
 	"testing"
@@ -7,49 +7,49 @@ import (
 )
 
 func TestGetAyaFound(t *testing.T) {
-	text, err := QuranClean.GetAya(1, 1)
+	text, err := quran.GetAya(1, 1)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, text)
 }
 
 func TestGetAyaSuraNotFound(t *testing.T) {
-	_, err := QuranClean.GetAya(0, 0)
+	_, err := quran.GetAya(0, 0)
 	assert.Error(t, err)
 }
 
 func TestGetAyaAyaNotFound(t *testing.T) {
-	_, err := QuranClean.GetAya(1, 0)
+	_, err := quran.GetAya(1, 0)
 	assert.Error(t, err)
 }
 
 func TestGetSuraNameFound(t *testing.T) {
-	text, err := QuranClean.GetSuraName(1)
+	text, err := quran.GetSuraName(1)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, text)
 }
 
 func TestGetSuraNameNotFound(t *testing.T) {
-	_, err := QuranClean.GetSuraName(0)
+	_, err := quran.GetSuraName(0)
 	assert.Error(t, err)
 }
 
 func TestLocateEmptyString(t *testing.T) {
 	input := ""
 	expected := []Location{}
-	actual := QuranClean.Locate(input)
+	actual := Locate(input)
 	assert.Equal(t, expected, actual)
 }
 
 func TestLocateNonAlquran(t *testing.T) {
 	input := "alfan"
 	expected := []Location{}
-	actual := QuranClean.Locate(input)
+	actual := Locate(input)
 	assert.Equal(t, expected, actual)
 }
 
 func TestLocateAlquran(t *testing.T) {
 	input := "بسم الله الرحمن الرحيم"
 	expected := []Location{Location{1, 1, 0}, Location{27, 30, 4}}
-	actual := QuranClean.Locate(input)
+	actual := Locate(input)
 	assert.Equal(t, expected, actual)
 }
