@@ -24,7 +24,11 @@ type Node struct {
 	children  []Child
 }
 
-type Location struct{ Sura, Aya, SliceIndex int }
+type Location struct {
+	Sura      int // sura number
+	Aya       int // aya number
+	WordIndex int // assuming aya is splitted word by word
+}
 
 type Child struct {
 	key   rune
