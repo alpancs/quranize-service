@@ -17,7 +17,7 @@ func Encode(text string) []string {
 	text = strings.ToLower(text)
 	results := []string{}
 	for _, result := range quranize(text, memo) {
-		if len(quran.Locate(result)) > 0 {
+		if len(Locate(result)) > 0 {
 			results = appendUniq(results, result)
 		}
 	}

@@ -18,15 +18,15 @@ type Quran struct {
 }
 
 type Node struct {
-	Locations []Location
-	Children  []Child
+	locations []Location
+	children  []Child
 }
 
 type Location struct{ Sura, Aya, SliceIndex int }
 
 type Child struct {
-	Key   rune
-	Value *Node
+	key   rune
+	value *Node
 }
 
 var (
@@ -56,17 +56,17 @@ func (q Quran) GetAya(sura, aya int) (string, error) {
 	return ayas[aya-1].Text, nil
 }
 
-// Get locations of kalima in Quran q, matching whole word
-func (q Quran) Locate(kalima string) []Location {
-	harfs := []rune(kalima)
+// Get locations of s, matching whole word
+func Locate(s string) []Location {
+	harfs := []rune(s)
 	node := root
 	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
+		node = getChild(node.children, harf)
 		if node == nil {
 			return zeroLocs
 		}
 	}
-	return node.Locations
+	return node.locations
 }
 
 // Check wether string s in Quran q or not
@@ -74,7 +74,7 @@ func (q Quran) exists(s string) bool {
 	harfs := []rune(s)
 	node := root
 	for _, harf := range harfs {
-		node = getChild(node.Children, harf)
+		node = getChild(node.children, harf)
 		if node == nil {
 			return false
 		}
@@ -83,7 +83,7 @@ func (q Quran) exists(s string) bool {
 }
 
 func buildIndex() {
-	root = &Node{Locations: zeroLocs}
+	root = &Node{locations: zeroLocs}
 	for _, sura := range quran.Suras {
 		for _, aya := range sura.Ayas {
 			indexAya([]rune(aya.Text), sura.Index, aya.Index, root)
@@ -103,22 +103,22 @@ func indexAya(harfs []rune, sura, aya int, node *Node) {
 
 func buildTree(harfs []rune, location Location, node *Node) {
 	for i, harf := range harfs {
-		child := getChild(node.Children, harf)
+		child := getChild(node.children, harf)
 		if child == nil {
 			child = &Node{}
-			node.Children = append(node.Children, Child{harf, child})
+			node.children = append(node.children, Child{harf, child})
 		}
 		node = child
 		if i == len(harfs)-1 || harfs[i+1] == ' ' {
-			node.Locations = append(node.Locations, location)
+			node.locations = append(node.locations, location)
 		}
 	}
 }
 
 func getChild(children []Child, key rune) *Node {
 	for _, child := range children {
-		if child.Key == key {
-			return child.Value
+		if child.key == key {
+			return child.value
 		}
 	}
 	return nil
