@@ -23,11 +23,11 @@ var (
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	json.NewEncoder(w).Encode(quran.Encode(keyword))
-	go tellOwner(keyword)
+	go postToChannel(keyword)
 }
 
-func tellOwner(keyword string) {
-	reqBody, err := json.Marshal(Response{"@alpancs", keyword})
+func postToChannel(keyword string) {
+	reqBody, err := json.Marshal(Response{"@quranize", keyword})
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -41,6 +41,6 @@ func tellOwner(keyword string) {
 	resCode := res.StatusCode
 	if resCode != 200 {
 		resBody, _ := ioutil.ReadAll(res.Body)
-		fmt.Printf("URL: %s\nrequest body: %s\nresponse code: %d\nresponse body: %s", url, string(reqBody), resCode, string(resBody))
+		fmt.Printf("URL: %s. request body: %s. response code: %d. response body: %s", url, string(reqBody), resCode, string(resBody))
 	}
 }
