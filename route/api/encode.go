@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -32,8 +33,14 @@ func tellOwner(keyword string) {
 		return
 	}
 	url := telegramAPI + "sendMessage"
-	_, err = http.Post(url, "application/json", bytes.NewReader(reqBody))
+	res, err := http.Post(url, "application/json", bytes.NewReader(reqBody))
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+	resCode := res.StatusCode
+	if resCode != 200 {
+		resBody, _ := ioutil.ReadAll(res.Body)
+		fmt.Printf("URL: %s\nrequest body: %s\nresponse code: %d\nresponse body: %s", url, string(reqBody), resCode, string(resBody))
 	}
 }
