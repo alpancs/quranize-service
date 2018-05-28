@@ -41,6 +41,6 @@ func postToChannel(keyword string) {
 	resCode := res.StatusCode
 	if resCode != 200 {
 		resBody, _ := ioutil.ReadAll(res.Body)
-		fmt.Printf("URL: %s. request body: %s. response code: %d. response body: %s", url, string(reqBody), resCode, string(resBody))
+		fmt.Printf("URL: %s. request body: %s. response code: %d. response body: %s\n", url, string(reqBody), resCode, string(resBody))
 	}
 }
