@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/alpancs/quranize/quran"
+	"github.com/alpancs/quranize-service/quran"
 	"github.com/go-chi/chi"
 )
 

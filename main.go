@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alpancs/quranize/job"
-	"github.com/alpancs/quranize/route"
-	"github.com/alpancs/quranize/route/api"
-	"github.com/alpancs/quranize/route/webhook"
+	"github.com/alpancs/quranize-service/job"
+	"github.com/alpancs/quranize-service/route"
+	"github.com/alpancs/quranize-service/route/api"
+	"github.com/alpancs/quranize-service/route/webhook"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )

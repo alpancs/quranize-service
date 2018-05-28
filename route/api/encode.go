@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alpancs/quranize/quran"
+	"github.com/alpancs/quranize-service/quran"
 )
 
 type Response struct {
