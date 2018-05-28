@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/alpancs/quranize/quran"
+	"github.com/alpancs/quranize-service/quran"
 )
 
 type Update struct {

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/alpancs/quranize/job"
+	"github.com/alpancs/quranize-service/job"
 )
 
 const DEFAULT_TRENDING_KEYWORDS_LIMIT = 6
