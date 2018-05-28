@@ -4,8 +4,7 @@ Quranize transforms alquran into القرآن.
 
 https://quranize.herokuapp.com
 
-
-# API
+## API
 
 - `GET /api/encode`
   - Query
@@ -47,3 +46,7 @@ https://quranize.herokuapp.com
   - Example
     - Request: `POST /api/log` with post data `bismillah`
     - Response: empty response with status code `200`
+
+## Related Project
+
+https://github.com/alpancs/quranize

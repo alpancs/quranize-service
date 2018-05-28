@@ -8,7 +8,7 @@
     ".",
     "corpus"
   ]
-  revision = "bd461a5c8115d0d306e9220f31e95928496cd054"
+  revision = "81c056328999d7fdb117713abb0c0e860f2f2885"
 
 [[projects]]
   name = "github.com/go-chi/chi"
