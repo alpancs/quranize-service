@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"gopkg.in/mgo.v2"
+	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -56,7 +56,7 @@ func UpdateTrendingKeywords() {
 	iter := historyCollection.Find(last30Days).Sort("timestamp").Iter()
 	defer iter.Close()
 	TrendingKeywords = getTrendingKeywords(iter)
-	fmt.Println("trending keywords updated in ", time.Since(startTime))
+	fmt.Println("trending keywords updated time:", time.Since(startTime))
 }
 
 func getTrendingKeywords(iter *mgo.Iter) []string {
