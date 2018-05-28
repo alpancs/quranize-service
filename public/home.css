@@ -1,10 +1,11 @@
 @font-face {
   font-family: me_quran;
-  src: url(//cdn.rawgit.com/alpancs/quranize/2fe62dd7/public/me_quran.ttf);
+  src: url(//cdn.rawgit.com/alpancs/quranize-service/2fe62dd7/public/me_quran.ttf);
 }
 .quran-text {
   font-family: me_quran;
   font-size: 1.15em;
+  line-height: 2em;
 }
 
 .text-left {text-align: left}
@@ -12,5 +13,5 @@
 .text-right {text-align: right}
 
 mark {
-  background-color: rgba(255, 255, 0, 0.7);
+  background-color: rgba(255, 255, 0, 0.75);
 }
