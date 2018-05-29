@@ -3,7 +3,7 @@
 *.dll
 *.so
 *.dylib
-quranize
+quranize-service
 
 # Test binary, build with `go test -c`
 *.test
@@ -17,5 +17,5 @@ quranize
 # Vim swp
 *.swp
 
-# vendor
+# Vendor
 vendor/
