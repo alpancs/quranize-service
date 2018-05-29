@@ -25,7 +25,7 @@ func Aya(w http.ResponseWriter, r *http.Request) {
 func serve(w http.ResponseWriter, r *http.Request, q quranize.Quran) {
 	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
 	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
-	text, err := q.GetAya(sura, aya)
+	text, err := q.GetAya(uint8(sura), uint16(aya))
 	if err != nil {
 		http.NotFound(w, r)
 		return

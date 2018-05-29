@@ -2,13 +2,13 @@
 
 
 [[projects]]
-  branch = "master"
   name = "github.com/alpancs/quranize"
   packages = [
     ".",
     "corpus"
   ]
-  revision = "751d2acfde53786f9577fce9367728bf8160fe4b"
+  revision = "d1eac7fd444b37d122e9023bc488f5686058ccb0"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/go-chi/chi"
@@ -34,6 +34,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3d2e70fb16c8767416305da397bf8b040bd98bf1c6f3a9fe7639b5ac8d8cf332"
+  inputs-digest = "714426c51f6dc64a7b03c61b2cf09740406546502b4e394cbaec67f9ecb3d7b4"
   solver-name = "gps-cdcl"
   solver-version = 1
