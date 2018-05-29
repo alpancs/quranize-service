@@ -27,6 +27,10 @@ func Encode(w http.ResponseWriter, r *http.Request) {
 }
 
 func postToChannel(keyword string) {
+	if os.Getenv("ENV") != "production" {
+		return
+	}
+
 	reqBody, err := json.Marshal(Response{"@quranize", keyword})
 	if err != nil {
 		fmt.Println(err)
