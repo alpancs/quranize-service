@@ -7,8 +7,8 @@
     ".",
     "corpus"
   ]
-  revision = "d1eac7fd444b37d122e9023bc488f5686058ccb0"
-  version = "v1.1.0"
+  revision = "65bdae5b73d5b1bfdc3d43e93073b536156ed469"
+  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/go-chi/chi"
@@ -34,6 +34,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "714426c51f6dc64a7b03c61b2cf09740406546502b4e394cbaec67f9ecb3d7b4"
+  inputs-digest = "ca37141f1fd7d58ed499e499ceb3edb7fc2398add5a27841d61aee81333dc69c"
   solver-name = "gps-cdcl"
   solver-version = 1
