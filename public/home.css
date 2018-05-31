@@ -1,6 +1,6 @@
 @font-face {
   font-family: me_quran;
-  src: url(//cdn.rawgit.com/alpancs/quranize-service/2fe62dd7/public/me_quran.ttf);
+  src: url(/me_quran.ttf);
 }
 .quran-text {
   font-family: me_quran;
