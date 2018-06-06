@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/alpancs/quranize"
 	"github.com/alpancs/quranize-service/quran"
 	"github.com/go-chi/chi"
 )
@@ -22,7 +21,7 @@ func Aya(w http.ResponseWriter, r *http.Request) {
 	serve(w, r, quran.QuranSimpleEnhanced)
 }
 
-func serve(w http.ResponseWriter, r *http.Request, q quranize.Quran) {
+func serve(w http.ResponseWriter, r *http.Request, q quran.Quran) {
 	sura, _ := strconv.Atoi(chi.URLParam(r, "sura"))
 	aya, _ := strconv.Atoi(chi.URLParam(r, "aya"))
 	text, err := q.GetAya(sura, aya)

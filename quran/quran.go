@@ -8,14 +8,16 @@ import (
 	"github.com/alpancs/quranize"
 )
 
+type Quran = quranize.Quran
+
 var (
 	q      quranize.Quranize
 	Encode func(string) []string
 	Locate func(string) []quranize.Location
 
-	QuranSimpleEnhanced quranize.Quran
-	TranslationID       quranize.Quran
-	TafsirID            quranize.Quran
+	QuranSimpleEnhanced Quran
+	TranslationID       Quran
+	TafsirID            Quran
 
 	wg sync.WaitGroup
 )
