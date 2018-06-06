@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/alpancs/quranize-service/quran"
+	"github.com/mssola/user_agent"
 )
 
 type Response struct {
@@ -23,15 +24,25 @@ var (
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
 	json.NewEncoder(w).Encode(quran.Encode(keyword))
-	go postToChannel(keyword)
+	go postToChannel(r, keyword)
 }
 
-func postToChannel(keyword string) {
+func postToChannel(r *http.Request, keyword string) {
 	if os.Getenv("ENV") != "production" {
 		return
 	}
 
-	reqBody, err := json.Marshal(Response{"@quranize", keyword})
+	ua := user_agent.New(r.UserAgent())
+	browserName, browserVersion := ua.Browser()
+	browser := browserName + " " + browserVersion
+	if ua.Mobile() {
+		browser += " mobile"
+	} else {
+		browser += " desktop"
+	}
+	msg := fmt.Sprintf("keyword: %s\nbrowser: %s, OS: %s", keyword, browser, ua.OS())
+
+	reqBody, err := json.Marshal(Response{"@quranize", msg})
 	if err != nil {
 		fmt.Println(err)
 		return
