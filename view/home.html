@@ -60,7 +60,7 @@
                   <button @click="undo()" :disabled="keywords.length < 2" title="Undo" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
                     <i class="material-icons">undo</i>
                   </button>
-                  <button @click="keyword=''" title="Clear" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
+                  <button @click="keyword=''" :disabled="keyword == ''" title="Clear" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
                     <i class="material-icons">clear</i>
                   </button>
                 </div>
