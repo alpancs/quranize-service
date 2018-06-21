@@ -40,6 +40,9 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
+      if (this.trimmedKeyword != history.state)
+        history.pushState(this.trimmedKeyword, "Quranize", "/"+this.trimmedKeyword)
+
       this.logged = false
       ++this.loading
       let currentRequestTime = Date.now()
@@ -174,4 +177,8 @@ function select(element) {
   let selection = window.getSelection()
   selection.removeAllRanges()
   selection.addRange(rangeObj)
+}
+
+window.onpopstate = function(event) {
+  app.keyword = event.state || ''
 }
