@@ -10,7 +10,6 @@ let app = new Vue({
     loading: 0,
     trendingKeywords: [],
     shareLink: '',
-    keywords: [''],
 
     logged: false,
     lastRequestTime: 0,
@@ -41,8 +40,6 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      this.keywords.push(this.trimmedKeyword)
-
       this.logged = false
       ++this.loading
       let currentRequestTime = Date.now()
@@ -57,7 +54,7 @@ let app = new Vue({
         .then(() => this.$refs.encodeds ? componentHandler.upgradeElements(this.$refs.encodeds) : undefined)
         .catch(() => {this.encodeds = []; this.notify('connection problem')})
         .then(() => {--this.loading; this.willRequest = this.loading > 0})
-    }, 600),
+    }, 500),
 
     locate(encoded) {
       this.log()
@@ -133,11 +130,6 @@ let app = new Vue({
       })
       .catch(() => this.notify('connection problem'))
       .then(() => keys.forEach((key) => this.$set(location, key, false)))
-    },
-
-    undo() {
-      this.keywords.pop()
-      this.keyword = this.keywords.pop()
     },
 
     log() {
