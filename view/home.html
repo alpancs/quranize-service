@@ -54,6 +54,18 @@
                 <input class="mdl-textfield__input text-center" type="text" id="keyword" v-model="keyword" autofocus>
                 <label class="mdl-textfield__label text-center" for="keyword">subhanallah</label>
               </div>
+              <!-- buttons -->
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--12-col text-center">
+                  <button @click="undo()" :disabled="keywords.length < 2" title="Undo" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
+                    <i class="material-icons">undo</i>
+                  </button>
+                  <button @click="keyword=''" title="Clear" type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
+                    <i class="material-icons">clear</i>
+                  </button>
+                </div>
+              </div>
+              <!-- end of buttons -->
             </div>
             <!-- end of input -->
             <!-- trending keywords -->
@@ -136,9 +148,9 @@
             <!-- sharing -->
             <div v-show="encodeds.length" class="mdl-grid">
               <div class="mdl-cell mdl-cell--12-col text-center">
-              <button id="share-link" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect">
-                <i class="material-icons">share</i>
-              </button>
+                <button id="share-link" title="Share Result" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect">
+                  <i class="material-icons">share</i>
+                </button>
               </div>
             </div>
             <!-- end of sharing -->
