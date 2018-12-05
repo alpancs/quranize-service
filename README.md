@@ -1,8 +1,9 @@
 # Quranize
 
 Quranize transforms Alquran's transliteration into its arabic form, like "bismillah" into "بسم الله".
-
 https://quranize.herokuapp.com
+
+Telegram channel https://t.me/quranize
 
 ## API
 
