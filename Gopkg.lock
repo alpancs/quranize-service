@@ -2,44 +2,59 @@
 
 
 [[projects]]
+  digest = "1:23ec40fe12fcf3f111c18209ae5f5d572b3d934c4cf539cb687bedb05ca787ae"
   name = "github.com/alpancs/quranize"
   packages = [
     ".",
-    "corpus"
+    "corpus",
   ]
-  revision = "ace1adc240565469b86ee94b6ef450e88f03daf2"
-  version = "v1.2.2"
+  pruneopts = "NUT"
+  revision = "b6b05f8edef85198b9356d017552a677fb5e978a"
+  version = "v1.3.0"
 
 [[projects]]
+  digest = "1:717e36544bc2aaa9f037ba61f80bf088aa2e3fd3805320f0f6107089104a787d"
   name = "github.com/go-chi/chi"
   packages = [
     ".",
-    "middleware"
+    "middleware",
   ]
+  pruneopts = "NUT"
   revision = "e83ac2304db3c50cf03d96a2fcd39009d458bc35"
   version = "v3.3.2"
 
 [[projects]]
+  digest = "1:6d68db4304cb362f41dbb982c704da5a7c59364c2f83ab2c03c54e1926fe6ada"
   name = "github.com/mssola/user_agent"
   packages = ["."]
+  pruneopts = "NUT"
   revision = "85b2f5798558a46fc23443c596e781712f4b7792"
   version = "v0.4.1"
 
 [[projects]]
   branch = "v2"
+  digest = "1:d9da6023ef4c1c8630db15fedcf8e71d4e18e21a83f81c53dfd8ba664509a63e"
   name = "gopkg.in/mgo.v2"
   packages = [
     ".",
     "bson",
     "internal/json",
     "internal/sasl",
-    "internal/scram"
+    "internal/scram",
   ]
+  pruneopts = "NUT"
   revision = "3f83fa5005286a7fe593b055f0d7771a7dce4655"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8ff077de62a4f4c07d3a762f9daf00c9f4093b1307eba28ee3f23659b0c4387b"
+  input-imports = [
+    "github.com/alpancs/quranize",
+    "github.com/go-chi/chi",
+    "github.com/go-chi/chi/middleware",
+    "github.com/mssola/user_agent",
+    "gopkg.in/mgo.v2",
+    "gopkg.in/mgo.v2/bson",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
