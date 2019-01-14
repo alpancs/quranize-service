@@ -23,8 +23,19 @@ var (
 
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
-	json.NewEncoder(w).Encode(quran.Encode(keyword))
 	go postToChannel(r, keyword)
+
+	if pythonRequest(r) {
+		json.NewEncoder(w).Encode([]string{"who is python-requests?", "please contact the developer via Telegram @alpancs or email alpancs@gmail.com"})
+		return
+	}
+
+	json.NewEncoder(w).Encode(quran.Encode(keyword))
+}
+
+func pythonRequest(r *http.Request) bool {
+	browserName, _ := user_agent.New(r.UserAgent()).Browser()
+	return browserName == "python-requests"
 }
 
 func postToChannel(r *http.Request, keyword string) {
@@ -36,9 +47,7 @@ func postToChannel(r *http.Request, keyword string) {
 	browserName, browserVersion := ua.Browser()
 	browser := browserName + " " + browserVersion
 	if ua.Mobile() {
-		browser += " mobile"
-	} else {
-		browser += " desktop"
+		browser += " (mobile)"
 	}
 	msg := fmt.Sprintf("keyword: %s\nbrowser: %s, OS: %s", keyword, browser, ua.OS())
 
