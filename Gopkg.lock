@@ -2,15 +2,15 @@
 
 
 [[projects]]
-  digest = "1:23ec40fe12fcf3f111c18209ae5f5d572b3d934c4cf539cb687bedb05ca787ae"
+  digest = "1:8ce8be66fc75d190a8933f982c0915105f19b61e2ac2d99957e291cecba2c24c"
   name = "github.com/alpancs/quranize"
   packages = [
     ".",
     "corpus",
   ]
   pruneopts = "NUT"
-  revision = "b6b05f8edef85198b9356d017552a677fb5e978a"
-  version = "v1.3.0"
+  revision = "d0d160da963c7dd8c2e4c16565ef6c0c5a199e2d"
+  version = "v1.4.0"
 
 [[projects]]
   digest = "1:717e36544bc2aaa9f037ba61f80bf088aa2e3fd3805320f0f6107089104a787d"
