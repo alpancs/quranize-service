@@ -1,7 +1,9 @@
 @font-face {
   font-family: me_quran;
+  font-display: swap;
   src: url(/me_quran.ttf);
 }
+
 .quran-text {
   font-family: me_quran;
   font-size: 1.15em;
@@ -13,5 +15,5 @@
 .text-right {text-align: right}
 
 mark {
-  background-color: rgba(255, 255, 0, 0.75);
+  background-color: rgba(255, 255, 0, 0.77);
 }
