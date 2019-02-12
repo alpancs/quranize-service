@@ -155,10 +155,8 @@ let nextTranslation = (location, n, command) =>
   .then((response)=> response.data) :
   Promise.resolve()
 
-let updateTrendingKeywords = () => axios.get('/api/trending_keywords')
-  .then((response) => app.trendingKeywords = response.data, undefined)
-updateTrendingKeywords()
-setInterval(updateTrendingKeywords, 30*1000)
+axios.get('/api/trending_keywords')
+.then((response) => app.trendingKeywords = response.data)
 
 let shareLinkClipboard = new Clipboard('#share-link', {text: () => app.shareLink})
 shareLinkClipboard.on('success', () => app.notify('share link copied to clipboard'))
