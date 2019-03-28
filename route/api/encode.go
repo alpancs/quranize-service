@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/alpancs/quranize-service/quran"
 	"github.com/mssola/user_agent"
@@ -26,7 +27,7 @@ func Encode(w http.ResponseWriter, r *http.Request) {
 	go postToChannel(r, keyword)
 
 	if pythonRequest(r) {
-		json.NewEncoder(w).Encode([]string{"who is python-requests?", "please contact the developer via Telegram @alpancs or email alpancs@gmail.com"})
+		json.NewEncoder(w).Encode([]string{"who is python?", "please contact the developer via Telegram @alpancs or email alpancs@gmail.com"})
 		return
 	}
 
@@ -35,7 +36,7 @@ func Encode(w http.ResponseWriter, r *http.Request) {
 
 func pythonRequest(r *http.Request) bool {
 	browserName, _ := user_agent.New(r.UserAgent()).Browser()
-	return browserName == "python-requests"
+	return strings.Contains(strings.ToLower(browserName), "python")
 }
 
 func postToChannel(r *http.Request, keyword string) {
