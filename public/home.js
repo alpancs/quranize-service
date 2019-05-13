@@ -46,7 +46,7 @@ let app = new Vue({
       this.logged = false
       ++this.loading
       let currentRequestTime = Date.now()
-      axios.get('/api/encode', {params: {keyword: this.trimmedKeyword}})
+      (this.trimmedKeyword ? axios.get('/api/encode', {params: {keyword: this.trimmedKeyword}}) : Promise.resolve({data: []}))
         .then((response) => {
           if (this.lastRequestTime < currentRequestTime) {
             this.lastRequestTime = currentRequestTime
