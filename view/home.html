@@ -83,7 +83,7 @@
                   <div v-show="encoded.expanded && encoded.loading" class="text-center"><div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" ref="encodeds"></div></div>
 
                   <div v-show="encoded.expanded" v-for="(location, i) in encoded.locations">
-                    <div class="text-left">${i+1}. Surah <span dir="rtl" class="quran-text clipboard" title="Click to Copy">${location.suraName}</span> (${location.suraNumber}) ayah ${location.ayaNumber}:</div>
+                    <div class="text-left">${i+1}. Surah ${location.suraNumber} (<span dir="rtl" class="quran-text clipboard" title="Click to Copy">${location.suraName}</span>) ayah ${location.ayaNumber}</div>
 
                     <div class="text-right">
                       <div v-show="location.ayaLoading" class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" :ref="encoded.text"></div>
