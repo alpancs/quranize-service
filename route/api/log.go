@@ -8,32 +8,26 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/mgo.v2"
+	"github.com/alpancs/quranize-service/db"
 )
-
-type History struct {
-	Timestamp time.Time
-	Keyword   string
-}
-
-var historyCollection = newMongodbCollection()
 
 func Log(w http.ResponseWriter, r *http.Request) {
 	data, _ := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
 	keyword := strings.ToLower(strings.TrimSpace(string(data)))
-	if keyword != "" {
-		err := historyCollection.Insert(History{time.Now(), keyword})
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			fmt.Println(err.Error())
-		}
+	if keyword == "" {
+		return
 	}
-}
 
-func newMongodbCollection() *mgo.Collection {
-	session, err := mgo.Dial(os.Getenv("MONGODB_HOST"))
-	if err != nil {
-		panic(err)
+	_, err := db.Exec(
+		"INSERT INTO history (keyword, timestamp) VALUES ($1, $2)",
+		keyword,
+		time.Now().In(time.UTC),
+	)
+	if err == nil {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		fmt.Fprintln(os.Stderr, err)
 	}
-	return session.DB(os.Getenv("MONGODB_DATABASE")).C("history")
 }
