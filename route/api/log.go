@@ -24,9 +24,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 		keyword,
 		time.Now().In(time.UTC),
 	)
-	if err == nil {
-		w.WriteHeader(http.StatusOK)
-	} else {
+	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		fmt.Fprintln(os.Stderr, err)
 	}
