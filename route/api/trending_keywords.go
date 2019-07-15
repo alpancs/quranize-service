@@ -30,10 +30,14 @@ func normalizeLimit(queryLimit string) int {
 
 func trendingKeywords(limit int) []string {
 	keywords := []string{}
-	rows, err := db.Query(
-		`SELECT regexp_replace(keyword, '[^a-z'']', '', 'g') FROM history
-		WHERE timestamp >= $1 GROUP BY 1 ORDER BY count(1) DESC`,
+	rows, err := db.Query(`
+		SELECT regexp_replace(keyword, '[^a-z'']', '', 'g') FROM history
+		WHERE timestamp >= $1
+		GROUP BY 1
+		ORDER BY count(1) DESC
+		LIMIT $2`,
 		time.Now().Add(-30*24*time.Hour).In(time.UTC),
+		limit,
 	)
 	if err != nil {
 		log.Println(err)
