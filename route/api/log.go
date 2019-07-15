@@ -25,7 +25,8 @@ func Log(w http.ResponseWriter, r *http.Request) {
 		time.Now().In(time.UTC),
 	)
 	if err != nil {
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		errorCode := http.StatusInternalServerError
+		http.Error(w, http.StatusText(errorCode), errorCode)
 		fmt.Fprintln(os.Stderr, err)
 	}
 }
