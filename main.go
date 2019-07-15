@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/alpancs/quranize-service/job"
 	"github.com/alpancs/quranize-service/route"
 	"github.com/alpancs/quranize-service/route/api"
 	"github.com/alpancs/quranize-service/route/webhook"
@@ -14,7 +13,6 @@ import (
 )
 
 func main() {
-	job.Start()
 	port := getPort()
 	fmt.Println("Quranize is listening port", port)
 	http.ListenAndServe(":"+port, newRouter())
