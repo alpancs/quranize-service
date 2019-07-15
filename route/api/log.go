@@ -20,7 +20,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err := db.Exec(
-		"INSERT INTO history (keyword, timestamp) VALUES ($1, $2)",
+		`INSERT INTO history (keyword, timestamp) VALUES ($1, $2)`,
 		keyword,
 		time.Now().In(time.UTC),
 	)
