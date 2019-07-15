@@ -1,10 +1,9 @@
 package api
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -25,7 +24,7 @@ func Log(w http.ResponseWriter, r *http.Request) {
 		time.Now().In(time.UTC),
 	)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Println(err)
 		errorCode := http.StatusInternalServerError
 		http.Error(w, http.StatusText(errorCode), errorCode)
 	}

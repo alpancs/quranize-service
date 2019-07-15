@@ -2,9 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
@@ -37,20 +36,20 @@ func trendingKeywords(limit int) []string {
 		time.Now().Add(-30*24*time.Hour).In(time.UTC),
 	)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Println(err)
 		return keywords
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var keyword string
 		if err := rows.Scan(&keyword); err != nil {
-			fmt.Fprintln(os.Stderr, err)
+			log.Println(err)
 			return keywords
 		}
 		keywords = append(keywords, keyword)
 	}
 	if err := rows.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Println(err)
 	}
 	return keywords
 }

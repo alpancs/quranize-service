@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -19,7 +19,7 @@ var (
 func newDB() *sql.DB {
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
-		fmt.Println("sql.Open error:", err)
+		log.Println("sql.Open error:", err)
 	}
 	return db
 }
