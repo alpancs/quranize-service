@@ -1,12 +1,10 @@
 package db
 
 import (
-	"context"
 	"database/sql"
 	"errors"
 	"log"
 	"os"
-	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -28,16 +26,12 @@ func Exec(query string, args ...interface{}) (sql.Result, error) {
 	if db == nil {
 		return nil, errorDBNil
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return db.ExecContext(ctx, query, args...)
+	return db.Exec(query, args...)
 }
 
 func Query(query string, args ...interface{}) (*sql.Rows, error) {
 	if db == nil {
 		return nil, errorDBNil
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return db.QueryContext(ctx, query, args...)
+	return db.Query(query, args...)
 }
