@@ -18,7 +18,9 @@ let app = new Vue({
 
   computed: {
     trimmedKeyword() {
-      return this.keyword.trim()
+      let keyword = this.keyword.trim()
+      document.title = keyword ? keyword+" - Quranize" : "Quranize"
+      return keyword
     },
     noResults() {
       return !this.willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
