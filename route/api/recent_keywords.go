@@ -19,9 +19,10 @@ func RecentKeywords(w http.ResponseWriter, r *http.Request) {
 func recentKeywords(limit int) []string {
 	keywords := []string{}
 	rows, err := db.Query(`
-		SELECT distinct(regexp_replace(keyword, '[^a-z'']', '', 'g')) FROM history
+		SELECT regexp_replace(keyword, '[^a-z'']', '', 'g') FROM history
 		WHERE timestamp >= $1
-		ORDER BY timestamp DESC
+		GROUP BY 1
+		ORDER BY max(timestamp) DESC
 		LIMIT $2`,
 		time.Now().Add(-30*24*time.Hour).In(time.UTC),
 		limit,
