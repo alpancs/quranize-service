@@ -18,9 +18,7 @@ let app = new Vue({
 
   computed: {
     trimmedKeyword() {
-      let keyword = this.keyword.trim()
-      document.title = keyword ? keyword+" - Quranize" : "Quranize"
-      return keyword
+      return this.keyword.trim()
     },
     noResults() {
       return !this.willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
@@ -37,6 +35,12 @@ let app = new Vue({
     keyword() {
       this.willRequest = true
       this.updateResult()
+    },
+    trimmedKeyword() {
+      document.title = this.trimmedKeyword ? this.trimmedKeyword+" - Quranize" : "Quranize"
+      if (this.trimmedKeyword === '')
+        axios.get('/api/trending_keywords')
+        .then((response) => this.trendingKeywords = response.data)
     },
   },
 
@@ -157,9 +161,6 @@ let nextTranslation = (location, n, command) =>
   axios.get(`/api/${command}/${location.suraNumber}/${location.ayaNumber+n}`)
   .then((response)=> response.data) :
   Promise.resolve()
-
-axios.get('/api/trending_keywords')
-.then((response) => app.trendingKeywords = response.data)
 
 let shareLinkClipboard = new Clipboard('#share-link', {text: () => app.shareLink})
 shareLinkClipboard.on('success', () => app.notify('share link copied to clipboard'))
