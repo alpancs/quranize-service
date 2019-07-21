@@ -13,14 +13,14 @@ import (
 const DEFAULT_TRENDING_KEYWORDS_LIMIT = 6
 
 func TrendingKeywords(w http.ResponseWriter, r *http.Request) {
-	limit := normalizeLimit(r.URL.Query().Get("limit"))
+	limit := normalizeLimit(r.URL.Query().Get("limit"), DEFAULT_TRENDING_KEYWORDS_LIMIT)
 	json.NewEncoder(w).Encode(trendingKeywords(limit))
 }
 
-func normalizeLimit(queryLimit string) int {
+func normalizeLimit(queryLimit string, defaultLimit int) int {
 	limit, err := strconv.Atoi(queryLimit)
 	if err != nil {
-		limit = DEFAULT_TRENDING_KEYWORDS_LIMIT
+		limit = defaultLimit
 	}
 	if limit < 0 {
 		limit = 0

@@ -65,6 +65,14 @@
               </a>
             </div>
             <!-- end of trending keywords -->
+            <!-- recent keywords -->
+            <div v-show="!willRequest && !trimmedKeyword" class="mdl-grid">
+              <div v-show="recentKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Recent Search</div>
+              <a :href="'/'+recentKeyword" v-for="recentKeyword in recentKeywords" class="text-center mdl-chip mdl-cell">
+                <span class="mdl-chip__text">${recentKeyword}</span>
+              </a>
+            </div>
+            <!-- end of recent keywords -->
             <!-- output -->
             <div class="mdl-grid mdl-grid--no-spacing">
               <div class="mdl-cell mdl-cell--12-col">
