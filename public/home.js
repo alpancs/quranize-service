@@ -5,7 +5,7 @@ let app = new Vue({
 
   data: {
     ayaCount: [7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6],
-    keyword: undefined,
+    keywordRaw: undefined,
     encodeds: [],
     loading: 0,
     trendingKeywords: [],
@@ -18,14 +18,14 @@ let app = new Vue({
   },
 
   computed: {
-    trimmedKeyword() {
-      return this.keyword && this.keyword.trim()
+    keyword() {
+      return this.keywordRaw ? this.keywordRaw.trim() : this.keywordRaw
     },
     noResults() {
-      return !this.willRequest && this.trimmedKeyword !== '' && this.encodeds.length === 0
+      return !this.willRequest && this.keyword !== '' && this.encodeds.length === 0
     },
     transliteration() {
-      return this.encodeds.length ? this.trimmedKeyword : 'alquran'
+      return this.encodeds.length ? this.keyword : 'alquran'
     },
     quran() {
       return this.encodeds.length ? this.encodeds[0].text : 'القرآن'
@@ -36,10 +36,8 @@ let app = new Vue({
     keyword() {
       this.willRequest = true
       this.updateResult()
-    },
-    trimmedKeyword() {
-      document.title = this.trimmedKeyword ? this.trimmedKeyword+" - Quranize" : "Quranize"
-      if (this.trimmedKeyword === '') {
+      document.title = this.keyword ? this.keyword+" - Quranize" : "Quranize"
+      if (this.keyword === '') {
         axios.get('/api/trending_keywords').then((response) => this.trendingKeywords = response.data)
         axios.get('/api/recent_keywords').then((response) => this.recentKeywords = response.data)
       }
@@ -48,19 +46,19 @@ let app = new Vue({
 
   methods: {
     updateResult: _.debounce(function() {
-      if (this.trimmedKeyword != history.state)
-        history.pushState(this.trimmedKeyword, "Quranize", "/"+this.trimmedKeyword)
+      if (this.keyword != history.state)
+        history.pushState(this.keyword, "Quranize", "/"+this.keyword)
 
       this.logged = false
       ++this.loading
       let currentRequestTime = Date.now()
-      let request = this.trimmedKeyword ? axios.get('/api/encode', {params: {keyword: this.trimmedKeyword}}) : Promise.resolve({data: []})
+      let request = this.keyword ? axios.get('/api/encode', {params: {keyword: this.keyword}}) : Promise.resolve({data: []})
       request
         .then((response) => {
           if (this.lastRequestTime < currentRequestTime) {
             this.lastRequestTime = currentRequestTime
             this.encodeds = response.data.map((text) => ({text}))
-            this.shareLink = location.origin + '/' + this.trimmedKeyword.replace(/ /g,'').toLowerCase()
+            this.shareLink = location.origin + '/' + this.keyword.replace(/ /g,'').toLowerCase()
           }
         })
         .then(() => this.$refs.encodeds ? componentHandler.upgradeElements(this.$refs.encodeds) : undefined)
@@ -147,7 +145,7 @@ let app = new Vue({
     log() {
       if (!this.logged) {
         this.logged = true
-        axios.post('/api/log', this.trimmedKeyword)
+        axios.post('/api/log', this.keyword)
         .catch(() => this.logged = false)
       }
     },
@@ -184,5 +182,5 @@ function select(element) {
 }
 
 window.onpopstate = function(event) {
-  app.keyword = event.state || ''
+  app.keywordRaw = event.state || ''
 }

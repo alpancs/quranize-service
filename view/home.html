@@ -52,13 +52,13 @@
             <!-- input -->
             <div class="mdl-grid mdl-grid--no-spacing">
               <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col">
-                <input class="mdl-textfield__input text-center" type="text" id="keyword" v-model="keyword" autofocus>
+                <input class="mdl-textfield__input text-center" type="text" id="keyword" v-model="keywordRaw" autofocus>
                 <label class="mdl-textfield__label text-center" for="keyword">subhanallah</label>
               </div>
             </div>
             <!-- end of input -->
             <!-- trending keywords -->
-            <div v-show="!willRequest && !trimmedKeyword" class="mdl-grid">
+            <div v-show="!willRequest && !keyword" class="mdl-grid">
               <div v-show="trendingKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Trending Now</div>
               <a :href="'/'+trendingKeyword" v-for="trendingKeyword in trendingKeywords" class="text-center mdl-chip mdl-cell">
                 <span class="mdl-chip__text">${trendingKeyword}</span>
@@ -66,7 +66,7 @@
             </div>
             <!-- end of trending keywords -->
             <!-- recent keywords -->
-            <div v-show="!willRequest && !trimmedKeyword" class="mdl-grid">
+            <div v-show="!willRequest && !keyword" class="mdl-grid">
               <div v-show="recentKeywords.length" class="text-center mdl-cell mdl-cell--12-col">Recent Search</div>
               <a :href="'/'+recentKeyword" v-for="recentKeyword in recentKeywords" class="text-center mdl-chip mdl-cell">
                 <span class="mdl-chip__text">${recentKeyword}</span>
@@ -78,7 +78,7 @@
               <div class="mdl-cell mdl-cell--12-col">
 
                 <div class="text-center" v-show="loading"><div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div></div>
-                <div class="text-center" v-show="noResults">no results for <strong>${trimmedKeyword}</strong></div>
+                <div class="text-center" v-show="noResults">no results for <strong>${keyword}</strong></div>
 
                 <div v-for="encoded in encodeds">
                   <div class="text-center">
@@ -176,5 +176,5 @@
 <script src="//cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
 <script src="//unpkg.com/axios@0.16.2/dist/axios.min.js"></script>
 <script src="/home.js?v={{.JsVersion}}"></script>
-<script type="text/javascript">app.keyword = {{.Keyword}}</script>
+<script type="text/javascript">app.keywordRaw = {{.Keyword}}</script>
 </html>
