@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/alpancs/quranize-service/route"
 	"github.com/alpancs/quranize-service/route/api"
@@ -41,15 +42,20 @@ func newRouter() http.Handler {
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
 
-		cachedRouter := compressedRoute.With(header("Cache-Control", "public, max-age=31536000"))
-		fileServer(cachedRouter, "/", http.Dir("public"))
+		if isProduction {
+			compressedRoute = compressedRoute.With(header("Cache-Control", "public, max-age=31536000"))
+		}
+		fileServer(compressedRoute, "/", http.Dir("public"))
 	})
 
 	router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
-		cachedRouter := apiRouter.With(header("Cache-Control", "public, max-age=43200"))
 		if !isProduction {
-			cachedRouter = apiRouter
+			apiRouter.Use(delay(2 * time.Second))
+		}
+		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
+		cachedRouter := apiRouter
+		if isProduction {
+			cachedRouter = apiRouter.With(header("Cache-Control", "public, max-age=43200"))
 		}
 		cachedRouter.Get("/encode", api.Encode)
 		cachedRouter.Get("/locate", api.Locate)
@@ -84,6 +90,15 @@ func header(key, value string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set(key, value)
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func delay(duration time.Duration) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(duration)
 			next.ServeHTTP(w, r)
 		})
 	}
