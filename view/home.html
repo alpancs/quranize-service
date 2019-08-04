@@ -78,7 +78,7 @@
               <div class="mdl-cell mdl-cell--12-col">
 
                 <div class="text-center" v-show="loading"><div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div></div>
-                <div class="text-center" v-show="noResults">no results for <strong>${keyword}</strong></div>
+                <div class="text-center" v-show="isNoResults">no results for <strong>${keyword}</strong></div>
 
                 <div v-for="encoded in encodeds">
                   <div class="text-center">
@@ -115,13 +115,13 @@
                       <button @click="setLocation(location, 'tafsir')" :class="{'mdl-button--raised': location.tafsirShown}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Tafsir" type="button">
                         <i class="material-icons">description</i>
                       </button>
-                      <button @click="shift(location, 1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === ayaCount[location.suraNumber-1]" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
+                      <button @click="shift(location, 1)" :disabled="location.shiftButtonDisabled || location.ayaNumber === ayaCounts[location.suraNumber-1]" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-button--colored" title="Next" type="button">
                         <i class="material-icons">skip_next</i>
                       </button>
                     </div>
 
                     <div class="text-center" v-if="location.playing">
-                      <audio autoplay controls :src="location.audioSource" @ended="location.ayaNumber === ayaCount[location.suraNumber-1] ? undefined : shift(location, 1)"></audio>
+                      <audio autoplay controls :src="location.audioSource" @ended="location.ayaNumber === ayaCounts[location.suraNumber-1] ? undefined : shift(location, 1)"></audio>
                     </div>
 
                     <div v-show="location.translationShown">
