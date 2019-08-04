@@ -34,18 +34,20 @@ func newRouter() http.Handler {
 		router.Use(middleware.Logger)
 	}
 
-	router.Route("/", func(compressedRoute chi.Router) {
-		compressedRoute.Use(middleware.DefaultCompress)
-		compressedRoute.Use(header("Vary", "Accept-Encoding"))
+	router.Route("/", func(compressedRouter chi.Router) {
+		compressedRouter.Use(middleware.DefaultCompress)
+		compressedRouter.Use(header("Vary", "Accept-Encoding"))
 
-		homeRouter := compressedRoute.With(header("Content-Type", "text/html; charset=utf-8"))
+		homeRouter := compressedRouter.With(header("Content-Type", "text/html; charset=utf-8"))
 		homeRouter.Get("/", route.Home)
 		homeRouter.Get("/{keyword:^([A-Za-z' ]|%20)+$}", route.Home)
 
+		cacheControl := "no-store"
 		if isProduction {
-			compressedRoute = compressedRoute.With(header("Cache-Control", "public, max-age=31536000"))
+			cacheControl = "public, max-age=31536000"
 		}
-		fileServer(compressedRoute, "/", http.Dir("public"))
+		cachedRouter := compressedRouter.With(header("Cache-Control", cacheControl))
+		fileServer(cachedRouter, "/", http.Dir("public"))
 	})
 
 	router.Route("/api", func(apiRouter chi.Router) {
@@ -53,6 +55,7 @@ func newRouter() http.Handler {
 			apiRouter.Use(delay(2 * time.Second))
 		}
 		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
+		apiRouter.Use(header("Cache-Control", "no-store"))
 		cachedRouter := apiRouter
 		if isProduction {
 			cachedRouter = apiRouter.With(header("Cache-Control", "public, max-age=43200"))
