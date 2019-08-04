@@ -47,7 +47,7 @@ func newRouter() http.Handler {
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
-		cachedRouter := apiRouter.With(header("Cache-Control", "public, max-age=3600"))
+		cachedRouter := apiRouter.With(header("Cache-Control", "public, max-age=43200"))
 		if !isProduction {
 			cachedRouter = apiRouter
 		}
