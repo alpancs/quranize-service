@@ -19,12 +19,15 @@ type Response struct {
 }
 
 var (
-	telegramAPI = fmt.Sprintf("https://api.telegram.org/bot%s/", os.Getenv("QURANIZE_TELEGRAM_TOKEN"))
+	telegramAPI      = fmt.Sprintf("https://api.telegram.org/bot%s/", os.Getenv("QURANIZE_TELEGRAM_TOKEN"))
+	hasTelegramToken = os.Getenv("QURANIZE_TELEGRAM_TOKEN") != ""
 )
 
 func Encode(w http.ResponseWriter, r *http.Request) {
 	keyword := r.URL.Query().Get("keyword")
-	go postToChannel(r, keyword)
+	if hasTelegramToken {
+		go postToChannel(r, keyword)
+	}
 
 	if pythonRequest(r) {
 		json.NewEncoder(w).Encode([]string{"who is python?", "please contact the developer via Telegram @alpancs or email alpancs@gmail.com"})
@@ -40,10 +43,6 @@ func pythonRequest(r *http.Request) bool {
 }
 
 func postToChannel(r *http.Request, keyword string) {
-	if os.Getenv("ENV") != "production" {
-		return
-	}
-
 	ua := user_agent.New(r.UserAgent())
 	browserName, browserVersion := ua.Browser()
 	browser := browserName + " " + browserVersion
