@@ -32,7 +32,7 @@ let app = new Vue({
       document.title = this.keyword ? this.keyword+" - Quranize" : "Quranize"
       if (this.keyword === "") {
         axios.get("/api/trending_keywords").then((response) => this.trendingKeywords = response.data)
-        axios.get("/api/recent_keywords").then((response) => this.recentKeywords = response.data)
+        // axios.get("/api/recent_keywords").then((response) => this.recentKeywords = response.data)
       }
     },
     encodeds() {
