@@ -52,7 +52,7 @@
             <!-- input -->
             <div class="mdl-grid mdl-grid--no-spacing">
               <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col">
-                <input class="mdl-textfield__input text-center" type="text" id="keyword" v-model="keywordRaw" autofocus>
+                <input class="mdl-textfield__input text-center" type="text" id="keyword" v-model.trim="keyword" autofocus>
                 <label class="mdl-textfield__label text-center" for="keyword">subhanallah</label>
               </div>
             </div>
@@ -172,5 +172,5 @@
 <script src="//cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js"></script>
 <script src="/home.js?v={{.JsVersion}}"></script>
-<script type="text/javascript">app.keywordRaw = {{.Keyword}}</script>
+<script type="text/javascript">app.keyword = {{.Keyword}}</script>
 </html>
