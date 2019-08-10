@@ -52,7 +52,7 @@ func newRouter() http.Handler {
 
 	router.Route("/api", func(apiRouter chi.Router) {
 		if !isProduction {
-			apiRouter.Use(delay(2 * time.Second))
+			apiRouter.Use(delay(1200 * time.Millisecond))
 		}
 		apiRouter.Use(header("Content-Type", "application/json; charset=utf-8"))
 		apiRouter.Use(header("Cache-Control", "no-store"))
