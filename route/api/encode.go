@@ -45,6 +45,7 @@ func pythonRequest(r *http.Request) bool {
 }
 
 func postToChannel(req *http.Request, resp []string, duration time.Duration) {
+	keyword := req.URL.Query().Get("keyword")
 	ua := user_agent.New(req.UserAgent())
 	browserName, browserVersion := ua.Browser()
 	browser := browserName + " " + browserVersion
