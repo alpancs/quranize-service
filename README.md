@@ -125,4 +125,6 @@ Telegram channel https://t.me/quranize
 
 ## Related Project
 
-https://github.com/alpancs/quranize
+- https://github.com/alpancs/quranize
+- https://github.com/alpancs/quranize-rs
+- https://github.com/quranize/quranize.github.io
