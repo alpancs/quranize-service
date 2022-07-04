@@ -1,5 +1,5 @@
-github.com/alpancs/quranize v1.4.1 h1:Zc1KYp3n7tUssCNnKzzsISJlb8nTKrxzdB7hDI/AaWA=
-github.com/alpancs/quranize v1.4.1/go.mod h1:nfMOEU4oCoSj2HdHoNet/KsqIybnvAkm+6A4loC/TlI=
+github.com/alpancs/quranize v1.5.0 h1:PM9aO9p3GXX4aYQEhs/fXcwMrcdpYsHjt+yjiYS6xZY=
+github.com/alpancs/quranize v1.5.0/go.mod h1:nfMOEU4oCoSj2HdHoNet/KsqIybnvAkm+6A4loC/TlI=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-chi/chi v4.0.2+incompatible h1:maB6vn6FqCxrpz4FqWdh4+lwpyZIQS7YEAUcHlgXVRs=
