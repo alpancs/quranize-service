@@ -11,6 +11,7 @@ import (
 
 	"github.com/alpancs/quranize-service/quran"
 	"github.com/go-chi/chi"
+	"github.com/mssola/user_agent"
 )
 
 type HomeData struct {
@@ -30,6 +31,9 @@ var (
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
+	if handledAsGooglebot(w, r) {
+		return
+	}
 	keyword, _ := url.QueryUnescape(chi.URLParam(r, "keyword"))
 
 	transliteration := "alquran"
@@ -42,6 +46,15 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	homeData := HomeData{isProduction, keyword, transliteration, quranText, cssVersion, jsVersion}
 	homeTemplate.Execute(w, homeData)
+}
+
+func handledAsGooglebot(w http.ResponseWriter, r *http.Request) bool {
+	browserName, _ := user_agent.New(r.UserAgent()).Browser()
+	if browserName == "Googlebot" {
+		http.Redirect(w, r, "https://quranize.github.io", http.StatusMovedPermanently)
+		return true
+	}
+	return false
 }
 
 func parseTemplate(filePath string) *template.Template {
