@@ -9,4 +9,4 @@ require (
 	github.com/mssola/user_agent v0.5.3
 )
 
-require golang.org/x/net v0.0.0-20191003171128-d98b1b443823 // indirect
+require golang.org/x/net v0.7.0 // indirect
